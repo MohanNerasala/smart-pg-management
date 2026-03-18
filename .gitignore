@@ -1,0 +1,24 @@
+# Java / Spring Boot
+target/
+*.jar
+*.war
+*.class
+backend/target/
+backend/*.jar
+
+# Node
+node_modules/
+frontend/node_modules/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+startup_final.log
+frontend/debug.log
+ai-service/debug.log
