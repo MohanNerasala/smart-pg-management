@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: staynest-backend
+  datasource:
+    url: jdbc:mysql://localhost:3306/pg_management?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: chakri
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: MOCK_GOOGLE_CLIENT_ID
+            client-secret: MOCK_GOOGLE_CLIENT_SECRET
+            scope:
+              - email
+              - profile
+
+jwt:
+  secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+  expirationMs: 86400000 # 24 hours (development)
+  jwtRefreshExpirationMs: 2592000000 # 30 days
+
+server:
+  port: 8080

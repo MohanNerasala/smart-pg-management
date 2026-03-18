@@ -1,0 +1,1 @@
+{"error":"Bad Request","message":"Unable to find com.staynest.model.PG with id 0","type":"jakarta.persistence.EntityNotFoundException"}

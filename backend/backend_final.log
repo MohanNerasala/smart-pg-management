@@ -1,0 +1,6313 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.4)
+
+2026-03-12T19:19:41.807+05:30  INFO 23844 --- [staynest-backend] [           main] com.staynest.StayNestApplication         : Starting StayNestApplication v0.0.1-SNAPSHOT using Java 21.0.10 with PID 23844 (C:\Users\CHAKRI\OneDrive\Desktop\smart pg management\backend\target\backend-0.0.1-SNAPSHOT.jar started by CHAKRI in C:\Users\CHAKRI\OneDrive\Desktop\smart pg management\backend)
+2026-03-12T19:19:41.811+05:30  INFO 23844 --- [staynest-backend] [           main] com.staynest.StayNestApplication         : No active profile set, falling back to 1 default profile: "default"
+2026-03-12T19:19:42.749+05:30  INFO 23844 --- [staynest-backend] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-12T19:19:42.836+05:30  INFO 23844 --- [staynest-backend] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 79 ms. Found 6 JPA repository interfaces.
+2026-03-12T19:19:43.710+05:30  INFO 23844 --- [staynest-backend] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-03-12T19:19:43.737+05:30  INFO 23844 --- [staynest-backend] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-03-12T19:19:43.740+05:30  INFO 23844 --- [staynest-backend] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2026-03-12T19:19:43.800+05:30  INFO 23844 --- [staynest-backend] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-03-12T19:19:43.804+05:30  INFO 23844 --- [staynest-backend] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1903 ms
+2026-03-12T19:19:44.169+05:30  INFO 23844 --- [staynest-backend] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-12T19:19:44.334+05:30  INFO 23844 --- [staynest-backend] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-03-12T19:19:44.380+05:30  INFO 23844 --- [staynest-backend] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-03-12T19:19:44.678+05:30  INFO 23844 --- [staynest-backend] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-12T19:19:44.728+05:30  INFO 23844 --- [staynest-backend] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-03-12T19:19:45.066+05:30  INFO 23844 --- [staynest-backend] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@65753724
+2026-03-12T19:19:45.073+05:30  INFO 23844 --- [staynest-backend] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-03-12T19:19:46.193+05:30  INFO 23844 --- [staynest-backend] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-12T19:19:46.324+05:30  INFO 23844 --- [staynest-backend] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+Loaded 0 persistent bookings.
+2026-03-12T19:19:47.581+05:30  WARN 23844 --- [staynest-backend] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-12T19:19:48.484+05:30  INFO 23844 --- [staynest-backend] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@64f1b2fb, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2c6553c6, org.springframework.security.web.context.SecurityContextHolderFilter@628cb8e0, org.springframework.security.web.header.HeaderWriterFilter@277dddcf, org.springframework.web.filter.CorsFilter@59ac60d1, org.springframework.security.web.authentication.logout.LogoutFilter@6f6998b6, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@751526a7, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@69542112, com.staynest.security.AuthTokenFilter@45b2b0ed, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5481f204, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@171b0d3, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1503f434, org.springframework.security.web.session.SessionManagementFilter@d5eca06, org.springframework.security.web.access.ExceptionTranslationFilter@7bb888b7, org.springframework.security.web.access.intercept.AuthorizationFilter@401b7226]
+2026-03-12T19:19:49.018+05:30  INFO 23844 --- [staynest-backend] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2026-03-12T19:19:49.063+05:30  INFO 23844 --- [staynest-backend] [           main] com.staynest.StayNestApplication         : Started StayNestApplication in 7.817 seconds (process running for 8.546)
+DataSeeder: Checking database state...
+DataSeeder: Relaxing room_id constraint in bookings/Bookings table...
+DataSeeder: room_id constraint relaxed successfully (checked both cases).
+Hibernate: 
+    select
+        p1_0.pg_id,
+        p1_0.address,
+        p1_0.area,
+        p1_0.city,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.latitude,
+        p1_0.longitude,
+        p1_0.pg_name,
+        p1_0.price,
+        p1_0.state 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        p1_0.pg_id,
+        p1_0.address,
+        p1_0.area,
+        p1_0.city,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.latitude,
+        p1_0.longitude,
+        p1_0.pg_name,
+        p1_0.price,
+        p1_0.state 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        p1_0.pg_id,
+        p1_0.address,
+        p1_0.area,
+        p1_0.city,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.latitude,
+        p1_0.longitude,
+        p1_0.pg_name,
+        p1_0.price,
+        p1_0.state 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        p1_0.pg_id,
+        p1_0.address,
+        p1_0.area,
+        p1_0.city,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.latitude,
+        p1_0.longitude,
+        p1_0.pg_name,
+        p1_0.price,
+        p1_0.state 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        p1_0.pg_id,
+        p1_0.address,
+        p1_0.area,
+        p1_0.city,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.latitude,
+        p1_0.longitude,
+        p1_0.pg_name,
+        p1_0.price,
+        p1_0.state 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        p1_0.pg_id,
+        p1_0.address,
+        p1_0.area,
+        p1_0.city,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.latitude,
+        p1_0.longitude,
+        p1_0.pg_name,
+        p1_0.price,
+        p1_0.state 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        p1_0.pg_id,
+        p1_0.address,
+        p1_0.area,
+        p1_0.city,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.latitude,
+        p1_0.longitude,
+        p1_0.pg_name,
+        p1_0.price,
+        p1_0.state 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        p1_0.pg_id,
+        p1_0.address,
+        p1_0.area,
+        p1_0.city,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.latitude,
+        p1_0.longitude,
+        p1_0.pg_name,
+        p1_0.price,
+        p1_0.state 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        p1_0.pg_id,
+        p1_0.address,
+        p1_0.area,
+        p1_0.city,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.latitude,
+        p1_0.longitude,
+        p1_0.pg_name,
+        p1_0.price,
+        p1_0.state 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        p1_0.pg_id,
+        p1_0.address,
+        p1_0.area,
+        p1_0.city,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.latitude,
+        p1_0.longitude,
+        p1_0.pg_name,
+        p1_0.price,
+        p1_0.state 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        f1_0.floor_id,
+        f1_0.floor_number,
+        f1_0.pg_id 
+    from
+        floors f1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+DataSeeder: Database state expanded to 50 Rooms/PG (PGs 1-10 Seeded).
+2026-03-12T19:22:37.071+05:30  INFO 23844 --- [staynest-backend] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-12T19:22:37.075+05:30  INFO 23844 --- [staynest-backend] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-03-12T19:22:37.076+05:30  INFO 23844 --- [staynest-backend] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+AuthTokenFilter: Incoming POST request to: /booking/create
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+BookingController: createBooking called for User ID: 1
+BookingService: Creating booking for User: 1, PG: 9, Room: 9301
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+BookingService: Incrementing occupancy for Room ID: 9301
+RoomService: Incrementing occupancy for Room ID: 9301. Old value: 0
+RoomService: Occupancy incremented. New value: 1
+Hibernate: 
+    select
+        null,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    insert 
+    into
+        bookings
+        (checkin_date, created_at, duration, meal_plan, pg_id, room_id, room_type, status, user_id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    update
+        rooms 
+    set
+        floor_id=?,
+        occupied_slots=?,
+        pg_id=?,
+        price=?,
+        room_type=?,
+        sharing_type=? 
+    where
+        room_id=?
+BookingController: Successfully created booking ID: 18
+AuthTokenFilter: Incoming POST request to: /sync/book
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+AuthTokenFilter: Incoming POST request to: /sync/release
+AuthTokenFilter: NO Authorization Header found for /sync/release
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    update
+        rooms 
+    set
+        floor_id=?,
+        occupied_slots=?,
+        pg_id=?,
+        price=?,
+        room_type=?,
+        sharing_type=? 
+    where
+        room_id=?
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming DELETE request to: /sync/clear
+AuthTokenFilter: NO Authorization Header found for /sync/clear
+SyncController: Performing FULL SYSTEM RESET...
+Hibernate: 
+    select
+        b1_0.booking_id,
+        b1_0.checkin_date,
+        b1_0.created_at,
+        b1_0.duration,
+        b1_0.meal_plan,
+        b1_0.pg_id,
+        b1_0.room_id,
+        b1_0.room_type,
+        b1_0.status,
+        b1_0.user_id 
+    from
+        bookings b1_0
+SyncController: All MySQL bookings deleted.
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0
+SyncController: All room occupancies reset to 0.
+Hibernate: 
+    delete 
+    from
+        bookings 
+    where
+        booking_id=?
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+JwtUtils: Token parsed and validated successfully.
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+AuthTokenFilter: Incoming POST request to: /booking/create
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+BookingController: createBooking called for User ID: 1
+BookingService: Creating booking for User: 1, PG: 9, Room: 9301
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+BookingService: Incrementing occupancy for Room ID: 9301
+RoomService: Incrementing occupancy for Room ID: 9301. Old value: 0
+RoomService: Occupancy incremented. New value: 1
+Hibernate: 
+    select
+        null,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    insert 
+    into
+        bookings
+        (checkin_date, created_at, duration, meal_plan, pg_id, room_id, room_type, status, user_id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    update
+        rooms 
+    set
+        floor_id=?,
+        occupied_slots=?,
+        pg_id=?,
+        price=?,
+        room_type=?,
+        sharing_type=? 
+    where
+        room_id=?
+BookingController: Successfully created booking ID: 19
+AuthTokenFilter: Incoming POST request to: /sync/book
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming DELETE request to: /sync/clear
+AuthTokenFilter: NO Authorization Header found for /sync/clear
+SyncController: Performing FULL SYSTEM RESET...
+Hibernate: 
+    select
+        b1_0.booking_id,
+        b1_0.checkin_date,
+        b1_0.created_at,
+        b1_0.duration,
+        b1_0.meal_plan,
+        b1_0.pg_id,
+        b1_0.room_id,
+        b1_0.room_type,
+        b1_0.status,
+        b1_0.user_id 
+    from
+        bookings b1_0
+SyncController: All MySQL bookings deleted.
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0
+SyncController: All room occupancies reset to 0.
+Hibernate: 
+    update
+        rooms 
+    set
+        floor_id=?,
+        occupied_slots=?,
+        pg_id=?,
+        price=?,
+        room_type=?,
+        sharing_type=? 
+    where
+        room_id=?
+Hibernate: 
+    delete 
+    from
+        bookings 
+    where
+        booking_id=?
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+AuthTokenFilter: Authentication set in SecurityContext
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+2026-03-12T20:32:01.728+05:30  WARN 23844 --- [staynest-backend] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=26m15s854ms618µs500ns).
+AuthTokenFilter: Incoming POST request to: /auth/login
+AuthTokenFilter: NO Authorization Header found for /auth/login
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+JwtUtils: Generating token for user: susmitha1234@gmail.com with role: ROLE_USER
+Hibernate: 
+    select
+        rt1_0.id,
+        rt1_0.expiry_date,
+        rt1_0.token,
+        rt1_0.user_id 
+    from
+        refreshtoken rt1_0 
+    where
+        rt1_0.user_id=?
+Hibernate: 
+    delete 
+    from
+        refreshtoken 
+    where
+        id=?
+Hibernate: 
+    insert 
+    into
+        refreshtoken
+        (expiry_date, token, user_id) 
+    values
+        (?, ?, ?)
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+AuthTokenFilter: Authentication set in SecurityContext
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+AuthTokenFilter: Incoming POST request to: /booking/create
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+BookingController: createBooking called for User ID: 1
+BookingService: Creating booking for User: 1, PG: 9, Room: 9301
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+BookingService: Incrementing occupancy for Room ID: 9301
+RoomService: Incrementing occupancy for Room ID: 9301. Old value: 0
+RoomService: Occupancy incremented. New value: 1
+Hibernate: 
+    select
+        null,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    insert 
+    into
+        bookings
+        (checkin_date, created_at, duration, meal_plan, pg_id, room_id, room_type, status, user_id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    update
+        rooms 
+    set
+        floor_id=?,
+        occupied_slots=?,
+        pg_id=?,
+        price=?,
+        room_type=?,
+        sharing_type=? 
+    where
+        room_id=?
+BookingController: Successfully created booking ID: 20
+AuthTokenFilter: Incoming POST request to: /sync/book
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+AuthTokenFilter: Incoming POST request to: /sync/release
+AuthTokenFilter: NO Authorization Header found for /sync/release
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    where
+        r1_0.room_id=?
+Hibernate: 
+    update
+        rooms 
+    set
+        floor_id=?,
+        occupied_slots=?,
+        pg_id=?,
+        price=?,
+        room_type=?,
+        sharing_type=? 
+    where
+        room_id=?
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /rooms/byPG/9
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Authentication set in SecurityContext
+RoomController: Fetching rooms for PG ID: 9
+Hibernate: 
+    select
+        count(*) 
+    from
+        pg p1_0 
+    where
+        p1_0.pg_id=?
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0 
+    left join
+        pg p1_0 
+            on p1_0.pg_id=r1_0.pg_id 
+    where
+        p1_0.pg_id=?
+RoomService: Found 50 rooms for PG ID: 9
+RoomService: First room occupancy: 0
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming DELETE request to: /sync/clear
+AuthTokenFilter: NO Authorization Header found for /sync/clear
+SyncController: Performing FULL SYSTEM RESET...
+Hibernate: 
+    select
+        b1_0.booking_id,
+        b1_0.checkin_date,
+        b1_0.created_at,
+        b1_0.duration,
+        b1_0.meal_plan,
+        b1_0.pg_id,
+        b1_0.room_id,
+        b1_0.room_type,
+        b1_0.status,
+        b1_0.user_id 
+    from
+        bookings b1_0
+SyncController: All MySQL bookings deleted.
+Hibernate: 
+    select
+        r1_0.room_id,
+        r1_0.floor_id,
+        r1_0.occupied_slots,
+        r1_0.pg_id,
+        r1_0.price,
+        r1_0.room_type,
+        r1_0.sharing_type 
+    from
+        rooms r1_0
+SyncController: All room occupancies reset to 0.
+Hibernate: 
+    delete 
+    from
+        bookings 
+    where
+        booking_id=?
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+AuthTokenFilter: Incoming GET request to: /sync/bookings
+AuthTokenFilter: Authorization Header found: Bearer eyJhbGci...
+AuthTokenFilter: Found JWT in request. Validating...
+JwtUtils: Token parsed and validated successfully.
+AuthTokenFilter: JWT is valid for user: susmitha1234@gmail.com
+Hibernate: 
+    select
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.provider,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+AuthTokenFilter: Authentication set in SecurityContext
+2026-03-12T21:03:12.199+05:30  WARN 23844 --- [staynest-backend] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=15m39s486ms18µs900ns).
+2026-03-12T21:18:47.992+05:30  WARN 23844 --- [staynest-backend] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m35s547ms997µs400ns).
+2026-03-12T21:39:15.085+05:30  WARN 23844 --- [staynest-backend] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=10m26s925ms335µs700ns).
+2026-03-12T22:11:45.677+05:30  WARN 23844 --- [staynest-backend] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=30m554ms10µs).
+2026-03-12T22:28:57.806+05:30  WARN 23844 --- [staynest-backend] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m11s874ms397µs800ns).
