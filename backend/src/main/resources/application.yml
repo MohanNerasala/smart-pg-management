@@ -2,11 +2,11 @@ spring:
   application:
     name: staynest-backend
   datasource:
-    url: jdbc:mysql://localhost:3306/pg_management?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: root
-    password: chakri
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
+  
+  jpa:  url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/pg_management}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
     hibernate:
       ddl-auto: update
     show-sql: true
@@ -18,16 +18,20 @@ spring:
       client:
         registration:
           google:
-            client-id: MOCK_GOOGLE_CLIENT_ID
-            client-secret: MOCK_GOOGLE_CLIENT_SECRET
+            client-id: ${GOOGLE_CLIENT_ID:MOCK_GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET:MOCK_GOOGLE_CLIENT_SECRET}
             scope:
               - email
               - profile
 
 jwt:
-  secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-  expirationMs: 86400000 # 24 hours (development)
-  jwtRefreshExpirationMs: 2592000000 # 30 days
+  secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+  expirationMs: 86400000 
+  jwtRefreshExpirationMs: 2592000000 
+
+app:
+  cors:
+    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:5173,http://127.0.0.1:5173}
 
 server:
   port: 8080
