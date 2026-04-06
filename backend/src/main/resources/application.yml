@@ -2,33 +2,33 @@ spring:
   application:
     name: staynest-backend
   main:
-    # DEFINITIVE FIX: Force the app to run as a web server and stay alive
     web-application-type: servlet
     lazy-initialization: true
+
   datasource:
-    # Uses Supavisor Pooler with direct IPv4 IP to avoid Java IPv6 resolution issues
-    url: jdbc:postgresql://aws-0-ap-northeast-1.pooler.supabase.com:5432/postgres?sslmode=require&prepareThreshold=0
-    username: postgres.dablrwdnybxqofefxtim
+    url: jdbc:postgresql://db.dablrwdnybxqofefxtim.supabase.co:5432/postgres
+    username: postgres
     password: irkahchakri0987
     driver-class-name: org.postgresql.Driver
     hikari:
-      connection-timeout: 30000
+      connection-timeout: 60000
       idle-timeout: 600000
       max-lifetime: 1800000
-      # CRITICAL: -1 means don't fail-fast. The app starts immediately and
-      # HikariPool keeps retrying the DB connection in the background.
-      initialization-fail-timeout: -1
       maximum-pool-size: 5
+      minimum-idle: 2
+      initialization-fail-timeout: -1
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: none
-    show-sql: false
+      ddl-auto: update
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
         temp:
           use_jdbc_metadata_defaults: false
+
   security:
     oauth2:
       client:
@@ -41,14 +41,14 @@ spring:
               - profile
 
 jwt:
-  secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+  secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
   expirationMs: 86400000 
   jwtRefreshExpirationMs: 2592000000 
 
 app:
-  ai-service-url: ${AI_SERVICE_URL:http://localhost:5000}
+  ai-service-url: ${PYTHON_AI_URL:http://localhost:5000}
   cors:
-    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,https://*.netlify.app}
+    allowed-origins: http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,https://*.netlify.app,https://staynest.netlify.app
 
 server:
-  port: 8081
+  port: ${PORT:8081}

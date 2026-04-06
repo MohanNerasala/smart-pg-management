@@ -41,68 +41,99 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody AuthDtos.LoginRequest loginRequest) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
+            
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();    
+            String role = userDetails.getAuthorities().stream()
+                    .findFirst()
+                    .map(GrantedAuthority::getAuthority)
+                    .orElse("ROLE_USER");
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-        
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();    
-        String role = userDetails.getAuthorities().stream()
-                .findFirst()
-                .map(GrantedAuthority::getAuthority)
-                .orElse("ROLE_USER");
+            RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
 
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
-
-        return ResponseEntity.ok(new AuthDtos.JwtResponse(jwt,
-                refreshToken.getToken(),
-                userDetails.getId(), 
-                userDetails.getName(), 
-                userDetails.getEmail(), 
-                role));
+            return ResponseEntity.ok(new AuthDtos.JwtResponse(jwt,
+                    refreshToken.getToken(),
+                    userDetails.getId(), 
+                    userDetails.getName(), 
+                    userDetails.getEmail(), 
+                    role));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new AuthDtos.MessageResponse("Error: Login failed! " + e.getMessage()));
+        }
     }
 
     @PostMapping("/refreshtoken")
     public ResponseEntity<?> refreshtoken(@RequestBody AuthDtos.TokenRefreshRequest request) {
-        String requestRefreshToken = request.getRefreshToken();
+        try {
+            String requestRefreshToken = request.getRefreshToken();
 
-        return refreshTokenService.findByToken(requestRefreshToken)
-                .map(refreshTokenService::verifyExpiration)
-                .map(RefreshToken::getUser)
-                .map(user -> {
-                    String token = jwtUtils.generateJwtTokenFromUser(user);
-                    return ResponseEntity.ok(new AuthDtos.TokenRefreshResponse(token, requestRefreshToken));
-                })
-                .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,
-                        "Refresh token is not in database!"));
+            return refreshTokenService.findByToken(requestRefreshToken)
+                    .map(refreshTokenService::verifyExpiration)
+                    .map(RefreshToken::getUser)
+                    .map(user -> {
+                        String token = jwtUtils.generateJwtTokenFromUser(user);
+                        return ResponseEntity.ok(new AuthDtos.TokenRefreshResponse(token, requestRefreshToken));
+                    })
+                    .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,
+                            "Refresh token is not in database!"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new AuthDtos.MessageResponse("Error: Token refresh failed! " + e.getMessage()));
+        }
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody AuthDtos.SignupRequest signUpRequest) {
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new AuthDtos.MessageResponse("Error: Email is already in use!"));
+        try {
+            if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new AuthDtos.MessageResponse("Error: Email is already in use!"));
+            }
+
+            // Create new user's account
+            User user = new User();
+            user.setName(signUpRequest.getName());
+            user.setEmail(signUpRequest.getEmail());
+            user.setPassword(encoder.encode(signUpRequest.getPassword()));
+            user.setPhone(signUpRequest.getPhone());
+            if ("admin@staynest.com".equals(signUpRequest.getEmail())) {
+                user.setRole(Role.ADMIN);
+            } else {
+                user.setRole(Role.USER);
+            }
+            user.setProvider(AuthProvider.LOCAL);
+
+            userRepository.save(user);
+
+            // AUTO-LOGIN after registration
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(signUpRequest.getEmail(), signUpRequest.getPassword()));
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
+            
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();    
+            String role = userDetails.getAuthorities().stream()
+                    .findFirst()
+                    .map(GrantedAuthority::getAuthority)
+                    .orElse("ROLE_USER");
+
+            RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+
+            return ResponseEntity.ok(new AuthDtos.JwtResponse(jwt,
+                    refreshToken.getToken(),
+                    userDetails.getId(), 
+                    userDetails.getName(), 
+                    userDetails.getEmail(), 
+                    role));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new AuthDtos.MessageResponse("Error: Registration failed! " + e.getMessage()));
         }
-
-        // Create new user's account
-        User user = new User();
-        user.setName(signUpRequest.getName());
-        user.setEmail(signUpRequest.getEmail());
-        user.setPassword(encoder.encode(signUpRequest.getPassword()));
-        user.setPhone(signUpRequest.getPhone());
-        if ("admin@staynest.com".equals(signUpRequest.getEmail())) {
-            user.setRole(Role.ADMIN);
-        } else {
-            user.setRole(Role.USER);
-        }
-        user.setProvider(AuthProvider.LOCAL);
-
-        userRepository.save(user);
-
-        return ResponseEntity.ok(new AuthDtos.MessageResponse("User registered successfully!"));
     }
 
     @GetMapping("/users")

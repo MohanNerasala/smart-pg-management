@@ -83,7 +83,17 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (name, email, phone, password) => {
     try {
-      await api.post('/auth/register', { name, email, phone, password });
+      const response = await api.post('/auth/register', { name, email, phone, password });
+      const { token, refreshToken, id, name: userName, email: userEmail, role } = response.data;
+      
+      const userData = { id, name: userName, email: userEmail, role };
+      console.log("AuthContext: Registration successful. Saving session for:", userEmail);
+      
+      localStorage.setItem('token', token);
+      if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('user', JSON.stringify(userData));
+      
+      setUser(userData);
       return { success: true };
     } catch (error) {
       return { 
@@ -92,6 +102,7 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
+
 
   const handleOAuthLogin = (token, refreshToken, userData) => {
     localStorage.setItem('token', token);

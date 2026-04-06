@@ -1,7 +1,11 @@
 import axios from 'axios';
 
 // Set the Production Render URL as the primary fallback for the cloud deployment
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://smart-pg-management.onrender.com';
+// Support both Vite (.env) and Create React App (.env) style variable names
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
+                     import.meta.env.REACT_APP_API_URL || 
+                     'https://smart-pg-management.onrender.com';
+
 
 const api = axios.create({
   baseURL: API_BASE_URL,
