@@ -79,6 +79,7 @@ public class WebSecurityConfig {
                     .requestMatchers("/pg/list", "/pg/{id}").permitAll()
                     .requestMatchers("/rooms/byPG/**").permitAll()
                     .requestMatchers("/sync/**").permitAll()
+                    .requestMatchers("/").permitAll()
                     .requestMatchers("/error").permitAll()
                     .anyRequest().authenticated()
             )
