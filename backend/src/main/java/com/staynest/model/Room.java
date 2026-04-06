@@ -36,7 +36,7 @@ public class Room {
     @Column(nullable = false)
     private Integer sharingType;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "integer default 0")
     private Integer occupiedSlots = 0;
 
     @Column(nullable = false, precision = 10, scale = 2)

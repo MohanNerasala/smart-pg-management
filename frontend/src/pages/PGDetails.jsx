@@ -110,7 +110,7 @@ const PGDetails = () => {
         localStorage.setItem('latestBooking', JSON.stringify(newBooking));
 
         // Sync with backend mock service
-        fetch('http://localhost:8080/sync/book', {
+        fetch('http://localhost:8081/sync/book', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newBooking)

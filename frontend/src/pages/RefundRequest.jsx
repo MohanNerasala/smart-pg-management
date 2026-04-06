@@ -174,7 +174,7 @@ const RefundRequest = () => {
 
       // Proactively release the bed in backend memory
       if (selectedBooking?.room?.roomId) {
-        fetch('http://localhost:8080/sync/release', {
+        fetch('http://localhost:8081/sync/release', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

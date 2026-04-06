@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: 'http://localhost:8081',
   withCredentials: true,
 });
 
@@ -35,7 +35,7 @@ api.interceptors.response.use(
       if (refreshToken) {
         try {
           console.log("api.js: Attempting to refresh token...");
-          const response = await axios.post('http://localhost:8080/auth/refreshtoken', {
+          const response = await axios.post('http://localhost:8081/auth/refreshtoken', {
             refreshToken: refreshToken,
           }, { withCredentials: true });
 
@@ -59,7 +59,9 @@ api.interceptors.response.use(
       }
     }
 
-    if (error.response?.status === 401) {
+    const isAuthRequest = originalRequest?.url?.includes('/auth/login') || originalRequest?.url?.includes('/auth/register');
+
+    if (error.response?.status === 401 && !isAuthRequest) {
       console.error("api.js: Final 401 detected. Logging out and redirecting to login.");
       localStorage.removeItem('token');
       localStorage.removeItem('refreshToken');

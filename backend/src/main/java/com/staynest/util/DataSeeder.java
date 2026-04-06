@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.math.BigDecimal;
 
@@ -41,36 +41,63 @@ public class DataSeeder implements CommandLineRunner {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    @Transactional
     public void run(String... args) {
+        try {
+            // Exit early if data already seeded to avoid cloud timeouts
+            if (userRepository.existsByEmail("admin@staynest.com")) {
+                System.out.println("DataSeeder: Database already seeded. Skipping expensive bootstrap.");
+                return;
+            }
+        } catch (Exception e) {
+            System.err.println("DataSeeder: WARNING - Could not connect to Supabase to check seed status. Check your network! Continuing startup...");
+            return; // Skip seeding if we can't connect, but DON'T crash the app.
+        }
+
         try {
             System.out.println("DataSeeder: Checking database state...");
             
             // 0. Bulletproof Fix: Relax room_id constraint directly via SQL
             System.out.println("DataSeeder: Relaxing room_id constraint in bookings/Bookings table...");
             try {
-                // Try both cases just to be 100% bulletproof
-                jdbcTemplate.execute("ALTER TABLE Bookings MODIFY room_id BIGINT NULL");
-                jdbcTemplate.execute("ALTER TABLE bookings MODIFY room_id BIGINT NULL");
-                System.out.println("DataSeeder: room_id constraint relaxed successfully (checked both cases).");
+                // PostgreSQL syntax for dropping NOT NULL and potentially changing type
+                jdbcTemplate.execute("ALTER TABLE Bookings ALTER COLUMN room_id DROP NOT NULL");
+                jdbcTemplate.execute("ALTER TABLE bookings ALTER COLUMN room_id DROP NOT NULL");
+                
+                // Align users_provider_check with uppercase java Enums
+                try {
+                    // Drop constraint first so we can normalize existing data
+                    jdbcTemplate.execute("ALTER TABLE users DROP CONSTRAINT IF EXISTS users_provider_check");
+                    // Set default for any null providers
+                    jdbcTemplate.execute("UPDATE users SET provider = 'LOCAL' WHERE provider IS NULL");
+                    // Normalize existing data to uppercase 
+                    jdbcTemplate.execute("UPDATE users SET provider = UPPER(provider)");
+                    // Re-add constraint with correct allowed values
+                    jdbcTemplate.execute("ALTER TABLE users ADD CONSTRAINT users_provider_check CHECK (provider IN ('LOCAL', 'GOOGLE'))");
+                    System.out.println("DataSeeder: users_provider_check aligned with LOCAL/GOOGLE.");
+                } catch (Exception constraintEx) {
+                    System.err.println("DataSeeder: Non-critical error adjusting users_provider_check: " + constraintEx.getMessage());
+                }
+
+                System.out.println("DataSeeder: room_id constraint relaxed successfully (PostgreSQL).");
             } catch (Exception sqlEx) {
                 System.err.println("DataSeeder: Partial success or non-critical error modifying room_id: " + sqlEx.getMessage());
             }
 
             // 0c. Ensure Admin User exists
-            if (!userRepository.existsByEmail("admin@staynest")) {
+            if (!userRepository.existsByEmail("admin@staynest.com")) {
                 System.out.println("DataSeeder: Seeding Admin User...");
                 User admin = new User();
                 admin.setName("Admin");
-                admin.setEmail("admin@staynest");
+                admin.setEmail("admin@staynest.com");
                 admin.setPassword(passwordEncoder.encode("admin123"));
                 admin.setRole(Role.ADMIN);
                 admin.setProvider(AuthProvider.LOCAL);
                 userRepository.save(admin);
                 System.out.println("DataSeeder: Admin User seeded successfully.");
-            } else {
+            }
+ else {
                 System.out.println("DataSeeder: Admin User found. Force-resetting password to admin123...");
-                User admin = userRepository.findByEmail("admin@staynest").get();
+                User admin = userRepository.findByEmail("admin@staynest.com").get();
                 admin.setPassword(passwordEncoder.encode("admin123"));
                 userRepository.save(admin);
             }
@@ -96,8 +123,8 @@ public class DataSeeder implements CommandLineRunner {
             }
             */
             
-            // 1. Ensure PGs exist (Seed 1-10 for stability with AI Search)
-            for (long p = 1; p <= 10; p++) {
+            // 1. Ensure PGs exist (Seed 1-110 to match analyzed local data)
+            for (long p = 1; p <= 110; p++) {
                 final long pgId = p;
                 PG pg = pgRepository.findById(pgId).orElseGet(() -> {
                     System.out.println("DataSeeder: Creating PG ID " + pgId);

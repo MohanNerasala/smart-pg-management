@@ -649,7 +649,7 @@ const BookingsPage = () => {
                  localStorage.removeItem('latestBooking');
                  localStorage.removeItem('dashboardFormState');
                  localStorage.removeItem('refund_requests');
-                 fetch('http://localhost:8080/sync/clear', { method: 'DELETE' })
+                 fetch('http://localhost:8081/sync/clear', { method: 'DELETE' })
                    .finally(() => window.location.reload());
               }
             }}

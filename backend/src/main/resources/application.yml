@@ -1,18 +1,32 @@
 spring:
   application:
     name: staynest-backend
+  main:
+    # DEFINITIVE FIX: Force the app to run as a web server and stay alive
+    web-application-type: servlet
+    lazy-initialization: true
   datasource:
-  
-  jpa:  url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/pg_management}
-    username: ${SPRING_DATASOURCE_USERNAME:postgres}
-    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    # DIRECT CONNECTION (Port 5432) - Often bypasses certain firewall filters better than 6543
+    url: jdbc:postgresql://db.dablrwdnybxqofefxtim.supabase.co:5432/postgres?sslmode=require&prepareThreshold=0
+    username: postgres.dablrwdnybxqofefxtim
+    password: irkahchakri0987
     driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      # PREVENT SHUTDOWN: App will NEVER stop if the DB is unreachable
+      initialization-fail-timeout: 0
+      maximum-pool-size: 5
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+        hibernate.temp.use_jdbc_metadata_defaults: false
   security:
     oauth2:
       client:
@@ -31,7 +45,7 @@ jwt:
 
 app:
   cors:
-    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:5173,http://127.0.0.1:5173}
+    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000}
 
 server:
-  port: 8080
+  port: 8081

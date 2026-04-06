@@ -13,7 +13,7 @@ const Login = () => {
 
   const handleGoogleLogin = () => {
     // Redirect to Spring Boot OAuth2 endpoint
-    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+    window.location.href = 'http://localhost:8081/oauth2/authorization/google';
   };
 
   const handleLogin = async (e) => {
