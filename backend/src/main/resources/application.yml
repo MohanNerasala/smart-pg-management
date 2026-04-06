@@ -15,8 +15,8 @@ spring:
       connection-timeout: 30000
       idle-timeout: 600000
       max-lifetime: 1800000
-      # PREVENT SHUTDOWN: App will NEVER stop if the DB is unreachable
-      initialization-fail-timeout: 0
+      # STABLE STARTUP: Allow 5 seconds for initial connection
+      initialization-fail-timeout: 5000
       maximum-pool-size: 5
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect

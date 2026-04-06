@@ -39,6 +39,20 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        // DEFINITIVE FIX: Run seeding in a BACKGROUND THREAD so Render doesn't kill the app for a 'startup timeout'
+        new Thread(() -> {
+            try {
+                // Wait 10 seconds for the cloud connection to stabilize
+                Thread.sleep(10000);
+                performSeeding();
+            } catch (Exception e) {
+                System.err.println("DataSeeder: Background Seeding CRITICAL ERROR: " + e.getMessage());
+            }
+        }).start();
+        System.out.println("DataSeeder: BACKGROUND SEEDING STARTED. Backend is now entering 'Ready' state.");
+    }
+
+    private void performSeeding() {
         try {
             // Exit early if data already seeded to avoid cloud timeouts
             if (userRepository.existsByEmail("admin@staynest.com")) {
@@ -53,23 +67,6 @@ public class DataSeeder implements CommandLineRunner {
         try {
             System.out.println("DataSeeder: Checking database state...");
             
-            // 0. Bulletproof Fix: Relax room_id constraint directly via SQL (Wrapped in safety)
-            // System.out.println("DataSeeder: Relaxing room_id constraint in bookings/Bookings table...");
-            // try {
-            //     jdbcTemplate.execute("ALTER TABLE Bookings ALTER COLUMN room_id DROP NOT NULL");
-            //     // Align users_provider_check with uppercase java Enums
-            //     try {
-            //         jdbcTemplate.execute("ALTER TABLE app_users DROP CONSTRAINT IF EXISTS users_provider_check");
-            //         jdbcTemplate.execute("UPDATE app_users SET provider = 'LOCAL' WHERE provider IS NULL");
-            //         jdbcTemplate.execute("UPDATE app_users SET provider = UPPER(provider)");
-            //         jdbcTemplate.execute("ALTER TABLE app_users ADD CONSTRAINT users_provider_check CHECK (provider IN ('LOCAL', 'GOOGLE'))");
-            //     } catch (Exception constraintEx) {
-            //         System.err.println("DataSeeder: Non-critical error adjusting users_provider_check: " + constraintEx.getMessage());
-            //     }
-            // } catch (Exception sqlEx) {
-            //     System.err.println("DataSeeder: Partial success or non-critical error modifying room_id: " + sqlEx.getMessage());
-            // }
-
             // 0c. Ensure Admin User exists
             if (!userRepository.existsByEmail("admin@staynest.com")) {
                 System.out.println("DataSeeder: Seeding Admin User...");
@@ -81,8 +78,7 @@ public class DataSeeder implements CommandLineRunner {
                 admin.setProvider(AuthProvider.LOCAL);
                 userRepository.save(admin);
                 System.out.println("DataSeeder: Admin User seeded successfully.");
-            }
- else {
+            } else {
                 System.out.println("DataSeeder: Admin User found. Force-resetting password to admin123...");
                 User admin = userRepository.findByEmail("admin@staynest.com").get();
                 admin.setPassword(passwordEncoder.encode("admin123"));
@@ -95,26 +91,12 @@ public class DataSeeder implements CommandLineRunner {
                 return;
             }
 
-            /* 0b. Optional: Reset Room Occupancy (Commented out to allow multi-booking persistence)
-            System.out.println("DataSeeder: [SKIPPED] Automatic System Reset...");
-            try {
-                // Fetch all existing rooms and reset their occupancy to 0
-                // roomRepository.findAll().forEach(room -> {
-                //     if (room.getOccupiedSlots() != 0) {
-                //         room.setOccupiedSlots(0);
-                //         roomRepository.save(room);
-                //     }
-                // });
-            } catch (Exception resetEx) {
-                System.err.println("DataSeeder: Non-critical error during system reset: " + resetEx.getMessage());
-            }
-            */
-            
             // 1. Ensure PGs exist (Seed 1-110 to match analyzed local data)
+            System.out.println("DataSeeder: Starting MASSIVE database population (110 PGs * 50 Rooms). This will run in background...");
+            int pgCount = 0;
             for (long p = 1; p <= 110; p++) {
                 final long pgId = p;
                 PG pg = pgRepository.findById(pgId).orElseGet(() -> {
-                    System.out.println("DataSeeder: Creating PG ID " + pgId);
                     PG newPg = new PG();
                     newPg.setPgId(pgId);
                     newPg.setPgName("StayNest PG " + pgId);
@@ -141,7 +123,6 @@ public class DataSeeder implements CommandLineRunner {
                             });
 
                     // 3. Ensure 10 Rooms exist for this floor (Matches frontend r=1..10)
-                    // ID logic: pgId * 1000 + floorNum * 100 + r
                     for (int r = 1; r <= 10; r++) {
                         long roomId = (pgId * 1000) + (f * 100) + r;
                         if (!roomRepository.existsById(roomId)) {
@@ -150,16 +131,20 @@ public class DataSeeder implements CommandLineRunner {
                             room.setPg(pg);
                             room.setFloor(floor);
                             room.setRoomType("Standard");
-                            room.setSharingType(6 - f); // Matches frontend logic
+                            room.setSharingType(6 - f); 
                             room.setOccupiedSlots(0);
                             room.setPrice(new BigDecimal("8000"));
                             roomRepository.save(room);
                         }
                     }
                 }
+                pgCount++;
+                if (pgCount % 10 == 0) {
+                    System.out.println("DataSeeder: Progress [" + pgCount + "/110] PGs fully seeded in background...");
+                }
             }
             
-            System.out.println("DataSeeder: Database state expanded to 50 Rooms/PG (PGs 1-10 Seeded).");
+            System.out.println("DataSeeder: !!! BACKGROUND SEEDING COMPLETE !!! (110 PGs / 5500 Rooms created).");
         } catch (Exception e) {
             System.err.println("!!! DATA SEEDER FAILED !!!");
             e.printStackTrace();
