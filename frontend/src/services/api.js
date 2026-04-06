@@ -1,7 +1,11 @@
 import axios from 'axios';
 
+// Dynamically pick the backend URL from environment variables
+// Falls back to localhost:8081 for internal development
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8081';
+
 const api = axios.create({
-  baseURL: 'http://localhost:8081',
+  baseURL: API_BASE_URL,
   withCredentials: true,
 });
 
@@ -35,7 +39,7 @@ api.interceptors.response.use(
       if (refreshToken) {
         try {
           console.log("api.js: Attempting to refresh token...");
-          const response = await axios.post('http://localhost:8081/auth/refreshtoken', {
+          const response = await axios.post(`${API_BASE_URL}/auth/refreshtoken`, {
             refreshToken: refreshToken,
           }, { withCredentials: true });
 

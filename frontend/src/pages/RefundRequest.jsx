@@ -174,7 +174,8 @@ const RefundRequest = () => {
 
       // Proactively release the bed in backend memory
       if (selectedBooking?.room?.roomId) {
-        fetch('http://localhost:8081/sync/release', {
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8081';
+        fetch(`${API_BASE_URL}/sync/release`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

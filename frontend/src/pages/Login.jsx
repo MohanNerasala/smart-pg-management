@@ -13,7 +13,8 @@ const Login = () => {
 
   const handleGoogleLogin = () => {
     // Redirect to Spring Boot OAuth2 endpoint
-    window.location.href = 'http://localhost:8081/oauth2/authorization/google';
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8081';
+    window.location.href = `${API_BASE_URL}/oauth2/authorization/google`;
   };
 
   const handleLogin = async (e) => {

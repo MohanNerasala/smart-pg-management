@@ -110,7 +110,8 @@ const PGDetails = () => {
         localStorage.setItem('latestBooking', JSON.stringify(newBooking));
 
         // Sync with backend mock service
-        fetch('http://localhost:8081/sync/book', {
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8081';
+        fetch(`${API_BASE_URL}/sync/book`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newBooking)
