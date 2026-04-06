@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
-@Component
+// @Component  // DISABLED: This crashes the app at startup if DB isn't connected yet
 public class AmountFixer implements CommandLineRunner {
 
     @Autowired

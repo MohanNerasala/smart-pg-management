@@ -6,8 +6,7 @@ spring:
     web-application-type: servlet
     lazy-initialization: true
   datasource:
-    # IPv4 COMPATIBILITY FIX: Use the Supavisor Pooler (Session Mode) for Render.com
-    # Render requires IPv4, but the direct Supabase URL is IPv6 only.
+    # Uses Supavisor Pooler with direct IPv4 IP to avoid Java IPv6 resolution issues
     url: jdbc:postgresql://aws-0-ap-northeast-1.pooler.supabase.com:5432/postgres?sslmode=require&prepareThreshold=0
     username: postgres.dablrwdnybxqofefxtim
     password: irkahchakri0987
@@ -16,18 +15,20 @@ spring:
       connection-timeout: 30000
       idle-timeout: 600000
       max-lifetime: 1800000
-      # STABLE STARTUP: Allow 5 seconds for initial connection
-      initialization-fail-timeout: 5000
+      # CRITICAL: -1 means don't fail-fast. The app starts immediately and
+      # HikariPool keeps retrying the DB connection in the background.
+      initialization-fail-timeout: -1
       maximum-pool-size: 5
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: none
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
-        hibernate.temp.use_jdbc_metadata_defaults: false
+        temp:
+          use_jdbc_metadata_defaults: false
   security:
     oauth2:
       client:
