@@ -103,7 +103,7 @@ public class WebSecurityConfig {
                                      .map(String::trim)
                                      .collect(Collectors.toList());
                                      
-        configuration.setAllowedOrigins(origins); 
+        configuration.setAllowedOriginPatterns(origins); 
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With"));
         configuration.setAllowCredentials(true);
