@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-// Dynamically pick the backend URL from environment variables
-// Falls back to localhost:8081 for internal development
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8081';
+// Set the Production Render URL as the primary fallback for the cloud deployment
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://smart-pg-management.onrender.com';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
