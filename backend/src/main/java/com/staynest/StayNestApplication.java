@@ -10,4 +10,9 @@ public class StayNestApplication {
 		SpringApplication.run(StayNestApplication.class, args);
 	}
 
+	@jakarta.annotation.PostConstruct
+	public void heartbeat() {
+		System.out.println("!!! BACKEND HEARTBEAT: CONTEXT LOADED SUCCESSFULLY !!!");
+	}
+
 }
