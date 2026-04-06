@@ -37,8 +37,6 @@ public class DataSeeder implements CommandLineRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     @Override
     public void run(String... args) {
@@ -56,32 +54,22 @@ public class DataSeeder implements CommandLineRunner {
         try {
             System.out.println("DataSeeder: Checking database state...");
             
-            // 0. Bulletproof Fix: Relax room_id constraint directly via SQL
-            System.out.println("DataSeeder: Relaxing room_id constraint in bookings/Bookings table...");
-            try {
-                // PostgreSQL syntax for dropping NOT NULL and potentially changing type
-                jdbcTemplate.execute("ALTER TABLE Bookings ALTER COLUMN room_id DROP NOT NULL");
-                jdbcTemplate.execute("ALTER TABLE bookings ALTER COLUMN room_id DROP NOT NULL");
-                
-                // Align users_provider_check with uppercase java Enums
-                try {
-                    // Drop constraint first so we can normalize existing data
-                    jdbcTemplate.execute("ALTER TABLE users DROP CONSTRAINT IF EXISTS users_provider_check");
-                    // Set default for any null providers
-                    jdbcTemplate.execute("UPDATE users SET provider = 'LOCAL' WHERE provider IS NULL");
-                    // Normalize existing data to uppercase 
-                    jdbcTemplate.execute("UPDATE users SET provider = UPPER(provider)");
-                    // Re-add constraint with correct allowed values
-                    jdbcTemplate.execute("ALTER TABLE users ADD CONSTRAINT users_provider_check CHECK (provider IN ('LOCAL', 'GOOGLE'))");
-                    System.out.println("DataSeeder: users_provider_check aligned with LOCAL/GOOGLE.");
-                } catch (Exception constraintEx) {
-                    System.err.println("DataSeeder: Non-critical error adjusting users_provider_check: " + constraintEx.getMessage());
-                }
-
-                System.out.println("DataSeeder: room_id constraint relaxed successfully (PostgreSQL).");
-            } catch (Exception sqlEx) {
-                System.err.println("DataSeeder: Partial success or non-critical error modifying room_id: " + sqlEx.getMessage());
-            }
+            // 0. Bulletproof Fix: Relax room_id constraint directly via SQL (Wrapped in safety)
+            // System.out.println("DataSeeder: Relaxing room_id constraint in bookings/Bookings table...");
+            // try {
+            //     jdbcTemplate.execute("ALTER TABLE Bookings ALTER COLUMN room_id DROP NOT NULL");
+            //     // Align users_provider_check with uppercase java Enums
+            //     try {
+            //         jdbcTemplate.execute("ALTER TABLE app_users DROP CONSTRAINT IF EXISTS users_provider_check");
+            //         jdbcTemplate.execute("UPDATE app_users SET provider = 'LOCAL' WHERE provider IS NULL");
+            //         jdbcTemplate.execute("UPDATE app_users SET provider = UPPER(provider)");
+            //         jdbcTemplate.execute("ALTER TABLE app_users ADD CONSTRAINT users_provider_check CHECK (provider IN ('LOCAL', 'GOOGLE'))");
+            //     } catch (Exception constraintEx) {
+            //         System.err.println("DataSeeder: Non-critical error adjusting users_provider_check: " + constraintEx.getMessage());
+            //     }
+            // } catch (Exception sqlEx) {
+            //     System.err.println("DataSeeder: Partial success or non-critical error modifying room_id: " + sqlEx.getMessage());
+            // }
 
             // 0c. Ensure Admin User exists
             if (!userRepository.existsByEmail("admin@staynest.com")) {
