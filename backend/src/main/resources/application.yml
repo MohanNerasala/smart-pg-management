@@ -6,8 +6,9 @@ spring:
     web-application-type: servlet
     lazy-initialization: true
   datasource:
-    # DIRECT CONNECTION (Port 5432) - Often bypasses certain firewall filters better than 6543
-    url: jdbc:postgresql://db.dablrwdnybxqofefxtim.supabase.co:5432/postgres?sslmode=require&prepareThreshold=0
+    # IPv4 COMPATIBILITY FIX: Use the Supavisor Pooler (Session Mode) for Render.com
+    # Render requires IPv4, but the direct Supabase URL is IPv6 only.
+    url: jdbc:postgresql://aws-0-ap-northeast-1.pooler.supabase.com:5432/postgres?sslmode=require&prepareThreshold=0
     username: postgres.dablrwdnybxqofefxtim
     password: irkahchakri0987
     driver-class-name: org.postgresql.Driver
