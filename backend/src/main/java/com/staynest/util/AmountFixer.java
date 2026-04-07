@@ -26,7 +26,7 @@ public class AmountFixer implements CommandLineRunner {
 
         for (Booking booking : allBookings) {
             if (booking.getTotalAmount() == null || booking.getTotalAmount() == 0) {
-                System.out.println("AmountFixer: Fixing amount for Booking ID: " + booking.getBookingId());
+                System.out.println("AmountFixer: Fixing amount for Booking ID: " + booking.getId());
                 
                 // We re-run the pricing logic by calling save through service if we had a pure calculation method.
                 // Since it's inside createBooking, I'll manually trigger it here for existing ones.

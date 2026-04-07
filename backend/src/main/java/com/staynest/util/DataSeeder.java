@@ -96,7 +96,7 @@ public class DataSeeder implements CommandLineRunner {
                 final long pgId = p;
                 PG pg = pgRepository.findById(pgId).orElseGet(() -> {
                     PG newPg = new PG();
-                    newPg.setPgId(pgId);
+                    newPg.setId(pgId);
                     newPg.setPgName("StayNest PG " + pgId);
                     newPg.setCity("Bangalore");
                     newPg.setState("Karnataka");
@@ -111,7 +111,7 @@ public class DataSeeder implements CommandLineRunner {
                 for (int f = 1; f <= 5; f++) {
                     final int floorNum = f;
                     Floor floor = floorRepository.findAll().stream()
-                            .filter(fl -> fl.getFloorNumber() == floorNum && fl.getPg().getPgId().equals(pg.getPgId()))
+                            .filter(fl -> fl.getFloorNumber() == floorNum && fl.getPg().getId().equals(pg.getId()))
                             .findFirst()
                             .orElseGet(() -> {
                                 Floor newFloor = new Floor();
@@ -125,7 +125,7 @@ public class DataSeeder implements CommandLineRunner {
                         long roomId = (pgId * 1000) + (f * 100) + r;
                         if (!roomRepository.existsById(roomId)) {
                             Room room = new Room();
-                            room.setRoomId(roomId);
+                            room.setId(roomId);
                             room.setPg(pg);
                             room.setFloor(floor);
                             room.setRoomType("Standard");

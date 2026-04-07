@@ -26,7 +26,7 @@ public class RoomService {
             System.out.println("RoomService: PG ID " + pgId + " not found or null. Returning empty list.");
             return Collections.emptyList();
         }
-        List<Room> rooms = roomRepository.findByPgPgId(pgId);
+        List<Room> rooms = roomRepository.findByPgId(pgId);
         System.out.println("RoomService: Found " + rooms.size() + " rooms for PG ID: " + pgId);
         if (!rooms.isEmpty()) {
             System.out.println("RoomService: First room occupancy: " + rooms.get(0).getOccupiedSlots());
@@ -35,7 +35,7 @@ public class RoomService {
     }
 
     public List<Room> getRoomsByFloor(Long floorId) {
-        return roomRepository.findByFloor_FloorId(floorId);
+        return roomRepository.findByFloor_Id(floorId);
     }
 
     public Optional<Room> getRoomById(Long id) {

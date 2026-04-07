@@ -47,7 +47,7 @@ public class JwtUtils {
         System.out.println("JwtUtils: Generating token from user model: " + user.getEmail() + " with role: " + role);
         return Jwts.builder()
                 .setSubject(user.getEmail())
-                .claim("userId", user.getUserId())
+                .claim("userId", user.getId())
                 .claim("name", user.getName())
                 .claim("role", role)
                 .setIssuedAt(new Date())

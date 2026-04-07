@@ -19,9 +19,9 @@ public class BookingController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/create")
     public Booking createBooking(@RequestBody Booking booking) {
-        System.out.println("BookingController: createBooking called for User ID: " + (booking.getUser() != null ? booking.getUser().getUserId() : "null"));
+        System.out.println("BookingController: createBooking called for User ID: " + (booking.getUser() != null ? booking.getUser().getId() : "null"));
         Booking savedBooking = bookingService.createBooking(booking);
-        System.out.println("BookingController: Successfully created booking ID: " + savedBooking.getBookingId());
+        System.out.println("BookingController: Successfully created booking ID: " + savedBooking.getId());
         return savedBooking;
     }
 

@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface FloorRepository extends JpaRepository<Floor, Long> {
-    List<Floor> findByPg_PgId(Long pgId);
+    List<Floor> findByPg_Id(Long pgId);
 }

@@ -8,15 +8,15 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.util.Date;
 
 @Entity
-@Table(name = "users")
+@Table(name = "Users")
 @Data
 @NoArgsConstructor
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long userId;
+    @Column(name = "user_id")
+    private Long id;
 
     @Column(nullable = false)
     private String name;

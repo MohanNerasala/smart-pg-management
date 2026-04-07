@@ -12,7 +12,8 @@ public class Floor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long floorId;
+    @Column(name = "floor_id")
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pg_id", nullable = false)

@@ -47,8 +47,8 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         String token = jwtUtils.generateJwtTokenFromUser(user);
         
         // Prevent duplicate refresh tokens for OAuth2 users
-        refreshTokenService.deleteByUserId(user.getUserId());
-        com.staynest.model.RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getUserId());
+        refreshTokenService.deleteByUserId(user.getId());
+        com.staynest.model.RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
 
         // Redirect to frontend with the token and refreshToken
         String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:5173/oauth2/redirect")

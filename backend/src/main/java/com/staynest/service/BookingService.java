@@ -24,7 +24,7 @@ public class BookingService {
     private RoomService roomService;
 
     public List<Booking> getUserBookings(Long userId) {
-        return bookingRepository.findByUser_UserId(userId);
+        return bookingRepository.findByUser_Id(userId);
     }
 
     public List<Booking> getAllBookings() {
@@ -32,18 +32,18 @@ public class BookingService {
     }
 
     public List<Booking> getRoomBookings(Long roomId) {
-        return bookingRepository.findByRoom_RoomId(roomId);
+        return bookingRepository.findByRoom_Id(roomId);
     }
 
     public Booking createBooking(Booking booking) {
-        System.out.println("BookingService: Creating booking for User: " + (booking.getUser() != null ? booking.getUser().getUserId() : "null") + 
-                           ", PG: " + (booking.getPg() != null ? booking.getPg().getPgId() : "null") +
-                           ", Room: " + (booking.getRoom() != null ? booking.getRoom().getRoomId() : "null"));
+        System.out.println("BookingService: Creating booking for User: " + (booking.getUser() != null ? booking.getUser().getId() : "null") + 
+                           ", PG: " + (booking.getPg() != null ? booking.getPg().getId() : "null") +
+                           ", Room: " + (booking.getRoom() != null ? booking.getRoom().getId() : "null"));
         
         // --- Stability: Ensure PG exists or fallback ---
-        if (booking.getPg() != null && booking.getPg().getPgId() != null) {
-            if (!pgRepository.existsById(booking.getPg().getPgId())) {
-                System.out.println("BookingService: PG ID " + booking.getPg().getPgId() + " not found. Falling back to default PG for stability.");
+        if (booking.getPg() != null && booking.getPg().getId() != null) {
+            if (!pgRepository.existsById(booking.getPg().getId())) {
+                System.out.println("BookingService: PG ID " + booking.getPg().getId() + " not found. Falling back to default PG for stability.");
                 com.staynest.model.PG fallbackPg = pgRepository.findAll().stream().findFirst().orElse(null);
                 if (fallbackPg != null) {
                     booking.setPg(fallbackPg);
@@ -58,8 +58,8 @@ public class BookingService {
         }
 
         // If room is provided, perform room-specific logic
-        if (booking.getRoom() != null && booking.getRoom().getRoomId() != null) {
-            java.util.Optional<com.staynest.model.Room> roomOpt = roomService.getRoomById(booking.getRoom().getRoomId());
+        if (booking.getRoom() != null && booking.getRoom().getId() != null) {
+            java.util.Optional<com.staynest.model.Room> roomOpt = roomService.getRoomById(booking.getRoom().getId());
             if (roomOpt.isPresent()) {
                 com.staynest.model.Room room = roomOpt.get();
                 if (!room.isAvailable()) {
@@ -67,10 +67,10 @@ public class BookingService {
                 }
 
                 // Increment occupancy
-                System.out.println("BookingService: Incrementing occupancy for Room ID: " + room.getRoomId());
-                roomService.incrementOccupancy(room.getRoomId());
+                System.out.println("BookingService: Incrementing occupancy for Room ID: " + room.getId());
+                roomService.incrementOccupancy(room.getId());
             } else {
-                System.out.println("BookingService: Room ID " + booking.getRoom().getRoomId() + " not found. Treating as predicted Room simulation.");
+                System.out.println("BookingService: Room ID " + booking.getRoom().getId() + " not found. Treating as predicted Room simulation.");
                 booking.setRoom(null); // Detach non-existent room to allow saving
             }
         }
@@ -148,7 +148,7 @@ public class BookingService {
         Booking booking = bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Booking not found"));
         // Free up a slot only if a room was attached
         if (booking.getRoom() != null) {
-            roomService.decrementOccupancy(booking.getRoom().getRoomId());
+            roomService.decrementOccupancy(booking.getRoom().getId());
         }
         bookingRepository.deleteById(id);
     }

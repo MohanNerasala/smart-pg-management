@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
-    List<Room> findByPgPgId(Long pgId);
-    List<Room> findByFloor_FloorId(Long floorId);
+    List<Room> findByPgId(Long pgId);
+    List<Room> findByFloor_Id(Long floorId);
 }

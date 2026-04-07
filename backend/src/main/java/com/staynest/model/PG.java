@@ -9,21 +9,21 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "pg_listings")
+@Table(name = "PG")
 @Data
 @NoArgsConstructor
 public class PG {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long pgId;
+    @Column(name = "pg_id")
+    private Long id;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "pg_name", nullable = false)
     private String pgName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    @JoinColumn(name = "owner_id")
     @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User owner;
 

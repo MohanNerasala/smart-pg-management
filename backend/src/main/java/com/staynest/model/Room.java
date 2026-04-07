@@ -14,7 +14,8 @@ import java.math.BigDecimal;
 public class Room {
 
     @Id
-    private Long roomId;
+    @Column(name = "room_id")
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pg_id", nullable = false)

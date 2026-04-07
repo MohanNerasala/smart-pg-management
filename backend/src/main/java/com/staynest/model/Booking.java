@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
-@Table(name = "bookings")
+@Table(name = "Bookings")
 @Data
 @NoArgsConstructor
 public class Booking {
@@ -17,11 +17,11 @@ public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long bookingId;
+    @Column(name = "booking_id")
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User user;
 
@@ -31,7 +31,7 @@ public class Booking {
     private Room room;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "listing_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "pg_id", nullable = false)
     @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private PG pg;
 
