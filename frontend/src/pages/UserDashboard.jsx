@@ -312,9 +312,9 @@ const UserDashboard = () => {
 
       console.log("UserDashboard: Sending /booking/create request... Room ID:", (bookingMode !== 'food' && selectedRoom) ? selectedRoom.roomId : 'NONE');
       await api.post('/booking/create', { 
-        user: { userId: user?.id },
-        pg: { pgId: cleanPgId || 1 }, // Fallback to 1 if no pgId or conversion fails
-        room: (bookingMode !== 'food' && selectedRoom) ? { roomId: selectedRoom.roomId } : null,
+        user: { id: user?.id },
+        pg: { id: cleanPgId || 1 }, // Map to Java field 'id'
+        room: (bookingMode !== 'food' && selectedRoom) ? { id: selectedRoom.roomId } : null,
         mealPlan: food?.label || null,
         roomType: sharing?.label || null,
         checkinDate: new Date().toISOString().split('T')[0],

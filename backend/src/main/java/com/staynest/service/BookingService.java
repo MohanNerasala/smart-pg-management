@@ -3,6 +3,7 @@ package com.staynest.service;
 import com.staynest.model.Booking;
 import com.staynest.repository.BookingRepository;
 import com.staynest.repository.PGRepository;
+import com.staynest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,9 @@ public class BookingService {
 
     @Autowired
     private PGRepository pgRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private RoomService roomService;
@@ -39,6 +43,15 @@ public class BookingService {
         System.out.println("BookingService: Creating booking for User: " + (booking.getUser() != null ? booking.getUser().getId() : "null") + 
                            ", PG: " + (booking.getPg() != null ? booking.getPg().getId() : "null") +
                            ", Room: " + (booking.getRoom() != null ? booking.getRoom().getId() : "null"));
+        
+        // --- Stability Fix: Fetch Managed User entity ---
+        if (booking.getUser() != null && booking.getUser().getId() != null) {
+            com.staynest.model.User managedUser = userRepository.findById(booking.getUser().getId())
+                    .orElseThrow(() -> new RuntimeException("Error: User ID " + booking.getUser().getId() + " not found in local database."));
+            booking.setUser(managedUser);
+        } else {
+            throw new RuntimeException("Error: A valid User is required to create a booking.");
+        }
         
         // --- Stability: Ensure PG exists or fallback ---
         if (booking.getPg() != null && booking.getPg().getId() != null) {

@@ -41,6 +41,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody AuthDtos.LoginRequest loginRequest) {
+        System.out.println("AuthController: Incoming login attempt for email: " + loginRequest.getEmail());
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
@@ -88,6 +89,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody AuthDtos.SignupRequest signUpRequest) {
+        System.out.println("AuthController: Incoming registration attempt for email: " + signUpRequest.getEmail());
         try {
             if (userRepository.existsByEmail(signUpRequest.getEmail())) {
                 return ResponseEntity
@@ -109,6 +111,7 @@ public class AuthController {
             user.setProvider(AuthProvider.LOCAL);
 
             userRepository.save(user);
+            System.out.println("AuthController: User registered successfully in MySQL: " + user.getEmail());
 
             // AUTO-LOGIN after registration
             Authentication authentication = authenticationManager.authenticate(
