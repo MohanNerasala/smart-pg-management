@@ -94,9 +94,18 @@ const PGCard = ({ pg }) => {
               <span className="text-[10px] text-slate-400 font-medium ml-1">/mo</span>
             </div>
           </div>
-          <div className="text-right">
+          <div className="text-right flex flex-col items-end">
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em] mb-0.5">Location</p>
-            <p className="text-xs font-bold text-slate-700 truncate max-w-[100px]">{pg.area}</p>
+            <p className="text-xs font-bold text-slate-700 truncate max-w-[100px] mb-1">{pg.area}</p>
+            {(pg.type || 'Both') === 'Boys' && (
+              <span className="text-[10px] font-black text-sky-600 bg-sky-50 px-2 py-0.5 rounded uppercase tracking-wider border border-sky-100 mt-1">📞 9573768293</span>
+            )}
+            {(pg.type || 'Both') === 'Both' && (
+              <span className="text-[10px] font-black text-purple-600 bg-purple-50 px-2 py-0.5 rounded uppercase tracking-wider border border-purple-100 mt-1">📞 8712305169</span>
+            )}
+            {(pg.type || 'Both') === 'Girls' && (
+              <span className="text-[10px] font-black text-pink-600 bg-pink-50 px-2 py-0.5 rounded uppercase tracking-wider border border-pink-100 mt-1">📞 6302781284</span>
+            )}
           </div>
         </div>
 

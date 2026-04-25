@@ -52,7 +52,7 @@ const PGCard = ({ pg, index = 0 }) => {
             <span className="truncate">{pg.area}, {pg.city}</span>
           </div>
 
-          <div className="flex items-center gap-3 text-xs text-slate-500 mb-4 font-medium">
+          <div className="flex items-center gap-3 text-xs text-slate-500 mb-4 font-medium flex-wrap">
              <div className="flex items-center bg-slate-50 px-2 py-1 rounded-md">
                <Users className="w-3.5 h-3.5 mr-1" />
                1-3 Sharing
@@ -61,6 +61,21 @@ const PGCard = ({ pg, index = 0 }) => {
                <ShieldCheck className="w-3.5 h-3.5 mr-1 text-brand-500" />
                Verified
              </div>
+             {(pg.type || 'Both') === 'Boys' && (
+               <div className="flex items-center bg-sky-50 px-2 py-1 rounded-md text-sky-600 font-bold ml-auto border border-sky-100">
+                 📞 9573768293
+               </div>
+             )}
+             {(pg.type || 'Both') === 'Both' && (
+               <div className="flex items-center bg-purple-50 px-2 py-1 rounded-md text-purple-600 font-bold ml-auto border border-purple-100">
+                 📞 8712305169
+               </div>
+             )}
+             {(pg.type || 'Both') === 'Girls' && (
+               <div className="flex items-center bg-pink-50 px-2 py-1 rounded-md text-pink-600 font-bold ml-auto border border-pink-100">
+                 📞 6302781284
+               </div>
+             )}
           </div>
 
           {/* Bottom Price Row */}

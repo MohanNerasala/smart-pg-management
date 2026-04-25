@@ -109,6 +109,8 @@ public class WebSecurityConfig {
         // Force include typical local dev origins to prevent lockouts during testing
         if (!origins.contains("http://localhost:5173")) origins.add("http://localhost:5173");
         if (!origins.contains("http://127.0.0.1:5173")) origins.add("http://127.0.0.1:5173");
+        if (!origins.contains("http://localhost:5174")) origins.add("http://localhost:5174");
+        if (!origins.contains("http://127.0.0.1:5174")) origins.add("http://127.0.0.1:5174");
                                      
         configuration.setAllowedOriginPatterns(origins); 
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
