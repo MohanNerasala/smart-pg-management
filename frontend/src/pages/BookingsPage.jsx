@@ -645,12 +645,19 @@ const BookingsPage = () => {
           <button 
             onClick={() => {
               if (window.confirm("This will clear all your bookings. Proceed?")) {
+                 // Clear local storage
                  localStorage.removeItem('allBookings');
                  localStorage.removeItem('latestBooking');
                  localStorage.removeItem('dashboardFormState');
                  localStorage.removeItem('refund_requests');
+                 
+                 // Clear React state and Navigation state immediately for snappy UI
+                 setServerBookings([]);
+                 navigate(location.pathname, { replace: true, state: {} });
+                 
+                 // Perform backend sync in background without reloading the page
                  fetch('http://localhost:8081/sync/clear', { method: 'DELETE' })
-                   .finally(() => window.location.reload());
+                   .catch(e => console.error("Failed to clear backend", e));
               }
             }}
             className="text-slate-400 hover:text-red-500 text-[10px] font-bold uppercase tracking-widest transition-colors"

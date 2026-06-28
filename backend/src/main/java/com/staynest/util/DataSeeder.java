@@ -16,7 +16,9 @@ import org.springframework.boot.CommandLineRunner;
 
 import java.math.BigDecimal;
 
-// @Component
+import org.springframework.stereotype.Component;
+
+@Component
 public class DataSeeder implements CommandLineRunner {
 
     @Autowired
@@ -52,22 +54,10 @@ public class DataSeeder implements CommandLineRunner {
 
     private void performSeeding() {
         try {
-            // Exit early if data already seeded to avoid cloud timeouts
-            if (userRepository.existsByEmail("admin@staynest.com")) {
-                System.out.println("DataSeeder: Database already seeded. Skipping expensive bootstrap.");
-                return;
-            }
-        } catch (Exception e) {
-            System.err.println("DataSeeder: WARNING - Could not connect to Supabase to check seed status. Check your network! Continuing startup...");
-            return; // Skip seeding if we can't connect, but DON'T crash the app.
-        }
-
-        try {
             System.out.println("DataSeeder: Checking database state...");
             
-            // 0c. Ensure Admin User exists
+            // Ensure Admin User exists
             if (!userRepository.existsByEmail("admin@staynest.com")) {
-                System.out.println("DataSeeder: Seeding Admin User...");
                 User admin = new User();
                 admin.setName("Admin");
                 admin.setEmail("admin@staynest.com");
@@ -75,74 +65,73 @@ public class DataSeeder implements CommandLineRunner {
                 admin.setRole(Role.ADMIN);
                 admin.setProvider(AuthProvider.LOCAL);
                 userRepository.save(admin);
-                System.out.println("DataSeeder: Admin User seeded successfully.");
             } else {
-                System.out.println("DataSeeder: Admin User found. Force-resetting password to admin123...");
                 User admin = userRepository.findByEmail("admin@staynest.com").get();
                 admin.setPassword(passwordEncoder.encode("admin123"));
                 userRepository.save(admin);
             }
 
-            // Early exit if already populated to prevent 500 scrolling logs
-            if (pgRepository.count() >= 10) {
-                System.out.println("DataSeeder: PGs already fully seeded (count >= 10). Skipping slow loop expansion.");
-                return;
-            }
+            // Always recreate the exact 10 PGs to ensure perfect demo state
+            System.out.println("DataSeeder: Purging existing PGs to guarantee exact 10-PG demo state...");
+            roomRepository.deleteAll();
+            floorRepository.deleteAll();
+            pgRepository.deleteAll();
 
-            // 1. Ensure PGs exist (Seed 1-110 to match analyzed local data)
-            System.out.println("DataSeeder: Starting MASSIVE database population (110 PGs * 50 Rooms). This will run in background...");
-            int pgCount = 0;
-            for (long p = 1; p <= 110; p++) {
-                final long pgId = p;
-                PG pg = pgRepository.findById(pgId).orElseGet(() -> {
-                    PG newPg = new PG();
-                    newPg.setId(pgId);
-                    newPg.setPgName("StayNest PG " + pgId);
-                    newPg.setCity("Bangalore");
-                    newPg.setState("Karnataka");
-                    newPg.setArea("Marthahalli");
-                    newPg.setAddress(pgId + " Luxury Lane, Bangalore");
-                    newPg.setPrice(new BigDecimal("10000"));
-                    newPg.setDescription("Premium accommodation.");
-                    return pgRepository.save(newPg);
-                });
+            System.out.println("DataSeeder: Seeding exactly 10 Premium PGs...");
+            
+            String[] types = {"Boys", "Boys", "Boys", "Boys", "Girls", "Girls", "Girls", "Both", "Both", "Both"};
+            String[] names = {
+                "Titanium Boys Hostel", "Spartan Men's PG", "Elite Boys Living", "Alpha Male Stays",
+                "Serenity Girls PG", "Blossom Women's Stay", "SafeHaven Girls Hostel",
+                "Harmony Coliving", "Urban Nest Shared", "Zenith Colive Hub"
+            };
+            String[] prices = {"6500", "7000", "6000", "7500", "8000", "7500", "8500", "9000", "10000", "8500"};
+            String[] ratings = {"4.5", "4.2", "4.7", "4.8", "4.9", "4.6", "4.8", "4.9", "4.7", "4.5"};
 
-                // 2. Ensure 5 Floors exist for each PG (Matches frontend f=1..5)
+            for (int i = 0; i < 10; i++) {
+                final long pgId = i + 1;
+                PG newPg = new PG();
+                newPg.setId(pgId);
+                newPg.setPgName(names[i]);
+                newPg.setCity("Universal City");
+                newPg.setState("Universal State");
+                newPg.setArea("Premium Zone");
+                newPg.setAddress(pgId + " Luxury Lane");
+                newPg.setPrice(new BigDecimal(prices[i]));
+                newPg.setDescription("Premium " + types[i] + " accommodation with all amenities.");
+                newPg.setType(types[i]);
+                newPg.setRating(ratings[i]);
+                
+                // Add mock latitude and longitude for google maps (centered around 17.4, 78.4)
+                newPg.setLatitude(new BigDecimal("17." + (4000 + i*10)));
+                newPg.setLongitude(new BigDecimal("78." + (4000 + i*10)));
+                
+                PG savedPg = pgRepository.save(newPg);
+
+                // Create 5 Floors for each PG
                 for (int f = 1; f <= 5; f++) {
-                    final int floorNum = f;
-                    Floor floor = floorRepository.findAll().stream()
-                            .filter(fl -> fl.getFloorNumber() == floorNum && fl.getPg().getId().equals(pg.getId()))
-                            .findFirst()
-                            .orElseGet(() -> {
-                                Floor newFloor = new Floor();
-                                newFloor.setFloorNumber(floorNum);
-                                newFloor.setPg(pg);
-                                return floorRepository.save(newFloor);
-                            });
+                    Floor newFloor = new Floor();
+                    newFloor.setFloorNumber(f);
+                    newFloor.setPg(savedPg);
+                    Floor savedFloor = floorRepository.save(newFloor);
 
-                    // 3. Ensure 10 Rooms exist for this floor (Matches frontend r=1..10)
+                    // Create 10 Rooms for each floor
                     for (int r = 1; r <= 10; r++) {
                         long roomId = (pgId * 1000) + (f * 100) + r;
-                        if (!roomRepository.existsById(roomId)) {
-                            Room room = new Room();
-                            room.setId(roomId);
-                            room.setPg(pg);
-                            room.setFloor(floor);
-                            room.setRoomType("Standard");
-                            room.setSharingType(6 - f); 
-                            room.setOccupiedSlots(0);
-                            room.setPrice(new BigDecimal("8000"));
-                            roomRepository.save(room);
-                        }
+                        Room room = new Room();
+                        room.setId(roomId);
+                        room.setPg(savedPg);
+                        room.setFloor(savedFloor);
+                        room.setRoomType(r % 2 == 0 ? "AC" : "Non-AC");
+                        room.setSharingType(f == 1 ? 1 : f == 2 ? 2 : 3); 
+                        room.setOccupiedSlots(0);
+                        room.setPrice(new BigDecimal(prices[i]));
+                        roomRepository.save(room);
                     }
-                }
-                pgCount++;
-                if (pgCount % 10 == 0) {
-                    System.out.println("DataSeeder: Progress [" + pgCount + "/110] PGs fully seeded in background...");
                 }
             }
             
-            System.out.println("DataSeeder: !!! BACKGROUND SEEDING COMPLETE !!! (110 PGs / 5500 Rooms created).");
+            System.out.println("DataSeeder: !!! BACKGROUND SEEDING COMPLETE !!! (10 PGs created).");
         } catch (Exception e) {
             System.err.println("!!! DATA SEEDER FAILED !!!");
             e.printStackTrace();

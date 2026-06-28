@@ -52,6 +52,12 @@ public class PG {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "pg_type")
+    private String type;
+
+    @Column(name = "rating")
+    private String rating;
+
     @CreationTimestamp
     @Column(updatable = false)
     private Date createdAt;

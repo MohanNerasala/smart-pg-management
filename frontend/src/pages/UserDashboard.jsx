@@ -100,8 +100,17 @@ const UserDashboard = () => {
      return (
        <div className="min-h-screen bg-slate-50 flex items-center justify-center">
          <div className="text-center">
-           <h2 className="text-xl font-bold text-slate-400">Loading PG Data...</h2>
-           <p className="text-slate-400 mt-2">Please wait while we set up your dashboard.</p>
+           <div className="w-20 h-20 bg-slate-200 rounded-full flex items-center justify-center mx-auto mb-4">
+             <MapPin className="w-10 h-10 text-slate-400" />
+           </div>
+           <h2 className="text-2xl font-black text-slate-700 tracking-tight">No PG Selected</h2>
+           <p className="text-slate-500 mt-2 mb-8 max-w-sm mx-auto">You haven't selected a PG to book yet. Please browse our listings to find your perfect stay.</p>
+           <button 
+             onClick={() => navigate('/listings')}
+             className="px-8 py-4 bg-brand-600 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-brand-500/20 hover:bg-brand-700 transition-all active:scale-95"
+           >
+             Browse Listings
+           </button>
          </div>
        </div>
      );
@@ -171,7 +180,8 @@ const UserDashboard = () => {
         .catch(err => console.error("Could not fetch global bookings", err));
 
       // Fetch actual room status from DB
-      const cleanPgId = typeof pg.pgId === 'string' ? parseInt(pg.pgId.replace(/[^\d]/g, '')) : pg.pgId;
+      const rawId = pg.id || pg.pgId;
+      const cleanPgId = typeof rawId === 'string' ? parseInt(rawId.replace(/[^\d]/g, '')) : rawId;
       api.get(`/rooms/byPG/${cleanPgId || 1}`)
         .then(res => setDbRooms(res.data || []))
         .catch(err => console.error("Could not fetch rooms from DB", err));
@@ -184,14 +194,15 @@ const UserDashboard = () => {
     let currentBookings = globalBookings;
 
     // 2. Tally how many beds are claimed per room for the CURRENT PG
-    const activePgIdRaw = pg?.pgId || location.state?.pg?.pgId;
+    const activePgIdRaw = pg?.id || pg?.pgId || location.state?.pg?.id || location.state?.pg?.pgId;
     const activePgId = typeof activePgIdRaw === 'string' ? parseInt(activePgIdRaw.replace(/[^\d]/g, '')) : activePgIdRaw;
     const roomClaims = {};
     const now = new Date();
 
     if (activePgId) {
        currentBookings.forEach(booking => {
-          const bookingPgId = typeof booking.pg?.pgId === 'string' ? parseInt(booking.pg.pgId.replace(/[^\d]/g, '')) : booking.pg?.pgId;
+          const rawBookingPgId = booking.pg?.id || booking.pg?.pgId;
+          const bookingPgId = typeof rawBookingPgId === 'string' ? parseInt(rawBookingPgId.replace(/[^\d]/g, '')) : rawBookingPgId;
           if (bookingPgId === activePgId && booking.room?.roomId) {
              // Calculate expiry: bookingDate + (1 or 12 months)
              const bDate = new Date(booking.bookingDate || now);
@@ -294,7 +305,8 @@ const UserDashboard = () => {
     console.log("UserDashboard: handleConfirm starting. User ID:", user?.id);
     try { 
       // Requirement 5: Refresh latest room data before booking
-      const cleanPgId = typeof pg?.pgId === 'string' ? parseInt(pg.pgId.replace(/[^\d]/g, '')) : pg?.pgId;
+      const rawId = pg?.id || pg?.pgId;
+      const cleanPgId = typeof rawId === 'string' ? parseInt(rawId.replace(/[^\d]/g, '')) : rawId;
       try {
         const roomUpdate = await api.get(`/rooms/byPG/${cleanPgId || 1}`);
         setDbRooms(roomUpdate.data || []);
@@ -375,7 +387,7 @@ const UserDashboard = () => {
           onClick={() => {
             const bookingData = {
               pg: pg,
-              pgId: pg?.pgId,
+              pgId: pg?.id || pg?.pgId,
               userEmail: user?.email, // Tagging for privacy filtering
               bookingMode: bookingMode,
               sharing: bookingMode === 'full' && sharing ? { id: sharing.id, label: sharing.label } : null,
@@ -476,7 +488,10 @@ const UserDashboard = () => {
 
         {/* Premium Back Navigation */}
         <button 
-          onClick={() => navigate('/listings')} 
+          onClick={() => {
+            localStorage.removeItem('dashboardFormState');
+            navigate('/listings');
+          }} 
           className="group mb-8 flex items-center gap-3 px-5 py-3 bg-white/50 backdrop-blur-md border border-slate-200 rounded-2xl shadow-sm hover:shadow-md hover:bg-white hover:border-brand-200 transition-all active:scale-[0.98] outline-none"
         >
           <div className="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 group-hover:bg-brand-50 group-hover:text-brand-600 transition-colors">

@@ -26,7 +26,7 @@ const PGCard = ({ pg }) => {
     'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=800',
     'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80&w=800'
   ];
-  const imageUrl = images[Math.abs(pg.pgId.toString().split('').reduce((a,b) => a + b.charCodeAt(0), 0)) % images.length];
+  const imageUrl = images[Math.abs((pg.id || pg.pgId || 1).toString().split('').reduce((a,b) => a + b.charCodeAt(0), 0)) % images.length];
 
   return (
     <div className="bg-white rounded-[2rem] border border-slate-200/60 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 flex flex-col group h-full">
@@ -97,15 +97,6 @@ const PGCard = ({ pg }) => {
           <div className="text-right flex flex-col items-end">
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em] mb-0.5">Location</p>
             <p className="text-xs font-bold text-slate-700 truncate max-w-[100px] mb-1">{pg.area}</p>
-            {(pg.type || 'Both') === 'Boys' && (
-              <span className="text-[10px] font-black text-sky-600 bg-sky-50 px-2 py-0.5 rounded uppercase tracking-wider border border-sky-100 mt-1">📞 9573768293</span>
-            )}
-            {(pg.type || 'Both') === 'Both' && (
-              <span className="text-[10px] font-black text-purple-600 bg-purple-50 px-2 py-0.5 rounded uppercase tracking-wider border border-purple-100 mt-1">📞 8712305169</span>
-            )}
-            {(pg.type || 'Both') === 'Girls' && (
-              <span className="text-[10px] font-black text-pink-600 bg-pink-50 px-2 py-0.5 rounded uppercase tracking-wider border border-pink-100 mt-1">📞 6302781284</span>
-            )}
           </div>
         </div>
 
@@ -153,31 +144,6 @@ const Listings = () => {
     // Phase 1: Instant Local Load
     const hardcodedCities = getCities(selectedState);
     setCities([...hardcodedCities.sort(), "All Cities / Nearby Towns"]);
-    
-    // Phase 2: Background Dynamic Discovery
-    const fetchDynamicLocations = async () => {
-      // Note: We don't set global 'loading' here to avoid blocking UI interaction
-      try {
-        const res = await axios.post('http://127.0.0.1:5000/locations', { state: selectedState });
-        const { hubs = [], towns = [], townsMap = {} } = res.data || {};
-        
-        // Merge discovered hubs with existing cities
-        if (hubs && hubs.length > 0) {
-          setCities(prev => {
-            const existing = prev.filter(c => c !== "All Cities / Nearby Towns");
-            const combined = Array.from(new Set([...existing, ...hubs])).sort();
-            return [...combined, "All Cities / Nearby Towns"];
-          });
-        }
-        
-        window._discoveredTowns = towns;
-        setTownsMap(townsMap);
-      } catch (err) {
-        console.warn("AI Location Service background update failed/unavailable.", err);
-      }
-    };
-
-    fetchDynamicLocations();
   }, [selectedState]);
 
   // 2. Load Areas / Villages
@@ -188,39 +154,30 @@ const Listings = () => {
     if (!selectedState) return;
 
     let baseAreas = [];
-    let discovered = [];
-
     if (selectedCity && selectedCity !== "All Cities / Nearby Towns") {
       baseAreas = getAreas(selectedState, selectedCity);
-      // Filter discovered to only show for this city
-      discovered = townsMap[selectedCity] || [];
-    } else {
-      // If "All Cities" or nothing selected, show all discovered towns in the state
-      discovered = window._discoveredTowns || [];
     }
     
-    const combined = Array.from(new Set([...baseAreas, ...discovered])).sort();
-    setAreas(combined);
-  }, [selectedCity, selectedState, townsMap]);
+    setAreas(baseAreas.sort());
+  }, [selectedCity, selectedState]);
 
   const handleSearch = async () => {
     setLoading(true);
     setSearched(true);
+
     try {
-      const res = await axios.post('http://127.0.0.1:5000/predict', {
-        city: selectedCity,
-        state: selectedState,
-        area: selectedArea
-      });
-      const data = res.data || [];
+      // Fetch exactly the 10 PGs from the Database universally
+      const res = await axios.get('http://localhost:8081/pg/list');
+      let data = res.data || [];
+      
       setPgs(data);
       setIsAiServiceLive(true);
-      // Save search state so we can restore it when navigating back
+      
       sessionStorage.setItem('pg_search', JSON.stringify({
         selectedState, selectedCity, selectedArea, pgs: data, pgFilter
       }));
     } catch (err) {
-      console.warn("AI Service not responding.", err);
+      console.warn("Backend Service not responding.", err);
       setIsAiServiceLive(false);
       setPgs([]);
     } finally {
@@ -256,18 +213,18 @@ const Listings = () => {
 
   if (!searched) return (
     <div className="min-h-[calc(100vh-64px)] bg-slate-50 flex items-center justify-center py-12">
-      <div className="max-w-xl w-full mx-auto px-6">
-        <div className="text-center mb-10">
+      <div className="max-w-lg w-full mx-auto px-4">
+        <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white text-brand-700 rounded-full text-[10px] font-black uppercase tracking-widest mb-6 border border-slate-200 shadow-sm">
              <MapPin className="w-3 h-3" /> Explore Verified Stays
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4">
-            Find Your <span className="text-brand-600">Perfect</span> Space
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-3 whitespace-nowrap">
+            Find Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-600">Perfect</span> Space
           </h1>
-          <p className="text-slate-500 font-medium text-base">Select your preferred location to discover premium accommodations.</p>
+          <p className="text-slate-500 font-medium text-sm md:text-base">Select your preferred location to discover premium accommodations.</p>
         </div>
 
-        <div className="bg-white border border-slate-200/60 rounded-[2.5rem] p-8 md:p-10 shadow-xl shadow-slate-200/40 space-y-6">
+        <div className="bg-white border border-slate-200/60 rounded-[2rem] p-6 md:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] space-y-5">
           <LocationDropdown label="Select State" placeholder="E.g. Andhra Pradesh" options={INDIA_STATES} value={selectedState} onChange={setSelectedState} />
           <LocationDropdown label="Select City" placeholder="Major Cities" options={cities} value={selectedCity} onChange={setSelectedCity} disabled={!selectedState} />
           <LocationDropdown 
@@ -342,7 +299,7 @@ const Listings = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">{[1,2,3,4,5,6].map(i => <div key={i} className="bg-white rounded-[3rem] h-[32rem] animate-pulse border border-slate-100 shadow-sm"></div>)}</div>
         ) : filteredResults.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {filteredResults.map((pg) => <PGCard key={pg.pgId} pg={pg} />)}
+            {filteredResults.map((pg) => <PGCard key={pg.id || pg.pgId} pg={pg} />)}
           </div>
         ) : (
           <div className="text-center py-32 bg-white rounded-[4rem] border border-slate-200 shadow-xl max-w-3xl mx-auto px-12">

@@ -112,9 +112,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    // Clear auth data
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
+    
+    // Clear application state to prevent cross-account data leaks
+    localStorage.removeItem('allBookings');
+    localStorage.removeItem('latestBooking');
+    localStorage.removeItem('dashboardFormState');
+    localStorage.removeItem('refund_requests');
+    
     setUser(null);
   };
 

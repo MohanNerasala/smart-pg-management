@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { Home, LogOut, LayoutDashboard, Menu, X, User, ChevronDown, HelpCircle, ShieldCheck, Settings, ReceiptText, IndianRupee, Search } from 'lucide-react';
+import { Home, Building2, LogOut, LayoutDashboard, Menu, X, User, ChevronDown, HelpCircle, ShieldCheck, Settings, ReceiptText, IndianRupee, Search } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -28,13 +28,20 @@ const Navbar = () => {
 
           {/* Logo Section */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="w-9 h-9 bg-brand-50 rounded-xl flex items-center justify-center group-hover:bg-brand-100 transition-colors">
-                <Home className="h-5 w-5 text-brand-600" />
+            <Link to="/" className="flex items-center gap-3 group">
+              {/* Clean Glassmorphism Mark (No Background Glow) */}
+              <div className="relative flex items-center justify-center w-[36px] h-[36px] rounded-[10px] bg-brand-500/10 backdrop-blur-xl border border-brand-500/20 shadow-[0_4px_12px_rgba(0,0,0,0.04),inset_0_1px_1px_rgba(255,255,255,0.9)] overflow-hidden transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:shadow-[0_6px_16px_rgba(16,185,129,0.1)]">
+                 {/* Interactive glass glare */}
+                 <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/80 to-white/0 -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-out"></div>
+                 
+                 <Home className="relative z-10 w-[18px] h-[18px] text-brand-600 drop-shadow-sm" strokeWidth={2.5} />
               </div>
-              <span className="font-extrabold text-xl text-slate-900 tracking-tight">
-                Stay<span className="text-brand-600">Nest</span>
-              </span>
+              
+              {/* Flawless Typography */}
+              <div className="flex items-baseline ml-0.5 select-none">
+                <span className="font-semibold text-[22px] tracking-tight text-slate-700">Stay</span>
+                <span className="font-black text-[22px] tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-teal-500">Nest</span>
+              </div>
             </Link>
           </div>
 
@@ -51,20 +58,30 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link to="/" className="font-semibold text-sm text-slate-600 hover:text-brand-600 transition-all">Home</Link>
-                <Link to="/listings" className="font-semibold text-sm text-slate-600 hover:text-brand-600 transition-all">Listings</Link>
+                <Link to="/" className="relative font-bold text-[13px] uppercase tracking-widest text-slate-500 hover:text-brand-600 transition-colors py-2 px-1 group">
+                  Home
+                  <span className="absolute bottom-0 left-0 w-full h-[2px] bg-brand-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></span>
+                </Link>
+                <Link to="/listings" className="relative font-bold text-[13px] uppercase tracking-widest text-slate-500 hover:text-brand-600 transition-colors py-2 px-1 group">
+                  Listings
+                  <span className="absolute bottom-0 left-0 w-full h-[2px] bg-brand-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></span>
+                </Link>
                 
                 {user && (
                   <>
                     {(user.role === 'ADMIN' || user.role === 'ROLE_ADMIN') && (
-                      <Link to="/admin" className="flex items-center gap-1.5 font-bold text-sm text-indigo-600 hover:text-indigo-700 bg-indigo-50/80 px-3 py-1.5 rounded-xl transition-all">
+                      <Link to="/admin" className="flex items-center gap-1.5 font-bold text-[13px] uppercase tracking-widest text-indigo-600 hover:text-indigo-700 bg-indigo-50/80 px-3 py-1.5 rounded-xl transition-all hover:shadow-sm">
                         <ShieldCheck className="h-4 w-4" /> Back to Admin
                       </Link>
                     )}
-                    <Link to="/dashboard" className="flex items-center gap-1.5 font-semibold text-sm text-slate-600 hover:text-brand-600 transition-all">
+                    <Link to="/dashboard" className="relative flex items-center gap-1.5 font-bold text-[13px] uppercase tracking-widest text-slate-500 hover:text-brand-600 transition-colors py-2 px-1 group">
                       <LayoutDashboard className="h-4 w-4" /> Dashboard
+                      <span className="absolute bottom-0 left-0 w-full h-[2px] bg-brand-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></span>
                     </Link>
-                    <Link to="/bookings" className="font-semibold text-sm text-slate-600 hover:text-brand-600 transition-all">Booking</Link>
+                    <Link to="/bookings" className="relative font-bold text-[13px] uppercase tracking-widest text-slate-500 hover:text-brand-600 transition-colors py-2 px-1 group">
+                      Booking
+                      <span className="absolute bottom-0 left-0 w-full h-[2px] bg-brand-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></span>
+                    </Link>
                   </>
                 )}
               </>
