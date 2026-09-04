@@ -304,7 +304,7 @@ def predict_pgs_from_map(city, state, area=None):
         suffices = ["PG for Gents", "Ladies PG", "Boys Hostel", "Girls Hostel",
                     "Executive PG", "Residential PG", "Luxury PG Rooms", "Guest Home"]
         area_tag = norm_area or city
-        needed = max(8, 20) - len(predicted_pgs)
+        needed = max(8, 50) - len(predicted_pgs)
         for i in range(needed):
             seed = f"{area_tag}-{city}-{state}-{i}-v3"
             h = int(hashlib.md5(seed.encode()).hexdigest(), 16)
@@ -315,8 +315,8 @@ def predict_pgs_from_map(city, state, area=None):
                 "area": area_tag, "city": city, "state": state,
                 "price": get_deterministic_price(pid, 4500, 10000),
                 "rating": get_deterministic_rating(pid, 3.2, 4.2),
-                "latitude": base_lat + ((h % 1000) / 100000.0 - 0.005),
-                "longitude": base_lon + (((h // 1000) % 1000) / 100000.0 - 0.005),
+                "latitude": (base_lat or 20.5937) + ((h % 1000) / 100000.0 - 0.01),
+                "longitude": (base_lon or 78.9629) + (((h // 1000) % 1000) / 100000.0 - 0.01),
                 "type": get_pg_type(name), "isPredicted": True,
                 "roomSlots": [{"type": "Standard Room", "price": 5500}]
             })
@@ -449,7 +449,7 @@ def discover_locations(state):
 
     # Add from mock data
     for pg in mock_pg_data:
-        if pg['state'].lower() == state.lower():
+        if str(pg.get('state', '')).lower() == str(state).lower():
             p_city = clean_name(pg['city'])
             p_area = clean_name(pg['location'])
             all_hubs.add(p_city)

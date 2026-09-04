@@ -28,6 +28,27 @@ const FOOD_PLANS = [
   { id: 'premium', label: 'Premium',  icon: Crown,   price: 7500, color: 'amber',   tag: 'Lux Life',   meals: ['24×7 Meals', 'Multi-cuisine', 'Midnight snacks'],    perks: ['Dietary requests', 'Fresh juice & sweets'] },
 ];
 
+const MEAL_SCHEDULES = {
+  basic: {
+    title: 'Basic Plan Schedule',
+    monSat: { morning: 'Idli / Poha / Dosa + Tea', afternoon: 'Dal, Rice, Roti, Seasonal Veg', evening: 'Rice, Dal, Veg Curry' },
+    sunday: { morning: 'Aloo Paratha + Curd', afternoon: 'Special Veg Pulao & Paneer', evening: 'Veg Fried Rice / Noodles' },
+    note: 'Pure Vegetarian. Simple, healthy, home-style food.'
+  },
+  medium: {
+    title: 'Standard Plan Schedule',
+    monSat: { morning: 'South/North Breakfast + Tea/Coffee', afternoon: 'Dal, Rice, Roti, 2 Veg Curries', evening: 'Rice, Roti, Veg Gravy, Salad' },
+    sunday: { morning: 'Chole Bhature / Poori Sabzi', afternoon: 'Paneer Butter Masala & Jeera Rice', evening: 'Chicken Curry (Non-Veg) / Paneer Tikka (Veg)' },
+    note: 'Sunday Evening Chicken Included. Fresh salads served daily.'
+  },
+  premium: {
+    title: 'Premium Plan Schedule',
+    monSat: { morning: 'Continental / Indian Buffet + Juice', afternoon: 'Rich Gravy, Rice, Roti, Salad, Sweet', evening: 'Multi-cuisine Dinner (Wed: Chicken/Paneer Special)' },
+    sunday: { morning: 'Grand Breakfast Buffet', afternoon: 'Special Feast (Veg/Non-Veg)', evening: 'Chicken Dum Biryani (Non-Veg) / Veg Dum Biryani' },
+    note: 'Wed & Sun Chicken Included. Midnight snacks & custom requests supported.'
+  }
+};
+
 const colorMap = {
   emerald: { bg: 'bg-emerald-50', text: 'text-emerald-600', border: 'border-emerald-300', pill: 'bg-emerald-600' },
   brand:   { bg: 'bg-brand-50',   text: 'text-brand-600',   border: 'border-brand-300',   pill: 'bg-brand-600' },
@@ -36,15 +57,15 @@ const colorMap = {
 
 /* ─── Step Badge ────────────────────────── */
 const StepBadge = ({ num, label, active, done }) => (
-  <div className={`flex flex-col sm:flex-row items-center gap-1 sm:gap-2 ${active || done ? '' : 'opacity-40'}`}>
-    <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-sm font-black
-      ${done ? 'bg-emerald-500 text-white' : active ? 'bg-brand-600 text-white' : 'bg-slate-200 text-slate-500'}`}>
-      {done ? <CheckCircle2 className="w-4 h-4" /> : num}
+  <div className={`flex flex-col sm:flex-row items-center gap-1 sm:gap-1.5 ${active || done ? '' : 'opacity-40'}`}>
+    <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-[9px] sm:text-[11px] font-black transition-all duration-300
+      ${done ? 'bg-emerald-500/85 backdrop-blur-md border border-emerald-300 shadow-[0_4px_10px_-2px_rgba(16,185,129,0.4)] text-white' : active ? 'bg-brand-500/85 backdrop-blur-md border border-brand-300 shadow-[0_4px_10px_-2px_rgba(34,197,94,0.4)] text-white scale-[1.05]' : 'bg-slate-100 border border-slate-200 text-slate-400'}`}>
+      {done ? <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> : num}
     </div>
-    <span className={`font-black text-[9px] sm:text-sm uppercase tracking-tighter sm:tracking-normal ${active ? 'text-slate-900' : 'text-slate-400'}`}>{label}</span>
+    <span className={`font-black text-[8px] sm:text-[10px] uppercase tracking-tighter sm:tracking-widest transition-colors ${active ? 'text-slate-900' : 'text-slate-400'}`}>{label}</span>
   </div>
 );
-const Divider = () => <div className="flex-1 h-0.5 bg-slate-100 min-w-[10px] sm:mx-2" />;
+const Divider = () => <div className="flex-1 h-[1.5px] bg-slate-100 min-w-[8px] sm:mx-2 rounded-full" />;
 
 /* ─── Custom Brand SVGs ─────────────────── */
 const PhonePeIcon = ({ className }) => (
@@ -120,6 +141,7 @@ const UserDashboard = () => {
   const [roomPack,        setRoomPack]        = useState(null);
   const [selectedFood,    setSelectedFood]    = useState(null);
   const [mealPack,        setMealPack]        = useState(null);
+  const [viewingMenu,     setViewingMenu]     = useState(null); // Which meal plan's schedule is open in the modal
   const [selectedRoom,    setSelectedRoom]    = useState(null); 
   const [availableRooms,  setAvailableRooms]  = useState([]);   
   const [step,            setStep]            = useState(1);       
@@ -566,7 +588,7 @@ const UserDashboard = () => {
         )}
 
         {/* Steps */}
-        <div className="flex items-center justify-between bg-white rounded-2xl p-2 sm:p-4 shadow-sm border border-slate-200 mb-8 gap-0 sm:gap-2">
+        <div className="flex items-center justify-between bg-white/80 backdrop-blur-lg rounded-2xl p-1.5 sm:p-3 shadow-sm border border-slate-200 mb-6 gap-0 sm:gap-2">
           {bookingMode === 'full' && (
             <>
               <StepBadge num={1} label="Sharing" active={step===1} done={step>1} />
@@ -585,24 +607,24 @@ const UserDashboard = () => {
         {/* ── STEP 1: SHARING + INLINE PACK ── */}
         {step === 1 && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 text-center sm:text-left">
-            <h2 className="text-2xl font-black text-slate-900 mb-2">Choose Sharing Type</h2>
-            <p className="text-slate-500 font-medium mb-10">
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 mb-1">Choose Sharing Type</h2>
+            <p className="text-slate-500 text-sm font-medium mb-6">
               PG base rate: <span className="font-black text-slate-800">₹{basePrice.toLocaleString()}/mo</span>
             </p>
 
             {/* ── Number tiles ── */}
-            <div className="flex gap-3 mb-4">
+            <div className="flex gap-2 mb-3">
               {SHARING_TYPES.map(s => {
                 const sel = selectedSharing === s.id;
                 return (
                   <button key={s.id}
                     onClick={() => { setSelectedSharing(s.id); setRoomPack(null); }}
-                    className={`flex-1 flex flex-col items-center gap-1.5 py-4 rounded-2xl border-2 font-black text-xl transition-all duration-200
+                    className={`flex-1 flex flex-col items-center gap-0.5 py-1.5 rounded-lg border font-black text-sm transition-all duration-300 ease-out cursor-pointer hover:-translate-y-0.5 hover:shadow-sm active:translate-y-0 active:scale-95 relative overflow-hidden group
                       ${sel
-                        ? 'border-brand-600 bg-brand-600 text-white shadow-lg shadow-brand-500/25 scale-[1.04]'
+                        ? 'border-brand-300 bg-brand-500/90 backdrop-blur-md text-white shadow-[0_8px_20px_-4px_rgba(34,197,94,0.5)] scale-[1.02]'
                         : 'border-slate-200 bg-white text-slate-700 hover:border-brand-300 hover:shadow-sm'}`}>
                     {s.id}
-                    <span className={`text-[9px] font-black uppercase tracking-widest leading-none
+                    <span className={`text-[8px] font-black uppercase tracking-widest leading-none
                       ${sel ? 'text-brand-100' : 'text-slate-400'}`}>
                       {s.id === 1 ? 'bed' : 'beds'}
                     </span>
@@ -671,58 +693,58 @@ const UserDashboard = () => {
               if (!roomInfo) return null;
 
               return (
-                <div className="bg-white border border-slate-200 rounded-3xl overflow-hidden mb-8 shadow-xl shadow-slate-200/50 animate-in fade-in zoom-in-95 duration-500">
-                  <div className="p-6 md:p-8">
-                    <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
+                <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden mb-5 shadow-xl shadow-slate-200/50 animate-in fade-in zoom-in-95 duration-500">
+                  <div className="p-3 md:p-4">
+                    <div className="flex flex-col md:flex-row justify-between items-start gap-3 mb-3">
                       <div>
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="bg-brand-50 text-brand-700 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider border border-brand-100">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="bg-brand-50 text-brand-700 font-black px-2 py-0.5 text-[9px] rounded-md uppercase tracking-wider border border-brand-100">
                             {roomInfo.type}
                           </span>
-                          <span className="bg-emerald-50 text-emerald-700 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider border border-emerald-100">
+                          <span className="bg-emerald-50 text-emerald-700 font-black px-2 py-0.5 text-[9px] rounded-md uppercase tracking-wider border border-emerald-100">
                             {s.tag}
                           </span>
                         </div>
-                        <h3 className="text-2xl font-black text-slate-900 mb-2">{roomInfo.name}</h3>
-                        <p className="text-slate-500 text-sm font-medium max-w-md leading-relaxed">
+                        <h3 className="text-xl sm:text-2xl font-black text-slate-900 mb-1">{roomInfo.name}</h3>
+                        <p className="text-slate-500 text-xs font-medium max-w-md leading-relaxed">
                           {roomInfo.desc}
                         </p>
                       </div>
-                      <div className="w-full md:w-auto bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center md:text-right">
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Price per person</p>
+                      <div className="w-full md:w-auto bg-slate-50 border border-slate-100 rounded-xl p-3 text-center md:text-right mt-2 md:mt-0">
+                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Price per person</p>
                         <div className="flex items-baseline justify-center md:justify-end gap-1">
-                          <span className="text-3xl font-black text-brand-600">₹{price.toLocaleString()}</span>
-                          <span className="text-slate-400 font-bold text-sm">/mo</span>
+                          <span className="text-2xl font-black text-brand-600">₹{price.toLocaleString()}</span>
+                          <span className="text-slate-400 font-bold text-[10px]">/mo</span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                       <div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 border-b border-slate-100 pb-2">Comfort & Space</p>
-                        <ul className="space-y-2">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 border-b border-slate-100 pb-2">Comfort & Space</p>
+                        <ul className="space-y-1.5">
                           {roomInfo.amenities.comfort.map((a, i) => (
-                            <li key={i} className="flex items-center gap-2 text-xs font-bold text-slate-600">
+                            <li key={i} className="flex items-center gap-2 text-[11px] font-bold text-slate-600">
                               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> {a}
                             </li>
                           ))}
                         </ul>
                       </div>
                       <div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 border-b border-slate-100 pb-2">Tech & Connectivity</p>
-                        <ul className="space-y-2">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 border-b border-slate-100 pb-2">Tech & Connectivity</p>
+                        <ul className="space-y-1.5">
                           {roomInfo.amenities.tech.map((a, i) => (
-                            <li key={i} className="flex items-center gap-2 text-xs font-bold text-slate-600">
+                            <li key={i} className="flex items-center gap-2 text-[11px] font-bold text-slate-600">
                               <Zap className="w-3.5 h-3.5 text-amber-500" /> {a}
                             </li>
                           ))}
                         </ul>
                       </div>
                       <div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 border-b border-slate-100 pb-2">Privacy & Safety</p>
-                        <ul className="space-y-2">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 border-b border-slate-100 pb-2">Privacy & Safety</p>
+                        <ul className="space-y-1.5">
                           {roomInfo.amenities.privacy.map((a, i) => (
-                            <li key={i} className="flex items-center gap-2 text-xs font-bold text-slate-600">
+                            <li key={i} className="flex items-center gap-2 text-[11px] font-bold text-slate-600">
                               <CheckCircle2 className="w-3.5 h-3.5 text-brand-500" /> {a}
                             </li>
                           ))}
@@ -736,88 +758,88 @@ const UserDashboard = () => {
 
             {/* Inline Monthly/Yearly pack — shows only after a sharing is selected */}
             {selectedSharing && (
-              <div className="bg-white border-2 border-brand-200 rounded-3xl p-6 mb-6 shadow-xl shadow-brand-500/5 animate-in fade-in slide-in-from-bottom-4 duration-300">
-                <h3 className="text-base font-black text-slate-900 mb-1">
+              <div className="bg-white border-[1.5px] border-brand-200 rounded-2xl p-3 sm:p-4 mb-5 shadow-lg shadow-brand-500/5 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                <h3 className="text-sm font-black text-slate-900 mb-1">
                   {sharing?.label} Sharing — Choose Your Pack
                 </h3>
-                <p className="text-slate-400 text-sm font-medium mb-5">Yearly saves you <span className="text-emerald-600 font-black">15%</span></p>
+                <p className="text-slate-400 text-xs font-medium mb-3">Yearly saves you <span className="text-emerald-600 font-black">15%</span></p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {/* Monthly */}
                   <div onClick={() => setRoomPack('monthly')}
-                    className={`relative rounded-2xl border-2 p-5 cursor-pointer transition-all duration-200
-                      ${roomPack === 'monthly' ? 'border-brand-600 bg-brand-50 shadow-md' : 'border-slate-200 bg-slate-50 hover:border-brand-300'}`}>
-                    <div className="flex items-center justify-between mb-4">
+                    className={`relative rounded-xl border-[1.5px] p-3 cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:scale-[0.98]
+                      ${roomPack === 'monthly' ? 'border-brand-500 bg-brand-50 shadow-[0_8px_20px_-4px_rgba(34,197,94,0.3)] ring-1 ring-brand-500/20' : 'border-slate-200 bg-slate-50 hover:border-brand-300'}`}>
+                    <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
-                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${roomPack === 'monthly' ? 'bg-brand-600' : 'bg-slate-200'}`}>
-                          <Calendar className={`w-5 h-5 ${roomPack === 'monthly' ? 'text-white' : 'text-slate-500'}`} />
+                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${roomPack === 'monthly' ? 'bg-brand-600' : 'bg-slate-200'}`}>
+                          <Calendar className={`w-4 h-4 ${roomPack === 'monthly' ? 'text-white' : 'text-slate-500'}`} />
                         </div>
                         <div>
                           <p className="font-black text-slate-900 text-sm">Monthly</p>
-                          <p className="text-slate-400 text-xs">Cancel anytime</p>
+                          <p className="text-slate-400 text-[10px]">Cancel anytime</p>
                         </div>
                       </div>
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0
+                      <div className={`w-4 h-4 rounded-full border-[1.5px] flex items-center justify-center flex-shrink-0
                         ${roomPack === 'monthly' ? 'border-brand-600 bg-brand-600' : 'border-slate-300'}`}>
-                        {roomPack === 'monthly' && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
+                        {roomPack === 'monthly' && <CheckCircle2 className="w-3 h-3 text-white" />}
                       </div>
                     </div>
                     {/* Price breakdown */}
-                    <div className="space-y-2 text-sm">
+                    <div className="space-y-1.5 text-xs">
                       <div className="flex justify-between">
                         <span className="text-slate-500">{sharing?.label} Sharing</span>
                         <span className="font-black text-slate-800">₹{monthlySharePrice.toLocaleString()}</span>
                       </div>
-                      <div className="flex justify-between border-t border-slate-200 pt-2 mt-1">
+                      <div className="flex justify-between border-t border-slate-200 pt-1.5 mt-0.5">
                         <span className="font-black text-slate-700">Room / month</span>
-                        <span className="font-black text-brand-700 text-base">₹{monthlySharePrice.toLocaleString()}</span>
+                        <span className="font-black text-brand-700 text-sm">₹{monthlySharePrice.toLocaleString()}</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Yearly */}
                   <div onClick={() => setRoomPack('yearly')}
-                    className={`relative rounded-2xl border-2 p-5 cursor-pointer transition-all duration-200
-                      ${roomPack === 'yearly' ? 'border-emerald-500 bg-emerald-50 shadow-md' : 'border-slate-200 bg-slate-50 hover:border-emerald-300'}`}>
-                    <div className="absolute -top-3 right-4 bg-emerald-500 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
-                      <BadgePercent className="w-3 h-3" /> Best Deal — 15% Off
+                    className={`relative rounded-xl border-[1.5px] p-3 cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:scale-[0.98]
+                      ${roomPack === 'yearly' ? 'border-emerald-500 bg-emerald-50 shadow-[0_8px_20px_-4px_rgba(16,185,129,0.3)] ring-1 ring-emerald-500/20' : 'border-slate-200 bg-slate-50 hover:border-emerald-300'}`}>
+                    <div className="absolute -top-2 right-3 bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
+                      <BadgePercent className="w-2.5 h-2.5" /> Best Deal — 15% Off
                     </div>
-                    <div className="flex items-center justify-between mb-4 mt-1">
+                    <div className="flex items-center justify-between mb-2 mt-1">
                       <div className="flex items-center gap-2">
-                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${roomPack === 'yearly' ? 'bg-emerald-500' : 'bg-slate-200'}`}>
-                          <CalendarDays className={`w-5 h-5 ${roomPack === 'yearly' ? 'text-white' : 'text-slate-500'}`} />
+                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${roomPack === 'yearly' ? 'bg-emerald-500' : 'bg-slate-200'}`}>
+                          <CalendarDays className={`w-4 h-4 ${roomPack === 'yearly' ? 'text-white' : 'text-slate-500'}`} />
                         </div>
                         <div>
                           <p className="font-black text-slate-900 text-sm">Yearly</p>
-                          <p className="text-slate-400 text-xs">Pay for 12 months</p>
+                          <p className="text-slate-400 text-[10px]">Pay for 12 months</p>
                         </div>
                       </div>
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0
+                      <div className={`w-4 h-4 rounded-full border-[1.5px] flex items-center justify-center flex-shrink-0
                         ${roomPack === 'yearly' ? 'border-emerald-500 bg-emerald-500' : 'border-slate-300'}`}>
-                        {roomPack === 'yearly' && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
+                        {roomPack === 'yearly' && <CheckCircle2 className="w-3 h-3 text-white" />}
                       </div>
                     </div>
 
                     {/* 12-month breakdown */}
-                    <div className="space-y-2 text-sm">
+                    <div className="space-y-1.5 text-xs">
                       <div className="flex justify-between items-center">
                         <span className="text-slate-500">Per month rate</span>
                         <div className="flex items-center gap-1.5">
-                          <span className="line-through text-slate-400 text-xs">₹{monthlySharePrice.toLocaleString()}</span>
-                          <span className="font-black text-emerald-700 text-base">₹{yearlySharePrice.toLocaleString()}</span>
+                          <span className="line-through text-slate-400 text-[10px]">₹{monthlySharePrice.toLocaleString()}</span>
+                          <span className="font-black text-emerald-700 text-sm">₹{yearlySharePrice.toLocaleString()}</span>
                         </div>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-slate-500">× 12 months</span>
                         <span className="font-black text-slate-900">₹{(yearlySharePrice * 12).toLocaleString()}</span>
                       </div>
-                      <div className="rounded-xl bg-emerald-100 border border-emerald-200 px-3 py-2 flex justify-between items-center mt-1">
-                        <span className="text-emerald-700 font-black text-xs">🎉 You save per year</span>
-                        <span className="font-black text-emerald-700 text-sm">₹{((monthlySharePrice - yearlySharePrice) * 12).toLocaleString()}</span>
+                      <div className="rounded-lg bg-emerald-100 border border-emerald-200 px-2 py-1 flex justify-between items-center mt-1">
+                        <span className="text-emerald-700 font-black text-[10px]">🎉 You save per year</span>
+                        <span className="font-black text-emerald-700 text-xs">₹{((monthlySharePrice - yearlySharePrice) * 12).toLocaleString()}</span>
                       </div>
-                      <div className="flex justify-between border-t border-slate-200 pt-2 mt-1">
+                      <div className="flex justify-between border-t border-slate-200 pt-1.5 mt-0.5">
                         <span className="font-black text-slate-700">Annual total</span>
-                        <span className="font-black text-emerald-700 text-base">₹{(yearlySharePrice * 12).toLocaleString()}</span>
+                        <span className="font-black text-emerald-700 text-sm">₹{(yearlySharePrice * 12).toLocaleString()}</span>
                       </div>
                     </div>
                   </div>
@@ -825,11 +847,13 @@ const UserDashboard = () => {
               </div>
             )}
 
-            <button onClick={() => setStep(2)} disabled={!pg || !selectedSharing || !roomPack}
-              className={`px-10 py-4 rounded-2xl font-black text-sm uppercase tracking-widest flex items-center gap-3 transition-all
-                ${pg && selectedSharing && roomPack ? 'bg-brand-600 hover:bg-brand-700 text-white shadow-xl shadow-brand-500/20 hover:-translate-y-0.5 active:scale-95' : 'bg-slate-200 text-slate-400 cursor-not-allowed opacity-60'}`}>
-              Continue <ArrowRight className="w-4 h-4" />
-            </button>
+            <div className="flex justify-end mt-2">
+              <button onClick={() => setStep(2)} disabled={!pg || !selectedSharing || !roomPack}
+                className={`w-full sm:w-auto h-11 px-8 rounded-full font-black text-[10px] sm:text-[11px] uppercase tracking-[0.15em] flex items-center justify-center gap-3 transition-all duration-300
+                  ${pg && selectedSharing && roomPack ? 'bg-brand-500 border border-brand-400/50 text-white shadow-[0_8px_20px_-4px_rgba(34,197,94,0.5)] hover:bg-brand-700 hover:border-brand-600 hover:shadow-[0_12px_24px_-4px_rgba(21,128,61,0.6)] hover:-translate-y-1 active:translate-y-0.5 active:scale-[0.97] cursor-pointer relative overflow-hidden group' : 'bg-slate-100 text-slate-400 cursor-not-allowed opacity-60'}`}>
+                Continue <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         )}
 
@@ -857,39 +881,56 @@ const UserDashboard = () => {
                 const Icon = f.icon;
                 return (
                   <div key={f.id} onClick={() => { setSelectedFood(f.id); setMealPack(null); }}
-                    className={`relative rounded-3xl border-2 p-6 cursor-pointer transition-all duration-300 group
-                      ${sel ? `${c.border} ${c.bg} shadow-xl scale-[1.01]` : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-md'}`}>
-                    <span className={`absolute -top-3 left-5 ${c.pill} text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow`}>{f.tag}</span>
-                    <div className="flex items-start justify-between mt-1 mb-4">
-                      <div className={`w-12 h-12 rounded-2xl ${sel ? c.bg : 'bg-slate-50'} flex items-center justify-center`}>
-                        <Icon className={`w-6 h-6 ${sel ? c.text : 'text-slate-400'}`} />
+                    className={`relative rounded-[1.5rem] border-[1.5px] p-4 md:p-5 cursor-pointer transition-all duration-300 group
+                      ${sel ? `${c.border} ${c.bg} shadow-[0_8px_20px_-4px_rgba(0,0,0,0.1)] scale-[1.02]` : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm hover:-translate-y-0.5'}`}>
+                    <span className={`absolute -top-3 left-4 md:left-5 ${c.pill} text-white text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full shadow-sm`}>{f.tag}</span>
+                    
+                    <div className="flex items-start justify-between mt-1 mb-3">
+                      <div className={`w-10 h-10 rounded-xl ${sel ? c.bg : 'bg-slate-50'} flex items-center justify-center transition-colors`}>
+                        <Icon className={`w-5 h-5 ${sel ? c.text : 'text-slate-400'}`} />
                       </div>
-                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${sel ? c.border : 'border-slate-300'}`}>
-                        {sel && <CheckCircle2 className={`w-4 h-4 ${c.text}`} />}
+                      <div className="flex flex-col items-end gap-2">
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${sel ? c.border : 'border-slate-300'}`}>
+                          {sel && <CheckCircle2 className={`w-3.5 h-3.5 ${c.text}`} />}
+                        </div>
                       </div>
                     </div>
-                    <h3 className="font-black text-xl text-slate-900 mb-3">{f.label} Plan</h3>
-                    <ul className="space-y-1.5 mb-4">
+
+                    <h3 className="font-black text-lg text-slate-900 mb-2">{f.label} Plan</h3>
+                    
+                    <ul className="space-y-1 mb-3">
                       {f.meals.map((m, i) => (
-                        <li key={i} className={`flex items-center gap-2 text-sm font-medium ${sel ? c.text : 'text-slate-600'}`}>
+                        <li key={i} className={`flex items-center gap-2 text-xs font-bold ${sel ? c.text : 'text-slate-600'}`}>
                           <span className="w-1.5 h-1.5 rounded-full bg-current opacity-60" />{m}
                         </li>
                       ))}
                     </ul>
-                    <div className="space-y-1 border-t border-slate-200 pt-3 mb-4">
+                    
+                    <div className="space-y-1 border-t border-slate-100 pt-2 mb-4">
                       {f.perks.map((p, i) => (
-                        <div key={i} className="flex items-center gap-2 text-xs text-slate-500">
+                        <div key={i} className="flex items-center gap-1.5 text-[10px] font-bold text-slate-500">
                           <Zap className="w-3 h-3 text-amber-400" />{p}
                         </div>
                       ))}
                     </div>
-                    <div className="flex items-end justify-between">
+
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); setViewingMenu(f.id); }}
+                      className={`w-full mb-4 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 transition-all duration-300 active:scale-[0.97] border-[1.5px]
+                        ${sel 
+                          ? 'bg-white border-transparent text-slate-900 shadow-[0_6px_16px_-4px_rgba(0,0,0,0.15)] hover:shadow-[0_8px_20px_-4px_rgba(0,0,0,0.2)] hover:-translate-y-0.5' 
+                          : 'bg-white border-slate-200 text-slate-600 shadow-sm hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 hover:shadow-md hover:-translate-y-0.5'}`}
+                    >
+                      <Info className="w-3.5 h-3.5" /> View Menu
+                    </button>
+
+                    <div className="flex items-end justify-between border-t border-slate-100 pt-3">
                       <div>
-                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Plan/mo</span>
-                        <div className={`text-2xl font-black mt-0.5 ${sel ? c.text : 'text-slate-900'}`}>₹{displayPrice.toLocaleString()}</div>
-                        {mealPack === 'yearly' && <span className="text-[10px] line-through text-slate-400">₹{f.price.toLocaleString()}</span>}
+                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Plan / Month</span>
+                        <div className={`text-xl font-black mt-0.5 ${sel ? c.text : 'text-slate-900'}`}>₹{displayPrice.toLocaleString()}</div>
+                        {mealPack === 'yearly' && <span className="text-[10px] line-through text-slate-400 font-bold">₹{f.price.toLocaleString()}</span>}
                       </div>
-                      <span className={`text-xs font-bold px-3 py-1.5 rounded-xl ${sel ? `${c.bg} ${c.text} border ${c.border}` : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200'}`}>
+                      <span className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-colors ${sel ? `${c.bg} ${c.text} border ${c.border}` : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200'}`}>
                         {sel ? 'Selected ✓' : 'Pick'}
                       </span>
                     </div>
@@ -909,8 +950,8 @@ const UserDashboard = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Monthly */}
                   <div onClick={() => setMealPack('monthly')}
-                    className={`relative rounded-2xl border-2 p-5 cursor-pointer transition-all duration-200
-                      ${mealPack === 'monthly' ? 'border-brand-600 bg-brand-50 shadow-md' : 'border-slate-200 bg-slate-50 hover:border-brand-300'}`}>
+                    className={`relative rounded-xl border-[1.5px] p-4 cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:scale-[0.98]
+                      ${mealPack === 'monthly' ? 'border-brand-500 bg-brand-50 shadow-[0_8px_20px_-4px_rgba(34,197,94,0.3)] ring-1 ring-brand-500/20' : 'border-slate-200 bg-slate-50 hover:border-brand-300'}`}>
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
                         <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${mealPack === 'monthly' ? 'bg-brand-600' : 'bg-slate-200'}`}>
@@ -941,8 +982,8 @@ const UserDashboard = () => {
 
                   {/* Yearly */}
                   <div onClick={() => setMealPack('yearly')}
-                    className={`relative rounded-2xl border-2 p-5 cursor-pointer transition-all duration-200
-                      ${mealPack === 'yearly' ? 'border-emerald-500 bg-emerald-50 shadow-md' : 'border-slate-200 bg-slate-50 hover:border-emerald-300'}`}>
+                    className={`relative rounded-xl border-[1.5px] p-4 cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:scale-[0.98]
+                      ${mealPack === 'yearly' ? 'border-emerald-500 bg-emerald-50 shadow-[0_8px_20px_-4px_rgba(16,185,129,0.3)] ring-1 ring-emerald-500/20' : 'border-slate-200 bg-slate-50 hover:border-emerald-300'}`}>
                     <div className="absolute -top-3 right-4 bg-emerald-500 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
                       <BadgePercent className="w-3 h-3" /> Best Deal — 15% Off
                     </div>
@@ -989,7 +1030,7 @@ const UserDashboard = () => {
               </div>
             )}
 
-            <div className="flex gap-4">
+            <div className="flex gap-3 sm:gap-4">
               <button onClick={() => {
                 if (bookingMode === 'food') {
                   setStep(1); 
@@ -997,10 +1038,10 @@ const UserDashboard = () => {
                 } else {
                   setStep(2);
                 }
-              }} className="px-8 py-4 border-2 border-slate-200 rounded-2xl font-black text-sm uppercase tracking-widest text-slate-600 hover:bg-slate-50 transition-all">← Back</button>
+              }} className="h-11 px-5 sm:px-6 border border-slate-200 rounded-full font-black text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-slate-500 hover:text-slate-800 hover:bg-slate-100/80 backdrop-blur-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-out">← Back</button>
               <button onClick={() => setStep(4)} disabled={!selectedFood || !mealPack}
-                className={`flex-1 py-4 rounded-2xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 transition-all
-                  ${selectedFood && mealPack ? 'bg-brand-600 hover:bg-brand-700 text-white shadow-xl shadow-brand-500/20 hover:-translate-y-0.5 active:scale-95' : 'bg-slate-200 text-slate-400 cursor-not-allowed opacity-60'}`}>
+                className={`flex-1 h-11 rounded-full font-black text-[10px] sm:text-[11px] uppercase tracking-[0.15em] flex items-center justify-center gap-3 transition-all duration-300
+                  ${selectedFood && mealPack ? 'bg-brand-500/90 backdrop-blur-md border border-white/40 text-white shadow-[0_8px_20px_-4px_rgba(34,197,94,0.5)] hover:bg-brand-400/90 hover:border-white/60 hover:shadow-[0_8px_20px_-4px_rgba(34,197,94,0.6)] hover:-translate-y-1 active:translate-y-0.5 active:scale-95 transition-all duration-300 ease-out relative overflow-hidden' : 'bg-slate-100 text-slate-400 cursor-not-allowed opacity-60'}`}>
                 Enter Details <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -1016,25 +1057,26 @@ const UserDashboard = () => {
             </div>
 
             {/* Building Grid */}
-            <div className="bg-white rounded-[2rem] p-6 sm:p-8 mb-8 shadow-xl shadow-slate-200/50 overflow-x-auto border-2 border-slate-100 relative">
-               <div className="absolute top-0 right-0 w-64 h-64 bg-brand-500/5 blur-[100px] pointer-events-none rounded-full" />
-               <div className="min-w-[700px] flex flex-col gap-6 relative">
+            <div className="bg-white rounded-3xl p-3 sm:p-5 mb-8 shadow-2xl shadow-slate-200/40 border border-slate-100 relative overflow-hidden">
+               <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-bl from-brand-400/10 to-transparent blur-3xl pointer-events-none rounded-full" />
+               <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-emerald-400/10 to-transparent blur-3xl pointer-events-none rounded-full" />
+               <div className="w-full flex flex-col gap-2 relative overflow-x-auto pb-2 sm:pb-0 hide-scrollbar">
                   {roomGrid.map((floor) => {
                      const isFloorActive = floor.sharingType === selectedSharing;
                      return (
-                        <div key={floor.floorNumber} className={`flex items-stretch gap-4 transition-opacity duration-300 ${isFloorActive ? 'opacity-100' : 'opacity-40 grayscale pointer-events-none'}`}>
+                        <div key={floor.floorNumber} className={`flex items-stretch gap-1.5 sm:gap-2 transition-all duration-500 ease-in-out ${isFloorActive ? 'opacity-100' : 'opacity-30 grayscale pointer-events-none hover:opacity-50'}`}>
                            
                            {/* Floor Label */}
-                           <div className="w-24 bg-slate-50 rounded-2xl flex flex-col items-center justify-center border border-slate-200 flex-shrink-0">
-                              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Floor</p>
-                              <p className="text-2xl font-black text-slate-800">{floor.floorNumber}</p>
-                              <p className="text-[9px] font-bold text-slate-500 mt-1 uppercase">
-                                 {floor.sharingType} Sharing
+                           <div className="w-12 sm:w-16 bg-gradient-to-b from-slate-50 to-slate-100 rounded-xl flex flex-col items-center justify-center border border-slate-200/60 flex-shrink-0 p-1.5 shadow-sm">
+                              <p className="text-[7px] font-black uppercase tracking-[0.2em] text-slate-400 mb-0.5">Floor</p>
+                              <p className="text-lg sm:text-xl font-black text-slate-800 leading-none">{floor.floorNumber}</p>
+                              <p className="text-[6px] sm:text-[7px] font-extrabold text-slate-500 mt-1 uppercase tracking-widest text-center">
+                                 {floor.sharingType} Share
                               </p>
                            </div>
 
                            {/* Rooms List */}
-                           <div className="flex-1 flex gap-3">
+                           <div className="flex-1 flex gap-1.5 sm:gap-2 min-w-max sm:min-w-0">
                               {floor.rooms.map(r => {
                                  const isSelected = selectedRoom?.roomId === r.roomId;
                                  const displayCapacity = isSelected ? r.currentCapacity - 1 : r.currentCapacity;
@@ -1045,28 +1087,28 @@ const UserDashboard = () => {
                                        key={r.roomId}
                                        onClick={() => setSelectedRoom(r)}
                                        disabled={!isFloorActive || isFull}
-                                       className={`flex-1 flex flex-col items-center justify-center p-3 rounded-2xl border-2 transition-all duration-300 relative overflow-hidden group
+                                       className={`min-w-[44px] sm:min-w-[50px] flex-1 flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-xl border transition-all duration-300 ease-out relative overflow-hidden group
                                           ${isSelected 
-                                             ? 'border-brand-500 bg-brand-50 shadow-md shadow-brand-500/20 scale-[1.02]' 
+                                             ? 'border-brand-500 bg-gradient-to-b from-brand-50 to-white shadow-lg shadow-brand-500/20 scale-105 z-10 ring-1 ring-brand-500/20' 
                                              : isFull 
-                                               ? 'border-slate-100 bg-slate-50 opacity-60 cursor-not-allowed'
-                                               : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm'}`}
+                                               ? 'border-slate-100 bg-slate-50/50 opacity-40 cursor-not-allowed'
+                                               : 'border-slate-200 bg-white hover:border-brand-400 hover:bg-brand-50/50 hover:shadow-md hover:-translate-y-1 hover:scale-[1.03] z-0 hover:z-10'}`}
                                     >
                                        {isSelected && (
-                                          <div className="absolute inset-0 bg-brand-500/5 animate-pulse pointer-events-none" />
+                                          <div className="absolute inset-0 bg-brand-500/10 animate-pulse pointer-events-none" />
                                        )}
 
-                                       <DoorOpen className={`w-5 h-5 mb-1 ${isSelected ? 'text-brand-600' : isFull ? 'text-slate-300' : 'text-slate-400 group-hover:text-slate-500'}`} />
-                                       <span className={`text-base font-black ${isSelected ? 'text-brand-900' : isFull ? 'text-slate-400' : 'text-slate-700'}`}>{r.roomName}</span>
+                                       <DoorOpen className={`w-3.5 h-3.5 sm:w-4 sm:h-4 mb-0.5 transition-all duration-300 ${isSelected ? 'text-brand-600 scale-110' : isFull ? 'text-slate-300' : 'text-slate-400 group-hover:text-brand-500 group-hover:scale-110'}`} />
+                                       <span className={`text-xs sm:text-sm font-black tracking-tight transition-colors ${isSelected ? 'text-brand-900' : isFull ? 'text-slate-400' : 'text-slate-700 group-hover:text-slate-900'}`}>{r.roomName}</span>
 
-                                       <div className={`mt-2 px-2 py-0.5 rounded-md text-[10px] font-black tracking-widest border transition-colors flex flex-col items-center gap-0.5
+                                       <div className={`mt-1 sm:mt-1.5 px-1.5 py-0.5 rounded text-[7px] font-black tracking-wider border transition-colors flex flex-col items-center w-full max-w-[44px]
                                            ${isSelected
-                                              ? 'bg-brand-100 text-brand-700 border-brand-200'
+                                              ? 'bg-brand-100 text-brand-700 border-brand-200 shadow-inner'
                                               : isFull
-                                                ? 'bg-slate-100 text-slate-400 border-slate-200'
-                                                : 'bg-emerald-50 text-emerald-600 border-emerald-100 group-hover:border-emerald-200'}`}>
-                                           <span className="leading-none">{displayCapacity}/{r.maxCapacity}</span>
-                                           <span className="text-[7px] uppercase tracking-tighter opacity-70">{isFull ? 'Full' : 'Available'}</span>
+                                                ? 'bg-slate-100 text-slate-400 border-slate-100'
+                                                : 'bg-emerald-50/80 text-emerald-600 border-emerald-100/50 group-hover:border-emerald-200 group-hover:bg-emerald-100'}`}>
+                                           <span className="leading-none mb-0.5">{displayCapacity}/{r.maxCapacity}</span>
+                                           <span className="text-[5px] sm:text-[6px] uppercase tracking-tighter opacity-80 font-bold">{isFull ? 'Full' : 'Avail'}</span>
                                         </div>
                                     </button>
                                  );
@@ -1077,21 +1119,21 @@ const UserDashboard = () => {
                   })}
 
                   {/* Ground Level Decor */}
-                  <div className="h-4 border-b-4 border-slate-200 mx-4 mt-2 border-dashed" />
+                  <div className="h-1.5 border-b-[3px] border-slate-200 mx-4 mt-1 border-dashed opacity-40" />
                </div>
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex gap-3 sm:gap-4 mt-2">
               <button 
                 onClick={() => setStep(1)} 
-                className="h-16 px-8 border-2 border-slate-200 rounded-2xl font-black text-sm uppercase tracking-widest text-slate-600 hover:bg-slate-50 transition-all">
+                className="h-11 px-5 sm:px-6 border border-slate-200 rounded-full font-black text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-slate-500 hover:text-slate-800 hover:bg-slate-100/80 backdrop-blur-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-out">
                 ← Back
               </button>
               <button 
                 onClick={() => setStep(3)} 
                 disabled={!selectedRoom}
-                className={`flex-1 h-16 rounded-2xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 transition-all
-                  ${selectedRoom ? 'bg-brand-600 hover:bg-brand-700 text-white shadow-xl shadow-brand-500/30' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}
+                className={`flex-1 h-11 rounded-full font-black text-[10px] sm:text-[11px] uppercase tracking-[0.15em] flex items-center justify-center gap-3 transition-all duration-300
+                  ${selectedRoom ? 'bg-brand-500 border border-brand-400/50 text-white shadow-[0_8px_20px_-4px_rgba(34,197,94,0.5)] hover:bg-brand-700 hover:border-brand-600 hover:shadow-[0_12px_24px_-4px_rgba(21,128,61,0.6)] hover:-translate-y-1 active:translate-y-0.5 active:scale-[0.97] transition-all duration-300 ease-out cursor-pointer relative overflow-hidden group' : 'bg-slate-100 text-slate-400 cursor-not-allowed opacity-60'}`}
               >
                 Choose Meals <ArrowRight className="w-4 h-4" />
               </button>
@@ -1107,38 +1149,40 @@ const UserDashboard = () => {
               <p className="text-slate-500 font-medium">Please provide your details for the booking records.</p>
             </div>
 
-            <div className="space-y-6 bg-white p-8 rounded-[2rem] border-2 border-slate-100 shadow-xl shadow-slate-200/50 mb-8">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                   <label className="text-xs font-black text-slate-400 uppercase tracking-widest block mb-2 px-1">Full Name</label>
+            <div className="space-y-6 bg-white/70 backdrop-blur-xl p-6 sm:p-8 rounded-[2rem] border-[1.5px] border-slate-100 shadow-2xl shadow-slate-200/40 mb-8 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-brand-500/5 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 relative z-10">
+                <div className="group">
+                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-2 px-2 transition-colors group-focus-within:text-brand-500">Full Name</label>
                    <input 
                      type="text" 
                      placeholder="John Doe"
-                     className="w-full h-14 px-5 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-brand-500 focus:bg-white transition-all outline-none font-bold text-slate-900"
+                     className="w-full h-14 px-5 bg-slate-50/50 border-[1.5px] border-slate-200 rounded-2xl focus:border-brand-500 focus:bg-white focus:shadow-[0_0_0_4px_rgba(34,197,94,0.1)] transition-all duration-300 outline-none font-black text-slate-900 placeholder:text-slate-300 placeholder:font-bold hover:border-slate-300"
                      value={userDetails.name}
                      onChange={(e) => setUserDetails({...userDetails, name: e.target.value})}
                    />
                 </div>
-                <div>
-                   <label className="text-xs font-black text-slate-400 uppercase tracking-widest block mb-2 px-1">City / Hometown</label>
+                <div className="group">
+                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-2 px-2 transition-colors group-focus-within:text-brand-500">City / Hometown</label>
                    <input 
                      type="text" 
                      placeholder="e.g. Bangalore"
-                     className="w-full h-14 px-5 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-brand-500 focus:bg-white transition-all outline-none font-bold text-slate-900"
+                     className="w-full h-14 px-5 bg-slate-50/50 border-[1.5px] border-slate-200 rounded-2xl focus:border-brand-500 focus:bg-white focus:shadow-[0_0_0_4px_rgba(34,197,94,0.1)] transition-all duration-300 outline-none font-black text-slate-900 placeholder:text-slate-300 placeholder:font-bold hover:border-slate-300"
                      value={userDetails.city}
                      onChange={(e) => setUserDetails({...userDetails, city: e.target.value})}
                    />
                 </div>
               </div>
 
-              <div>
-                <label className="text-xs font-black text-slate-400 uppercase tracking-widest block mb-2 px-1">Phone Number</label>
+              <div className="group relative z-10">
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-2 px-2 transition-colors group-focus-within:text-brand-500">Phone Number</label>
                 <div className="relative">
-                  <Phone className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <Phone className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors group-focus-within:text-brand-500" />
                   <input 
                     type="tel" 
                     placeholder="+91 00000 00000"
-                    className="w-full h-14 pl-14 pr-5 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-brand-500 focus:bg-white transition-all outline-none font-bold text-slate-900"
+                    className="w-full h-14 pl-14 pr-5 bg-slate-50/50 border-[1.5px] border-slate-200 rounded-2xl focus:border-brand-500 focus:bg-white focus:shadow-[0_0_0_4px_rgba(34,197,94,0.1)] transition-all duration-300 outline-none font-black text-slate-900 placeholder:text-slate-300 placeholder:font-bold hover:border-slate-300"
                     value={userDetails.phone}
                     onChange={(e) => setUserDetails({...userDetails, phone: e.target.value})}
                   />
@@ -1146,7 +1190,8 @@ const UserDashboard = () => {
               </div>
 
               <div>
-                <label className="text-xs font-black text-slate-400 uppercase tracking-widest block mb-2 px-1">Purpose of Stay</label>
+              <div className="relative z-10 mt-8">
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-4 px-2">Purpose of Stay</label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                   {PURPOSES.map(p => {
                     const PIcon = p.icon;
@@ -1156,26 +1201,37 @@ const UserDashboard = () => {
                         key={p.id}
                         type="button"
                         onClick={() => setUserDetails({...userDetails, purpose: p.id})}
-                        className={`flex flex-col items-center justify-center p-3 rounded-2xl border-2 transition-all duration-200 gap-2
-                          ${isSel ? 'border-brand-600 bg-brand-50 text-brand-600 scale-105 shadow-md' : 'border-slate-100 bg-slate-50 text-slate-400 hover:border-slate-200'}`}
+                        className={`group flex flex-col items-center justify-center p-4 rounded-2xl border-[1.5px] transition-all duration-300 gap-3 cursor-pointer active:scale-95
+                          ${isSel 
+                            ? 'border-transparent bg-white text-brand-600 shadow-[0_8px_20px_-4px_rgba(0,0,0,0.1)] scale-[1.02] ring-1 ring-brand-500/20' 
+                            : 'border-slate-200 bg-slate-50/50 text-slate-400 hover:bg-white hover:border-slate-300 hover:shadow-md hover:text-slate-600 hover:-translate-y-1'}`}
                       >
-                        <PIcon className={`w-5 h-5 ${isSel ? 'text-brand-600' : 'text-slate-400'}`} />
-                        <span className="text-[10px] font-black uppercase tracking-widest leading-none text-center">{p.label.split(' / ')[0]}</span>
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${isSel ? 'bg-brand-50' : 'bg-white shadow-sm group-hover:scale-110'}`}>
+                          <PIcon className={`w-5 h-5 transition-colors duration-300 ${isSel ? 'text-brand-500' : 'text-slate-400 group-hover:text-brand-400'}`} />
+                        </div>
+                        <span className={`text-[9px] font-black uppercase tracking-[0.15em] leading-none text-center transition-colors ${isSel ? 'text-brand-700' : 'text-slate-500 group-hover:text-slate-700'}`}>
+                          {p.label.split(' / ')[0]}
+                        </span>
                       </button>
                     );
                   })}
                 </div>
               </div>
+              </div>
 
             </div>
 
-            <div className="flex gap-4">
-              <button onClick={() => setStep(3)} className="h-16 px-8 border-2 border-slate-200 rounded-2xl font-black text-sm uppercase tracking-widest text-slate-600 hover:bg-slate-50 transition-all">← Back</button>
+            <div className="flex gap-3 sm:gap-4">
+              <button onClick={() => setStep(3)} className="h-11 px-5 sm:px-6 border border-slate-200 rounded-full font-black text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-slate-500 hover:text-slate-800 hover:bg-slate-100/80 backdrop-blur-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-out">
+                ← Back
+              </button>
               <button 
                 onClick={() => setStep(5)} 
                 disabled={!userDetails.name || !userDetails.phone || !userDetails.purpose}
-                className={`flex-1 h-16 rounded-2xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 transition-all
-                  ${userDetails.name && userDetails.phone && userDetails.purpose ? 'bg-brand-600 hover:bg-brand-700 text-white shadow-xl shadow-brand-500/30' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}
+                className={`flex-1 h-11 rounded-full font-black text-[10px] sm:text-[11px] uppercase tracking-[0.15em] flex items-center justify-center gap-3 transition-all duration-300
+                  ${userDetails.name && userDetails.phone && userDetails.purpose 
+                    ? 'bg-brand-500 border border-brand-400/50 text-white shadow-[0_8px_20px_-4px_rgba(34,197,94,0.5)] hover:bg-brand-700 hover:border-brand-600 hover:shadow-[0_12px_24px_-4px_rgba(21,128,61,0.6)] hover:-translate-y-1 active:translate-y-0.5 active:scale-[0.97] transition-all duration-300 ease-out cursor-pointer relative overflow-hidden' 
+                    : 'bg-slate-100 text-slate-400 cursor-not-allowed opacity-60'}`}
               >
                 Review Booking <ArrowRight className="w-4 h-4" />
               </button>
@@ -1544,17 +1600,17 @@ const UserDashboard = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <button onClick={() => setStep(4)} className="h-16 px-8 border-2 border-slate-200 rounded-2xl font-black text-sm uppercase tracking-widest text-slate-600 hover:bg-slate-50 transition-all">
+            <div className="flex items-center gap-3 sm:gap-4 mt-2">
+              <button onClick={() => setStep(4)} className="h-11 px-5 sm:px-6 border border-slate-200 rounded-full font-black text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-slate-500 hover:text-slate-800 hover:bg-slate-100/80 backdrop-blur-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-out">
                 ← Back
               </button>
               <button 
                 onClick={handleConfirm} 
                 disabled={bookingLoading || (bookingMode === 'full' ? (!agreedToTerms || !paymentMethod || !agreedToRefund) : !paymentMethod)}
-                className={`flex-1 h-16 rounded-2xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 transition-all
+                className={`flex-1 h-11 rounded-full font-black text-[10px] sm:text-[11px] uppercase tracking-[0.15em] flex items-center justify-center gap-3 transition-all duration-300
                   ${(bookingMode === 'full' ? (agreedToTerms && paymentMethod && agreedToRefund) : paymentMethod) 
-                    ? 'bg-brand-600 hover:bg-brand-700 text-white shadow-xl shadow-brand-500/30 hover:-translate-y-1 active:scale-95' 
-                    : 'bg-slate-200 text-slate-400 cursor-not-allowed opacity-70'}`}>
+                    ? 'bg-brand-500 border border-brand-400/50 text-white shadow-[0_8px_20px_-4px_rgba(34,197,94,0.5)] hover:bg-brand-700 hover:border-brand-600 hover:shadow-[0_12px_24px_-4px_rgba(21,128,61,0.6)] hover:-translate-y-1 active:translate-y-0.5 active:scale-[0.97] transition-all duration-300 ease-out cursor-pointer relative overflow-hidden group' 
+                    : 'bg-slate-100 text-slate-400 cursor-not-allowed opacity-60'}`}>
                 {bookingLoading ? (
                   <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
@@ -1571,8 +1627,97 @@ const UserDashboard = () => {
           </div>
         )}
       </div>
+      
+      {/* ── MEAL MENU MODAL ── */}
+      {viewingMenu && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setViewingMenu(null)} />
+          <div className="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+            {/* Modal Header */}
+            <div className="bg-slate-900 px-6 py-5 flex items-center justify-between">
+              <div>
+                <h3 className="text-xl font-black text-white">{MEAL_SCHEDULES[viewingMenu].title}</h3>
+                <p className="text-slate-400 text-xs font-medium mt-1">{MEAL_SCHEDULES[viewingMenu].note}</p>
+              </div>
+              <button 
+                onClick={() => setViewingMenu(null)}
+                className="w-8 h-8 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-full flex items-center justify-center transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            
+            {/* Modal Body */}
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                
+                {/* Mon - Sat Schedule */}
+                <div className="bg-slate-50 border border-slate-100 rounded-3xl p-5">
+                  <h4 className="text-[10px] font-black text-slate-800 uppercase tracking-widest mb-4 flex items-center gap-2 border-b border-slate-200 pb-2">
+                    <CalendarDays className="w-4 h-4 text-brand-500" /> Mon — Sat
+                  </h4>
+                  <div className="space-y-4">
+                    <div>
+                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Morning</span>
+                      <p className="text-xs sm:text-sm font-bold text-slate-700">{MEAL_SCHEDULES[viewingMenu].monSat.morning}</p>
+                    </div>
+                    <div>
+                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Afternoon</span>
+                      <p className="text-xs sm:text-sm font-bold text-slate-700">{MEAL_SCHEDULES[viewingMenu].monSat.afternoon}</p>
+                    </div>
+                    <div>
+                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Evening</span>
+                      <p className="text-xs sm:text-sm font-bold text-slate-700">{MEAL_SCHEDULES[viewingMenu].monSat.evening}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sunday Schedule */}
+                <div className="bg-gradient-to-br from-brand-50 to-emerald-50 border border-brand-100 rounded-3xl p-5 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-4 opacity-5">
+                    <Star className="w-32 h-32 text-brand-600" />
+                  </div>
+                  <h4 className="text-[10px] font-black text-brand-800 uppercase tracking-widest mb-4 flex items-center gap-2 border-b border-brand-200 pb-2 relative z-10">
+                    <Crown className="w-4 h-4 text-amber-500" /> Sunday Special
+                  </h4>
+                  <div className="space-y-4 relative z-10">
+                    <div>
+                      <span className="text-[9px] font-bold text-brand-600/70 uppercase tracking-widest block mb-1">Morning</span>
+                      <p className="text-xs sm:text-sm font-black text-brand-900">{MEAL_SCHEDULES[viewingMenu].sunday.morning}</p>
+                    </div>
+                    <div>
+                      <span className="text-[9px] font-bold text-brand-600/70 uppercase tracking-widest block mb-1">Afternoon</span>
+                      <p className="text-xs sm:text-sm font-black text-brand-900">{MEAL_SCHEDULES[viewingMenu].sunday.afternoon}</p>
+                    </div>
+                    <div>
+                      <span className="text-[9px] font-bold text-brand-600/70 uppercase tracking-widest block mb-1">Evening</span>
+                      <p className="text-xs sm:text-sm font-black text-brand-900">{MEAL_SCHEDULES[viewingMenu].sunday.evening}</p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              
+              <div className="mt-6 pt-5 border-t border-slate-100 flex justify-end">
+                <button 
+                  onClick={() => setViewingMenu(null)}
+                  className="px-8 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all"
+                >
+                  Close Menu
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default UserDashboard;
+
+
+
+
+
+
