@@ -83,6 +83,7 @@ const Home = () => {
   const [mounted, setMounted] = useState(false);
   const [heroSearch, setHeroSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
+  const [mobileSupportMode, setMobileSupportMode] = useState('grid'); // 'grid' | 'list'
   
   // Crossfade state management: prevSlide stays 100% visible beneath activeSlide during 1200ms dissolve
   const [activeSlide, setActiveSlide] = useState(0);
@@ -580,7 +581,122 @@ const Home = () => {
           <div className="flex flex-col lg:flex-row-reverse items-center gap-12">
             
             <div className="flex-1 w-full max-w-xl lg:max-w-none scroll-reveal delay-200">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              {/* ── Mobile-Only Header: Live Status & Layout Variation Switch ── */}
+              <div className="sm:hidden flex items-center justify-between gap-2 mb-3 px-1">
+                <div className="flex items-center gap-2">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+                  </span>
+                  <span className="text-xs font-black uppercase tracking-wider text-slate-800">24/7 Concierge</span>
+                </div>
+
+                {/* Mobile Variation Switcher */}
+                <div className="inline-flex items-center p-0.5 rounded-xl bg-slate-200/90 border border-slate-300/80 text-[11px] font-bold">
+                  <button
+                    type="button"
+                    onClick={() => setMobileSupportMode('grid')}
+                    className={`px-3 py-1 rounded-lg transition-all duration-200 cursor-pointer ${
+                      mobileSupportMode === 'grid'
+                        ? 'bg-white text-slate-900 shadow-xs font-black'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    ⊞ 2×2 Tiles
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMobileSupportMode('list')}
+                    className={`px-3 py-1 rounded-lg transition-all duration-200 cursor-pointer ${
+                      mobileSupportMode === 'list'
+                        ? 'bg-white text-slate-900 shadow-xs font-black'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    ☰ List Hub
+                  </button>
+                </div>
+              </div>
+
+              {/* ── Mobile Variation 1: 2x2 Interactive Luxury Tiles (Compact & High-Density) ── */}
+              {mobileSupportMode === 'grid' && (
+                <div className="grid grid-cols-2 gap-2.5 sm:hidden">
+                  {[
+                    { icon: Phone, label: 'Resident Helpline', desc: '1234567890', actionText: 'Call Now', color: 'text-amber-600', badgeBg: 'bg-amber-500/10 text-amber-700 border-amber-200', gradient: 'from-amber-400 to-amber-600', shadow: 'shadow-amber-500/20', tag: 'Direct', href: 'tel:1234567890' },
+                    { icon: MessageSquare, label: 'WhatsApp Concierge', desc: 'Direct fast chat', actionText: 'Chat Now', color: 'text-emerald-600', badgeBg: 'bg-emerald-500/10 text-emerald-700 border-emerald-200', gradient: 'from-emerald-500 to-teal-600', shadow: 'shadow-emerald-500/20', tag: '< 2 min', href: 'https://wa.me/1234567890' },
+                    { icon: Mail, label: 'Email Desk', desc: 'support@staynest.com', actionText: 'Send Email', color: 'text-cyan-600', badgeBg: 'bg-cyan-500/10 text-cyan-700 border-cyan-200', gradient: 'from-cyan-500 to-blue-600', shadow: 'shadow-cyan-500/20', tag: 'Official', href: 'mailto:support@staynest.com' },
+                    { icon: HelpCircle, label: 'Help & Policies', desc: 'Instant refund FAQ', actionText: 'View FAQs', color: 'text-indigo-600', badgeBg: 'bg-indigo-500/10 text-indigo-700 border-indigo-200', gradient: 'from-indigo-500 to-purple-600', shadow: 'shadow-indigo-500/20', tag: 'Guides', href: '/refund-request' },
+                  ].map((f, idx) => (
+                    <a 
+                      key={idx} 
+                      href={f.href} 
+                      className="bg-white rounded-2xl p-3.5 border border-slate-200/90 shadow-xs hover:shadow-md transition-all duration-200 active:scale-[0.98] flex flex-col justify-between group"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-1 mb-2.5">
+                          <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${f.gradient} text-white flex items-center justify-center shadow-md ${f.shadow} shrink-0 group-hover:scale-105 transition-transform`}>
+                            <f.icon className="w-4.5 h-4.5" />
+                          </div>
+                          <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md border ${f.badgeBg}`}>
+                            {f.tag}
+                          </span>
+                        </div>
+                        <p className="font-bold text-slate-900 text-xs tracking-tight truncate group-hover:text-emerald-700 transition-colors">
+                          {f.label}
+                        </p>
+                        <p className="text-[10px] text-slate-500 font-medium truncate mt-0.5">
+                          {f.desc}
+                        </p>
+                      </div>
+
+                      <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-slate-700 group-hover:text-emerald-700">
+                        <span>{f.actionText}</span>
+                        <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              {/* ── Mobile Variation 2: Executive Concierge Hub (Horizontal Unified List) ── */}
+              {mobileSupportMode === 'list' && (
+                <div className="sm:hidden bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden divide-y divide-slate-100">
+                  {[
+                    { icon: Phone, label: 'Resident Helpline', desc: '1234567890', sub: '24/7 Toll-free resident line', actionText: 'Call', color: 'text-amber-600', badgeBg: 'bg-amber-50 text-amber-800 border-amber-200', gradient: 'from-amber-400 to-amber-600', shadow: 'shadow-amber-500/20', href: 'tel:1234567890' },
+                    { icon: MessageSquare, label: 'WhatsApp Concierge', desc: 'Direct fast response', sub: 'Average reply under 2 mins', actionText: 'Chat', color: 'text-emerald-600', badgeBg: 'bg-emerald-50 text-emerald-800 border-emerald-200', gradient: 'from-emerald-500 to-teal-600', shadow: 'shadow-emerald-500/20', href: 'https://wa.me/1234567890' },
+                    { icon: Mail, label: 'Email Desk', desc: 'support@staynest.com', sub: 'Official concierge inquiries', actionText: 'Email', color: 'text-cyan-600', badgeBg: 'bg-cyan-50 text-cyan-800 border-cyan-200', gradient: 'from-cyan-500 to-blue-600', shadow: 'shadow-cyan-500/20', href: 'mailto:support@staynest.com' },
+                    { icon: HelpCircle, label: 'Help Center & Policies', desc: 'Instant refund guides', sub: 'Policies, deposits & FAQ', actionText: 'Guides', color: 'text-indigo-600', badgeBg: 'bg-indigo-50 text-indigo-800 border-indigo-200', gradient: 'from-indigo-500 to-purple-600', shadow: 'shadow-indigo-500/20', href: '/refund-request' },
+                  ].map((f, idx) => (
+                    <a 
+                      key={idx} 
+                      href={f.href} 
+                      className="p-3.5 flex items-center justify-between gap-3 hover:bg-slate-50/70 transition-colors active:bg-slate-100 group"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${f.gradient} text-white flex items-center justify-center shadow-md ${f.shadow} shrink-0 group-hover:scale-105 transition-transform`}>
+                          <f.icon className="w-4.5 h-4.5" />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-bold text-slate-900 text-xs tracking-tight group-hover:text-emerald-700 transition-colors truncate">
+                            {f.label}
+                          </p>
+                          <p className="text-[10px] text-slate-500 font-medium truncate mt-0.5">
+                            {f.desc} • {f.sub}
+                          </p>
+                        </div>
+                      </div>
+
+                      <span className={`shrink-0 inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1.5 rounded-xl border ${f.badgeBg} group-hover:shadow-xs transition-all`}>
+                        {f.actionText}
+                        <ChevronRight className="w-3 h-3" />
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              {/* ── Desktop View (Preserved Classic 2-Column Grid) ── */}
+              <div className="hidden sm:grid sm:grid-cols-2 gap-3.5">
                 {[
                   { icon: Phone, label: 'Resident Helpline', desc: '1234567890', color: 'text-amber-600', bg: 'bg-amber-50 border-amber-200', href: 'tel:1234567890' },
                   { icon: MessageSquare, label: 'WhatsApp Concierge', desc: 'Direct fast response', color: 'text-indigo-600', bg: 'bg-indigo-50 border-indigo-200', href: 'https://wa.me/1234567890' },

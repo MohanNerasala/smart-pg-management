@@ -340,14 +340,16 @@ const Navbar = () => {
             <button 
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
-              className={`p-2 rounded-xl transition-colors cursor-pointer ${
-                isDarkHeroNav 
-                  ? 'text-white hover:bg-white/10' 
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
+              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 cursor-pointer border ${
+                mobileMenuOpen
+                  ? 'bg-emerald-500 text-white border-emerald-400 shadow-md shadow-emerald-500/25'
+                  : isDarkHeroNav 
+                    ? 'bg-white/10 hover:bg-white/15 text-white border-white/20 backdrop-blur-md' 
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-200 shadow-2xs'
               }`}
               aria-label="Toggle navigation menu"
             >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {mobileMenuOpen ? <X className="h-5 w-5 transition-transform duration-200 rotate-90" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
@@ -356,33 +358,180 @@ const Navbar = () => {
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden">
-          <div className="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} />
+          {/* Backdrop with smooth blur */}
+          <div 
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200" 
+            onClick={() => setMobileMenuOpen(false)} 
+          />
           
-          <div className={`absolute left-4 right-4 top-18 z-50 rounded-3xl shadow-2xl p-4 animate-in fade-in zoom-in-95 duration-200 border ${
-            isDarkHeroNav
-              ? 'bg-slate-950/95 backdrop-blur-2xl border-white/20 text-white'
-              : 'bg-white/95 backdrop-blur-2xl border-slate-200/90 text-slate-900'
-          }`}>
+          <div className="fixed inset-x-3.5 top-18 z-50 max-h-[calc(100vh-5.5rem)] overflow-y-auto rounded-3xl bg-[#0d151c]/95 backdrop-blur-2xl border border-white/10 shadow-2xl shadow-black/80 p-3.5 text-white animate-in fade-in slide-in-from-top-3 zoom-in-95 duration-200 hide-scrollbar">
             {user ? (
-              <div>
-                {/* User Card */}
-                <div className={`flex items-center gap-3 p-3.5 rounded-2xl mb-3 border ${
-                  isDarkHeroNav
-                    ? 'bg-white/10 border-white/15'
-                    : 'bg-slate-50 border-slate-200/70'
-                }`}>
-                  <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white font-black text-base flex items-center justify-center shadow-xs">
-                    {user.name ? user.name.charAt(0).toUpperCase() : <User className="w-5 h-5" />}
+              <div className="space-y-3">
+                {/* ── User Profile Badge (Tappable) ── */}
+                <Link
+                  to="/profile"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 transition-all duration-200 group active:scale-[0.99]"
+                >
+                  <div className="relative shrink-0">
+                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white font-black text-base flex items-center justify-center shadow-md shadow-emerald-500/25 ring-2 ring-emerald-400/30">
+                      {user.name ? user.name.charAt(0).toUpperCase() : <User className="w-5 h-5" />}
+                    </div>
+                    <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-[#0d151c]" />
                   </div>
+                  
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-black truncate">{user.name}</p>
-                    <p className={`text-[11px] font-medium truncate ${isDarkHeroNav ? 'text-white/60' : 'text-slate-500'}`}>
-                      {user.email || 'Resident Account'}
+                    <div className="flex items-center gap-1.5">
+                      <p className="text-sm font-bold text-white tracking-tight truncate group-hover:text-emerald-300 transition-colors">
+                        {user.name || 'Resident'}
+                      </p>
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    </div>
+                    <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                      {user.email || 'Resident Member'}
                     </p>
+                    <div className="mt-1 inline-flex items-center gap-1 text-[9px] font-bold text-emerald-400 bg-emerald-500/15 px-2 py-0.5 rounded-md border border-emerald-500/25">
+                      Active Resident
+                    </div>
                   </div>
+
+                  <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition-all shrink-0" />
+                </Link>
+
+                {/* ── Main Navigation Group ── */}
+                <div className="space-y-1">
+                  <div className="px-2 pt-1 pb-1">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
+                      Navigation
+                    </span>
+                  </div>
+
+                  {navItems.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = location.pathname === item.path;
+                    return (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all duration-150 group select-none ${
+                          isActive
+                            ? 'bg-gradient-to-r from-emerald-500/20 via-emerald-500/10 to-transparent text-white border border-emerald-500/30 shadow-sm'
+                            : 'text-slate-300 hover:text-white hover:bg-white/[0.05]'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-8.5 h-8.5 rounded-xl flex items-center justify-center shrink-0 transition-all ${
+                            isActive
+                              ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/30'
+                              : 'bg-white/[0.06] text-slate-400 group-hover:text-white group-hover:bg-white/[0.1]'
+                          }`}>
+                            <Icon className="w-4 h-4" />
+                          </div>
+                          <span className="tracking-wide text-xs">{item.label}</span>
+                        </div>
+
+                        {isActive ? (
+                          <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-400 uppercase tracking-widest bg-emerald-500/15 px-2 py-0.5 rounded-md border border-emerald-500/30">
+                            Active
+                          </span>
+                        ) : (
+                          <ChevronDown className="w-3.5 h-3.5 -rotate-90 text-slate-600 group-hover:text-slate-400 transition-transform" />
+                        )}
+                      </Link>
+                    );
+                  })}
+
+                  {/* Admin link if applicable */}
+                  {user && (user.role === 'ADMIN' || user.role === 'ROLE_ADMIN') && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold text-indigo-300 hover:text-indigo-200 hover:bg-indigo-500/10 transition-all duration-150 group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-8.5 h-8.5 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0">
+                          <ShieldCheck className="w-4 h-4" />
+                        </div>
+                        <span className="tracking-wide text-xs">Admin Console</span>
+                      </div>
+                      <ChevronDown className="w-3.5 h-3.5 -rotate-90 text-indigo-500" />
+                    </Link>
+                  )}
                 </div>
 
-                {/* Nav Links */}
+                {/* ── Resident Services Group ── */}
+                <div className="pt-2 border-t border-white/[0.08] space-y-1">
+                  <div className="px-2 pt-1 pb-1">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
+                      Resident Services
+                    </span>
+                  </div>
+
+                  <Link
+                    to="/profile"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all duration-150 group ${
+                      location.pathname === '/profile'
+                        ? 'bg-gradient-to-r from-emerald-500/20 via-emerald-500/10 to-transparent text-white border border-emerald-500/30'
+                        : 'text-slate-300 hover:text-white hover:bg-white/[0.05]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8.5 h-8.5 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
+                        location.pathname === '/profile'
+                          ? 'bg-emerald-500 text-white'
+                          : 'bg-white/[0.06] text-slate-400 group-hover:text-emerald-400 group-hover:bg-emerald-500/15'
+                      }`}>
+                        <User className="w-4 h-4" />
+                      </div>
+                      <span className="tracking-wide text-xs">Profile Settings</span>
+                    </div>
+                    <ChevronDown className="w-3.5 h-3.5 -rotate-90 text-slate-600 group-hover:text-slate-400 transition-transform" />
+                  </Link>
+
+                  <Link
+                    to="/refund-request"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all duration-150 group ${
+                      location.pathname === '/refund-request'
+                        ? 'bg-gradient-to-r from-emerald-500/20 via-emerald-500/10 to-transparent text-white border border-emerald-500/30'
+                        : 'text-slate-300 hover:text-white hover:bg-white/[0.05]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8.5 h-8.5 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
+                        location.pathname === '/refund-request'
+                          ? 'bg-emerald-500 text-white'
+                          : 'bg-white/[0.06] text-slate-400 group-hover:text-emerald-400 group-hover:bg-emerald-500/15'
+                      }`}>
+                        <IndianRupee className="w-4 h-4" />
+                      </div>
+                      <span className="tracking-wide text-xs">Refund Request</span>
+                    </div>
+                    <ChevronDown className="w-3.5 h-3.5 -rotate-90 text-slate-600 group-hover:text-slate-400 transition-transform" />
+                  </Link>
+                </div>
+
+                {/* ── Sign Out Session ── */}
+                <div className="pt-2 border-t border-white/[0.08]">
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 border border-rose-500/10 hover:border-rose-500/20 transition-all duration-150 cursor-pointer group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8.5 h-8.5 rounded-xl bg-rose-500/15 text-rose-400 group-hover:bg-rose-500/25 flex items-center justify-center shrink-0 transition-colors">
+                        <LogOut className="w-4 h-4" />
+                      </div>
+                      <span className="tracking-wide text-xs">Sign Out</span>
+                    </div>
+                    <ArrowRight className="w-3.5 h-3.5 text-rose-500/60 group-hover:text-rose-400 group-hover:translate-x-0.5 transition-all" />
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="p-2 space-y-3">
                 <div className="space-y-1">
                   {navItems.map((item) => {
                     const Icon = item.icon;
@@ -392,65 +541,42 @@ const Navbar = () => {
                         key={item.path}
                         to={item.path}
                         onClick={() => setMobileMenuOpen(false)}
-                        className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all
-                          ${isActive 
-                            ? (isDarkHeroNav ? 'bg-white/20 text-white font-black' : 'bg-slate-100 text-slate-900 font-black')
-                            : (isDarkHeroNav ? 'text-white/80 hover:bg-white/10' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900')}`}
+                        className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all duration-150 select-none ${
+                          isActive
+                            ? 'bg-emerald-500/20 text-white border border-emerald-500/30'
+                            : 'text-slate-300 hover:text-white hover:bg-white/[0.05]'
+                        }`}
                       >
-                        <span className="flex items-center gap-3">
-                          <Icon className={`w-4 h-4 ${isActive ? 'text-emerald-400' : (isDarkHeroNav ? 'text-white/50' : 'text-slate-400')}`} />
-                          <span>{item.label}</span>
-                        </span>
+                        <div className="flex items-center gap-3">
+                          <div className={`w-8.5 h-8.5 rounded-xl flex items-center justify-center shrink-0 ${
+                            isActive ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/30' : 'bg-white/[0.06] text-slate-400'
+                          }`}>
+                            <Icon className="w-4 h-4" />
+                          </div>
+                          <span className="tracking-wide text-xs">{item.label}</span>
+                        </div>
                         {isActive && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />}
                       </Link>
                     );
                   })}
-
-                  <div className={`h-px my-2 ${isDarkHeroNav ? 'bg-white/15' : 'bg-slate-200/70'}`} />
-
-                  <Link 
-                    to="/profile" 
-                    onClick={() => setMobileMenuOpen(false)} 
-                    className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold ${
-                      isDarkHeroNav ? 'text-white/80 hover:bg-white/10' : 'text-slate-600 hover:bg-slate-50'
-                    }`}
-                  >
-                    <User className="w-4 h-4 opacity-60" />
-                    <span>Profile Settings</span>
-                  </Link>
-
-                  <Link 
-                    to="/refund-request" 
-                    onClick={() => setMobileMenuOpen(false)} 
-                    className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold ${
-                      isDarkHeroNav ? 'text-white/80 hover:bg-white/10' : 'text-slate-600 hover:bg-slate-50'
-                    }`}
-                  >
-                    <IndianRupee className="w-4 h-4 opacity-60" />
-                    <span>Refund Request</span>
-                  </Link>
-
-                  <div className={`h-px my-2 ${isDarkHeroNav ? 'bg-white/15' : 'bg-slate-200/70'}`} />
-
-                  <button
-                    type="button"
-                    onClick={handleLogout}
-                    className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-rose-500 hover:bg-rose-500/10 cursor-pointer"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    <span>Sign Out</span>
-                  </button>
                 </div>
-              </div>
-            ) : (
-              <div className="p-2">
-                <Link
-                  to="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full py-3 bg-slate-900 text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center shadow-md"
-                >
-                  Sign In
-                </Link>
+
+                <div className="pt-2 border-t border-white/[0.08] grid grid-cols-2 gap-2">
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="py-2.5 px-4 rounded-xl bg-white/[0.08] hover:bg-white/[0.12] text-white border border-white/10 font-bold text-xs text-center tracking-wider transition-all"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs text-center tracking-wider shadow-lg shadow-emerald-600/25 transition-all"
+                  >
+                    Get Started
+                  </Link>
+                </div>
               </div>
             )}
           </div>

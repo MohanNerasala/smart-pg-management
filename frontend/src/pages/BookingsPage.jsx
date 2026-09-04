@@ -118,15 +118,15 @@ const ReceiptRow = ({
 const Modal = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 print:p-0 print:relative print:z-auto">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-6 print:p-0 print:relative print:z-auto">
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm print:hidden" onClick={onClose} />
-      <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl animate-in zoom-in-95 duration-200 hide-scrollbar print:max-h-none print:shadow-none print:overflow-visible">
+      <div className="relative w-full max-w-3xl max-h-[92vh] sm:max-h-[90vh] overflow-y-auto rounded-2xl sm:rounded-3xl animate-in zoom-in-95 duration-200 hide-scrollbar print:max-h-none print:shadow-none print:overflow-visible">
         {/* Modern Close Button */}
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 z-50 w-10 h-10 bg-white/20 hover:bg-white/40 text-white rounded-full flex items-center justify-center backdrop-blur-md transition-all print:hidden shadow-lg border border-white/20"
+          className="absolute top-2.5 right-2.5 sm:top-4 sm:right-4 z-50 w-8 h-8 sm:w-10 sm:h-10 bg-slate-900/40 sm:bg-white/20 hover:bg-slate-900/60 sm:hover:bg-white/40 text-white rounded-full flex items-center justify-center backdrop-blur-md transition-all print:hidden shadow-lg border border-white/20"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
         {children}
       </div>
@@ -608,149 +608,149 @@ const BookingsPage = () => {
             <div className="flex flex-col items-center">
               {activeReceipt?.type === 'room' ? (
                 /* ─── ROOM RECEIPT (Standardized 100mm) ─── */
-                <div id="room-receipt" className="bg-[#fcfbf7] text-slate-900 shadow-2xl w-full max-w-sm mx-auto flex flex-col relative font-sans overflow-visible my-8 rounded-2xl border border-emerald-900/20">
+                <div id="room-receipt" className="bg-[#fcfbf7] text-slate-900 shadow-2xl w-full max-w-sm mx-auto flex flex-col relative font-sans overflow-visible my-3 sm:my-8 rounded-2xl border border-emerald-900/20">
                   <div className="receipt-zig-zag top" />
                   <div className="receipt-zig-zag bottom" />
 
-                  <div className="p-8 pb-4 text-center">
-                    <h2 className="text-2xl font-black tracking-tighter uppercase mb-2 italic text-emerald-900">STAYNEST</h2>
-                    <div className="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-800 text-white p-3.5 rounded-2xl mb-3 shadow-md shadow-emerald-950/20">
-                       <p className="text-xs font-black uppercase tracking-widest text-white drop-shadow-xs">{activeBooking.pg?.pgName || 'PREMIUM ACCOMMODATION'}</p>
-                       <p className="text-[10px] font-bold text-emerald-200 uppercase mt-0.5">{activeBooking.pg?.area || 'Executive Sector'}, {activeBooking.pg?.city || 'Smart City'}</p>
+                  <div className="p-4 sm:p-8 pb-3 sm:pb-4 text-center">
+                    <h2 className="text-xl sm:text-2xl font-black tracking-tighter uppercase mb-2 italic text-emerald-900">STAYNEST</h2>
+                    <div className="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-800 text-white p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl mb-2 sm:mb-3 shadow-md shadow-emerald-950/20">
+                       <p className="text-[11px] sm:text-xs font-black uppercase tracking-widest text-white drop-shadow-xs">{activeBooking.pg?.pgName || 'PREMIUM ACCOMMODATION'}</p>
+                       <p className="text-[9px] sm:text-[10px] font-bold text-emerald-200 uppercase mt-0.5">{activeBooking.pg?.area || 'Executive Sector'}, {activeBooking.pg?.city || 'Smart City'}</p>
                     </div>
-                    <p className="text-[9px] font-mono font-bold text-emerald-700 uppercase tracking-[0.3em] leading-none">Official Occupancy Receipt</p>
+                    <p className="text-[8px] sm:text-[9px] font-mono font-bold text-emerald-700 uppercase tracking-[0.3em] leading-none">Official Occupancy Receipt</p>
                   </div>
 
-                  <div className="px-8 space-y-1 text-[9px] font-mono font-bold text-slate-500 uppercase pb-4 border-b border-slate-200">
+                  <div className="px-4 sm:px-8 space-y-1 text-[8px] sm:text-[9px] font-mono font-bold text-slate-500 uppercase pb-3 sm:pb-4 border-b border-slate-200">
                     <div className="flex justify-between"><span>Resident ID:</span><span>#ST-{activeBooking.bookingDate?.slice(-4).toUpperCase() || 'U72'}</span></div>
                     <div className="flex justify-between"><span>Inv Number:</span><span>#RM-{activeBooking.bookingDate?.slice(-6).toUpperCase() || 'X721'}</span></div>
                     <div className="flex justify-between"><span>Print Date:</span><span>{new Date().toLocaleDateString('en-GB')}</span></div>
                     <div className="flex justify-between text-emerald-700 font-bold"><span>System Status:</span><span>Authorized / Paid</span></div>
                   </div>
 
-                  <div className="p-8 py-6">
-                    <table className="w-full text-left border-collapse mb-8">
+                  <div className="p-4 sm:p-8 py-4 sm:py-6">
+                    <table className="w-full text-left border-collapse mb-4 sm:mb-8">
                       <thead>
                         <tr className="border-b-2 border-emerald-800">
-                          <th className="pb-2 text-[10px] font-black uppercase tracking-widest text-emerald-900/60">Description</th>
-                          <th className="pb-2 text-[10px] font-black uppercase tracking-widest text-right text-emerald-900/60">
+                          <th className="pb-2 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-emerald-900/60">Description</th>
+                          <th className="pb-2 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-right text-emerald-900/60">
                             {activeBooking.roomPack === 'yearly' ? 'Annual Total' : 'Monthly Rate'}
                           </th>
                         </tr>
                       </thead>
                       <tbody className="text-sm font-bold">
                         <tr>
-                          <td className="py-5">
-                            <p className="font-black uppercase leading-tight text-lg text-slate-900">{bookedSharingLabel}</p>
-                            <p className="text-[10px] text-emerald-700 font-bold uppercase mt-1">{bookedRoomName} • Floor {bookedFloorNum}</p>
+                          <td className="py-3 sm:py-5">
+                            <p className="font-black uppercase leading-tight text-base sm:text-lg text-slate-900">{bookedSharingLabel}</p>
+                            <p className="text-[9px] sm:text-[10px] text-emerald-700 font-bold uppercase mt-1">{bookedRoomName} • Floor {bookedFloorNum}</p>
                           </td>
-                          <td className="py-5 text-right align-top text-lg font-black italic text-emerald-800">₹{roomFinalAmount.toLocaleString()}</td>
+                          <td className="py-3 sm:py-5 text-right align-top text-base sm:text-lg font-black italic text-emerald-800">₹{roomFinalAmount.toLocaleString()}</td>
                         </tr>
                       </tbody>
                       <tfoot>
                         <tr className="border-t-2 border-emerald-800 bg-emerald-50/60">
-                          <td className="py-4 px-2 text-[10px] font-black uppercase tracking-widest text-emerald-900">{activeBooking.roomPack === 'yearly' ? 'Annual Commitment' : 'Authorized Total'}</td>
-                          <td className="py-4 px-2 text-right text-2xl font-black italic text-emerald-800">₹{roomFinalAmount.toLocaleString()}</td>
+                          <td className="py-3 sm:py-4 px-1.5 sm:px-2 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-emerald-900">{activeBooking.roomPack === 'yearly' ? 'Annual Commitment' : 'Authorized Total'}</td>
+                          <td className="py-3 sm:py-4 px-1.5 sm:px-2 text-right text-lg sm:text-2xl font-black italic text-emerald-800">₹{roomFinalAmount.toLocaleString()}</td>
                         </tr>
                       </tfoot>
                     </table>
 
-                    <div className="grid grid-cols-2 gap-8 pt-2">
-                      <div className="border-l-2 border-slate-200 pl-4">
-                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Stay Period (Starts)</p>
-                        <p className="text-xs font-black uppercase">{fmtDate(startDate)}</p>
+                    <div className="grid grid-cols-2 gap-3 sm:gap-8 pt-1 sm:pt-2">
+                      <div className="border-l-2 border-slate-200 pl-2.5 sm:pl-4">
+                        <p className="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5 sm:mb-1">Stay Period (Starts)</p>
+                        <p className="text-[11px] sm:text-xs font-black uppercase">{fmtDate(startDate)}</p>
                       </div>
-                      <div className="border-r-2 border-emerald-700 pr-4 text-right">
-                        <p className="text-[9px] font-black text-emerald-700 uppercase tracking-widest mb-1">Subscription Ends</p>
-                        <p className="text-sm font-black uppercase text-emerald-700 underline decoration-2 underline-offset-4">{fmtDate(roomEndDate)}</p>
+                      <div className="border-r-2 border-emerald-700 pr-2.5 sm:pr-4 text-right">
+                        <p className="text-[8px] sm:text-[9px] font-black text-emerald-700 uppercase tracking-widest mb-0.5 sm:mb-1">Subscription Ends</p>
+                        <p className="text-xs sm:text-sm font-black uppercase text-emerald-700 underline decoration-2 underline-offset-4">{fmtDate(roomEndDate)}</p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="p-8 pt-0 mt-8 mb-4">
+                  <div className="p-4 sm:p-8 pt-0 mt-4 sm:mt-8 mb-2 sm:mb-4">
                     <div className="h-[1px] bg-slate-200 mb-2 border-dashed border-t" />
-                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Authorized Resident Signatory</p>
+                    <p className="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Authorized Resident Signatory</p>
                   </div>
 
-                  <div className="p-8 pt-0 flex gap-2 print:hidden z-10">
-                    <button onClick={handleRoomDownload} className="flex-1 h-12 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl font-black text-xs uppercase tracking-widest shadow-md shadow-emerald-700/20 transition-all cursor-pointer">Download Receipt</button>
-                    <button onClick={handleRoomShare} className="w-12 h-12 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border-2 border-emerald-200/80 rounded-xl flex items-center justify-center transition-all cursor-pointer">
+                  <div className="p-4 sm:p-8 pt-0 flex gap-2 print:hidden z-10">
+                    <button onClick={handleRoomDownload} className="flex-1 h-11 sm:h-12 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl font-black text-xs uppercase tracking-widest shadow-md shadow-emerald-700/20 transition-all cursor-pointer">Download Receipt</button>
+                    <button onClick={handleRoomShare} className="w-11 sm:w-12 h-11 sm:h-12 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border-2 border-emerald-200/80 rounded-xl flex items-center justify-center transition-all cursor-pointer">
                       {roomCopied ? <Check className="w-5 h-5 text-emerald-600" /> : <Share2 className="w-5 h-5" />}
                     </button>
                   </div>
                 </div>
               ) : activeReceipt?.type === 'meal' ? (
                 /* ─── MEAL RECEIPT (Standardized 100mm) ─── */
-                <div id="meal-receipt" className="bg-[#fcfbf7] text-slate-900 shadow-2xl w-full max-w-sm mx-auto flex flex-col relative font-sans overflow-visible my-8 rounded-2xl">
+                <div id="meal-receipt" className="bg-[#fcfbf7] text-slate-900 shadow-2xl w-full max-w-sm mx-auto flex flex-col relative font-sans overflow-visible my-3 sm:my-8 rounded-2xl">
                   <div className="receipt-zig-zag top" />
                   <div className="receipt-zig-zag bottom" />
 
-                  <div className="p-8 pb-4 text-center">
-                    <h2 className="text-2xl font-black tracking-tighter uppercase mb-2 italic text-emerald-950">STAYNEST</h2>
-                    <div className="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-800 text-white p-3.5 rounded-2xl mb-3 shadow-md shadow-emerald-950/20">
-                       <p className="text-xs font-black uppercase tracking-widest text-white">{activeBooking.pg?.pgName}</p>
-                       <p className="text-[10px] font-bold text-emerald-200 uppercase mt-0.5">{activeBooking.pg?.area}, {activeBooking.pg?.city}</p>
+                  <div className="p-4 sm:p-8 pb-3 sm:pb-4 text-center">
+                    <h2 className="text-xl sm:text-2xl font-black tracking-tighter uppercase mb-2 italic text-emerald-950">STAYNEST</h2>
+                    <div className="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-800 text-white p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl mb-2 sm:mb-3 shadow-md shadow-emerald-950/20">
+                       <p className="text-[11px] sm:text-xs font-black uppercase tracking-widest text-white">{activeBooking.pg?.pgName}</p>
+                       <p className="text-[9px] sm:text-[10px] font-bold text-emerald-200 uppercase mt-0.5">{activeBooking.pg?.area}, {activeBooking.pg?.city}</p>
                     </div>
-                    <p className="text-[9px] font-mono font-bold text-emerald-700 uppercase tracking-[0.3em] leading-none">Official Meal Voucher</p>
+                    <p className="text-[8px] sm:text-[9px] font-mono font-bold text-emerald-700 uppercase tracking-[0.3em] leading-none">Official Meal Voucher</p>
                   </div>
 
-                  <div className="px-8 space-y-1 text-[9px] font-mono font-bold text-slate-500 uppercase pb-4 border-b border-slate-200">
+                  <div className="px-4 sm:px-8 space-y-1 text-[8px] sm:text-[9px] font-mono font-bold text-slate-500 uppercase pb-3 sm:pb-4 border-b border-slate-200">
                     <div className="flex justify-between"><span>Resident ID:</span><span>#ST-{activeBooking.bookingDate?.slice(-4).toUpperCase() || 'U72'}</span></div>
                     <div className="flex justify-between"><span>Pass ID:</span><span>#FD-{activeBooking.bookingDate?.slice(-6).toUpperCase() || 'M921'}</span></div>
                     <div className="flex justify-between"><span>Active Since:</span><span>{fmtDate(startDate)}</span></div>
                     <div className="flex justify-between text-emerald-700 font-bold"><span>System Status:</span><span>Auth / Provisioned</span></div>
                   </div>
 
-                  <div className="p-8 py-6">
-                    <table className="w-full text-left border-collapse mb-8">
+                  <div className="p-4 sm:p-8 py-4 sm:py-6">
+                    <table className="w-full text-left border-collapse mb-4 sm:mb-8">
                       <thead>
                         <tr className="border-b-2 border-emerald-800">
-                          <th className="pb-2 text-[10px] font-black uppercase tracking-widest text-emerald-900/60">Plan Category</th>
-                          <th className="pb-2 text-[10px] font-black uppercase tracking-widest text-right text-emerald-900/60">
+                          <th className="pb-2 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-emerald-900/60">Plan Category</th>
+                          <th className="pb-2 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-right text-emerald-900/60">
                             {activeBooking.mealPack === 'yearly' ? 'Annual Total' : 'Monthly Price'}
                           </th>
                         </tr>
                       </thead>
                       <tbody className="text-sm font-bold">
                         <tr>
-                          <td className="py-6">
-                            <p className="font-black uppercase leading-tight text-lg text-slate-900">{activeBooking.food?.label || 'Standard'} PLAN</p>
-                            <p className="text-[10px] text-emerald-700 font-bold uppercase tracking-tighter mt-1">{activeBooking.food?.meals?.join(' • ').toUpperCase() || '3 MEALS/DAY • ALL 7 DAYS'}</p>
+                          <td className="py-3 sm:py-6">
+                            <p className="font-black uppercase leading-tight text-base sm:text-lg text-slate-900">{activeBooking.food?.label || 'Standard'} PLAN</p>
+                            <p className="text-[9px] sm:text-[10px] text-emerald-700 font-bold uppercase tracking-tighter mt-1">{activeBooking.food?.meals?.join(' • ').toUpperCase() || '3 MEALS/DAY • ALL 7 DAYS'}</p>
                           </td>
-                          <td className="py-6 text-right align-top text-lg font-black italic text-emerald-800">₹{mealFinalAmount.toLocaleString()}</td>
+                          <td className="py-3 sm:py-6 text-right align-top text-base sm:text-lg font-black italic text-emerald-800">₹{mealFinalAmount.toLocaleString()}</td>
                         </tr>
                       </tbody>
                       <tfoot>
                         <tr className="border-t-2 border-emerald-800 bg-emerald-50/60">
-                          <td className="py-4 px-2 text-[10px] font-black uppercase tracking-widest text-emerald-900">{activeBooking.mealPack === 'yearly' ? 'Annual Total' : 'Subscription Total'}</td>
-                          <td className="py-4 px-2 text-right text-2xl font-black italic text-emerald-800">₹{mealFinalAmount.toLocaleString()}</td>
+                          <td className="py-3 sm:py-4 px-1.5 sm:px-2 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-emerald-900">{activeBooking.mealPack === 'yearly' ? 'Annual Total' : 'Subscription Total'}</td>
+                          <td className="py-3 sm:py-4 px-1.5 sm:px-2 text-right text-lg sm:text-2xl font-black italic text-emerald-800">₹{mealFinalAmount.toLocaleString()}</td>
                         </tr>
                       </tfoot>
                     </table>
 
-                    <div className="grid grid-cols-1 gap-4 pt-2">
-                      <div className="border-l-4 border-emerald-600 pl-4 py-2 bg-emerald-50/40 overflow-hidden">
-                        <p className="text-[9px] font-black text-emerald-700 uppercase tracking-[0.3em] mb-1">Access Valid Until (Auto-Renewal Enabled)</p>
-                        <p className="text-xl font-black uppercase tracking-tight text-slate-900">{fmtDate(mealEndDate)}</p>
+                    <div className="grid grid-cols-1 gap-3 sm:gap-4 pt-1 sm:pt-2">
+                      <div className="border-l-4 border-emerald-600 pl-3 sm:pl-4 py-1.5 sm:py-2 bg-emerald-50/40 overflow-hidden">
+                        <p className="text-[8px] sm:text-[9px] font-black text-emerald-700 uppercase tracking-[0.3em] mb-0.5 sm:mb-1">Access Valid Until (Auto-Renewal Enabled)</p>
+                        <p className="text-lg sm:text-xl font-black uppercase tracking-tight text-slate-900">{fmtDate(mealEndDate)}</p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="p-8 pt-0 mt-8 mb-4 text-center">
-                    <p className="text-sm font-black uppercase tracking-tight italic border-b border-slate-200 inline-block px-10 pb-1 mb-1">{activeBooking.userDetails?.name || 'Authorized Resident'}</p>
-                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Authorized Member Signature</p>
+                  <div className="p-4 sm:p-8 pt-0 mt-4 sm:mt-8 mb-2 sm:mb-4 text-center">
+                    <p className="text-xs sm:text-sm font-black uppercase tracking-tight italic border-b border-slate-200 inline-block px-6 sm:px-10 pb-1 mb-1">{activeBooking.userDetails?.name || 'Authorized Resident'}</p>
+                    <p className="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase tracking-widest">Authorized Member Signature</p>
                   </div>
 
-                  <div className="p-8 pt-0 flex gap-2 print:hidden z-10">
-                    <button onClick={handleMealDownload} className="flex-1 h-12 bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-700 hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-600 text-white rounded-xl font-black text-xs uppercase tracking-widest shadow-md shadow-emerald-700/20 transition-all cursor-pointer">Download Receipt</button>
-                    <button onClick={handleMealShare} className="w-12 h-12 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border-2 border-emerald-200/80 rounded-xl flex items-center justify-center transition-all cursor-pointer">
+                  <div className="p-4 sm:p-8 pt-0 flex gap-2 print:hidden z-10">
+                    <button onClick={handleMealDownload} className="flex-1 h-11 sm:h-12 bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-700 hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-600 text-white rounded-xl font-black text-xs uppercase tracking-widest shadow-md shadow-emerald-700/20 transition-all cursor-pointer">Download Receipt</button>
+                    <button onClick={handleMealShare} className="w-11 sm:w-12 h-11 sm:h-12 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border-2 border-emerald-200/80 rounded-xl flex items-center justify-center transition-all cursor-pointer">
                       {mealCopied ? <Check className="w-5 h-5 text-emerald-600" /> : <Share2 className="w-5 h-5" />}
                     </button>
                   </div>
                 </div>
               ) : activeReceipt?.type === 'refund' ? (
                 /* ─── REFUND RECEIPT ─── */
-                <div id="refund-receipt" className="bg-white text-slate-900 shadow-2xl w-full max-w-sm mx-auto flex flex-col relative font-sans overflow-visible my-8 rounded-3xl border border-slate-100">
+                <div id="refund-receipt" className="bg-white text-slate-900 shadow-2xl w-full max-w-sm mx-auto flex flex-col relative font-sans overflow-visible my-3 sm:my-8 rounded-2xl sm:rounded-3xl border border-slate-100">
                   <div className="p-8 pb-4 text-center border-b border-dashed border-slate-200 bg-slate-50/50 rounded-t-3xl">
                     <ReceiptText className="w-12 h-12 text-red-600 mx-auto mb-3" />
                     <h2 className="text-xl font-black tracking-tighter uppercase mb-1">Refund Receipt</h2>
@@ -837,7 +837,7 @@ const BookingsPage = () => {
                  navigate(location.pathname, { replace: true, state: {} });
                  
                  // Perform backend sync in background without reloading the page
-                 fetch('http://localhost:8081/sync/clear', { method: 'DELETE' })
+                 api.delete('/sync/clear')
                    .catch(e => console.error("Failed to clear backend", e));
               }
             }}

@@ -96,11 +96,13 @@ public class WebSecurityConfig {
                                      .map(String::trim)
                                      .collect(Collectors.toCollection(java.util.ArrayList::new));
         
-        // Force include typical local dev origins to prevent lockouts during testing
+        // Force include typical local dev origins and cloud patterns
         if (!origins.contains("http://localhost:5173")) origins.add("http://localhost:5173");
         if (!origins.contains("http://127.0.0.1:5173")) origins.add("http://127.0.0.1:5173");
         if (!origins.contains("http://localhost:5174")) origins.add("http://localhost:5174");
         if (!origins.contains("http://127.0.0.1:5174")) origins.add("http://127.0.0.1:5174");
+        if (!origins.contains("https://*.vercel.app")) origins.add("https://*.vercel.app");
+        if (!origins.contains("https://*.onrender.com")) origins.add("https://*.onrender.com");
                                      
         configuration.setAllowedOriginPatterns(origins); 
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));

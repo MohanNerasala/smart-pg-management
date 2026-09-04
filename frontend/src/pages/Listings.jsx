@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { Search, MapPin, Star, IndianRupee, ArrowLeft, CheckCircle, Wifi, Coffee, Shield, Loader, AlertCircle, Info, ExternalLink, ArrowRight } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
+import { API_BASE_URL } from '../services/api';
 import LocationDropdown from '../components/LocationDropdown';
 import { INDIA_STATES, getCities, getAreas } from '../data/locationData';
 
@@ -167,7 +168,7 @@ const Listings = () => {
 
     try {
       // Fetch exactly the 10 PGs from the Database universally
-      const res = await axios.get('http://localhost:8081/pg/list');
+      const res = await axios.get(`${API_BASE_URL}/pg/list`);
       let data = res.data || [];
       
       setPgs(data);

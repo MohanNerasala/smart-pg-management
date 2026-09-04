@@ -3,5 +3,6 @@
   "python.analysis.typeCheckingMode": "off",
   "python.analysis.extraPaths": [],
   "pyre2.enable": false,
-  "pyre2.pythonPath": "C:\\Users\\CHAKRI\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+  "pyre2.pythonPath": "C:\\Users\\CHAKRI\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+  "css.lint.unknownAtRules": "ignore"
 }

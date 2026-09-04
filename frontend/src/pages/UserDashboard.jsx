@@ -144,6 +144,7 @@ const UserDashboard = () => {
   const [selectedFood,    setSelectedFood]    = useState(null);
   const [mealPack,        setMealPack]        = useState(null);
   const [viewingMenu,     setViewingMenu]     = useState(null); // Which meal plan's schedule is open in the modal
+  const [mobileMenuTab,   setMobileMenuTab]   = useState('all'); // 'all' | 'weekday' | 'sunday' for mobile view
   const [selectedRoom,    setSelectedRoom]    = useState(null); 
   const [availableRooms,  setAvailableRooms]  = useState([]);   
   const [step,            setStep]            = useState(1);       
@@ -175,7 +176,12 @@ const UserDashboard = () => {
       try {
         const saved = JSON.parse(savedStateStr);
         if (saved.step) setStep(saved.step);
-        if (saved.userDetails) setUserDetails(saved.userDetails);
+        if (saved.userDetails) {
+          // Clean phone of any stray prefix or non-digits so input is purely digits
+          const rawDigits = String(saved.userDetails.phone || '').replace(/\D/g, '');
+          const clean10 = rawDigits.length > 10 && rawDigits.startsWith('91') ? rawDigits.slice(2, 12) : rawDigits.slice(0, 10);
+          setUserDetails({ ...saved.userDetails, phone: clean10 });
+        }
         
         // Restore PG from saved state if missing from navigation
         if (!pg && saved.pg) {
@@ -328,6 +334,9 @@ const UserDashboard = () => {
     ? ((roomPack === 'yearly' ? activeSharePrice * 12 : activeSharePrice) + 
        (mealPack === 'yearly' ? activeFoodPrice * 12 : activeFoodPrice)) 
     : totalMonthly;
+
+  // Pure 10 digits for Indian phone number
+  const phoneDigits = String(userDetails.phone || '').replace(/\D/g, '').slice(0, 10);
 
   const handleConfirm = async () => {
     setBookingLoading(true);
@@ -539,7 +548,11 @@ const UserDashboard = () => {
               totalMonthly: bookingMode === 'full' ? totalMonthly : activeFoodPrice,
               totalAmount: calculatedTotal,
               status: 'CONFIRMED',
-              userDetails: { ...userDetails, email: user?.email }
+              userDetails: { 
+                ...userDetails, 
+                phone: userDetails.phone?.startsWith('+91') ? userDetails.phone : (userDetails.phone ? `+91 ${userDetails.phone}` : ''),
+                email: user?.email 
+              }
             };
             const existingBookingsStr = localStorage.getItem('allBookings');
             let allBookings = existingBookingsStr ? JSON.parse(existingBookingsStr) : [];
@@ -1334,16 +1347,60 @@ const UserDashboard = () => {
               </div>
 
               <div className="group relative z-10">
-                <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-2 px-2 transition-colors group-focus-within:text-emerald-600">Phone Number</label>
-                <div className="relative">
-                  <Phone className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors group-focus-within:text-emerald-600" />
-                  <input 
-                    type="tel" 
-                    placeholder="+91 00000 00000"
-                    className="w-full h-14 pl-14 pr-5 bg-white border border-slate-200 rounded-2xl focus:border-emerald-500 focus:outline-none focus:ring-0 focus:shadow-none transition-colors duration-200 outline-none font-bold text-slate-900 placeholder:text-slate-300 hover:border-slate-300"
-                    value={userDetails.phone}
-                    onChange={(e) => setUserDetails({...userDetails, phone: e.target.value})}
-                  />
+                <div className="flex items-center justify-between mb-2 px-2">
+                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] transition-colors group-focus-within:text-emerald-600">
+                    Phone Number
+                  </label>
+                  <span className="text-[9px] font-black uppercase tracking-widest text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200/60">
+                    🇮🇳 India (+91)
+                  </span>
+                </div>
+
+                <div className="relative flex items-center bg-white border border-slate-200 rounded-2xl focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/10 transition-all duration-200 hover:border-slate-300 overflow-hidden h-14">
+                  {/* Predefined India +91 Badge */}
+                  <div className="flex items-center gap-1.5 px-4 h-full bg-slate-50 border-r border-slate-200 shrink-0 select-none">
+                    <span className="text-base" role="img" aria-label="India">🇮🇳</span>
+                    <span className="font-black text-xs sm:text-sm text-slate-800 tracking-wider">+91</span>
+                  </div>
+
+                  <div className="relative flex-1 flex items-center h-full">
+                    <Phone className="absolute left-3.5 w-4 h-4 text-slate-400 group-focus-within:text-emerald-600 transition-colors pointer-events-none" />
+                    <input 
+                      type="tel" 
+                      inputMode="numeric"
+                      placeholder="Enter 10-digit number"
+                      maxLength={10}
+                      className="w-full h-full pl-10 pr-10 bg-transparent border-none outline-none focus:outline-none focus:ring-0 font-bold text-slate-900 placeholder:text-slate-300 text-sm tracking-wider"
+                      value={userDetails.phone || ''}
+                      onChange={(e) => {
+                        const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
+                        setUserDetails({ ...userDetails, phone: digits });
+                      }}
+                    />
+                    {(userDetails.phone || '').length === 10 && (
+                      <div className="absolute right-3.5 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center animate-in zoom-in-50 duration-200 shadow-sm">
+                        <Check className="w-3 h-3 stroke-[3]" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Validation Status Strip */}
+                <div className="flex items-center justify-between px-2 mt-1.5 text-[10px]">
+                  {!userDetails.phone || userDetails.phone.length === 0 ? (
+                    <span className="text-slate-400 font-medium">Predefined Indian prefix (+91) included automatically</span>
+                  ) : userDetails.phone.length < 10 ? (
+                    <span className="text-amber-600 font-semibold flex items-center gap-1">
+                      <span>⚠️</span> Enter remaining {10 - userDetails.phone.length} digit{10 - userDetails.phone.length > 1 ? 's' : ''} ({userDetails.phone.length}/10)
+                    </span>
+                  ) : (
+                    <span className="text-emerald-600 font-bold flex items-center gap-1">
+                      <span>✓</span> 10-digit mobile number ready (+91 {userDetails.phone})
+                    </span>
+                  )}
+                  <span className={`font-mono font-bold text-[9px] ${(userDetails.phone || '').length === 10 ? 'text-emerald-600' : 'text-slate-400'}`}>
+                    {(userDetails.phone || '').length}/10
+                  </span>
                 </div>
               </div>
 
@@ -1379,20 +1436,28 @@ const UserDashboard = () => {
 
             </div>
 
-            <div className="flex gap-3 sm:gap-4">
+            <div className="flex gap-3 sm:gap-4 items-center">
               <button onClick={() => setStep(3)} className="h-11 px-5 sm:px-6 border border-slate-200 rounded-full font-black text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-slate-500 hover:text-slate-800 hover:bg-slate-100/80 backdrop-blur-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-out">
                 ← Back
               </button>
-              <button 
-                onClick={() => setStep(5)} 
-                disabled={!userDetails.name || !userDetails.phone || !userDetails.purpose}
-                className={`flex-1 h-11 rounded-full font-black text-[10px] sm:text-[11px] uppercase tracking-[0.15em] flex items-center justify-center gap-3 transition-all duration-300
-                  ${userDetails.name && userDetails.phone && userDetails.purpose 
-                    ? 'bg-brand-500 border border-brand-400/50 text-white shadow-[0_8px_20px_-4px_rgba(34,197,94,0.5)] hover:bg-brand-700 hover:border-brand-600 hover:shadow-[0_12px_24px_-4px_rgba(21,128,61,0.6)] hover:-translate-y-1 active:translate-y-0.5 active:scale-[0.97] transition-all duration-300 ease-out cursor-pointer relative overflow-hidden' 
-                    : 'bg-slate-100 text-slate-400 cursor-not-allowed opacity-60'}`}
-              >
-                Review Booking <ArrowRight className="w-4 h-4" />
-              </button>
+
+              {/* Review Booking Button — ONLY shown when exactly 10 digits are entered */}
+              {(userDetails.phone || '').length === 10 ? (
+                <button 
+                  onClick={() => setStep(5)} 
+                  disabled={!userDetails.name || !userDetails.purpose}
+                  className={`flex-1 h-11 rounded-full font-black text-[10px] sm:text-[11px] uppercase tracking-[0.15em] flex items-center justify-center gap-3 transition-all duration-300 animate-in fade-in zoom-in-95 duration-200
+                    ${userDetails.name && userDetails.purpose 
+                      ? 'bg-brand-500 border border-brand-400/50 text-white shadow-[0_8px_20px_-4px_rgba(34,197,94,0.5)] hover:bg-brand-700 hover:border-brand-600 hover:shadow-[0_12px_24px_-4px_rgba(21,128,61,0.6)] hover:-translate-y-1 active:translate-y-0.5 active:scale-[0.97] transition-all duration-300 ease-out cursor-pointer relative overflow-hidden' 
+                      : 'bg-slate-100 text-slate-400 cursor-not-allowed opacity-60'}`}
+                >
+                  Review Booking <ArrowRight className="w-4 h-4" />
+                </button>
+              ) : (
+                <div className="flex-1 h-11 rounded-full bg-slate-100/80 border border-dashed border-slate-200 flex items-center justify-center text-slate-400 text-[10px] sm:text-[11px] font-bold tracking-wider px-4 text-center select-none">
+                  Enter 10-digit number to review ({(userDetails.phone || '').length}/10)
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -1446,7 +1511,7 @@ const UserDashboard = () => {
                     </div>
                     <div>
                       <p className="text-[10px] text-slate-400 uppercase tracking-wider mb-0.5">Phone</p>
-                      <p className="text-sm font-semibold text-slate-800">{userDetails.phone}</p>
+                      <p className="text-sm font-semibold text-slate-800">{userDetails.phone?.startsWith('+91') ? userDetails.phone : (userDetails.phone ? `+91 ${userDetails.phone}` : 'N/A')}</p>
                     </div>
                     <div>
                       <p className="text-[10px] text-slate-400 uppercase tracking-wider mb-0.5">Hometown</p>
@@ -1775,24 +1840,24 @@ const UserDashboard = () => {
       
       {/* ── MEAL MENU MODAL ── */}
       {viewingMenu && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 animate-in fade-in duration-300">
           <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-md" onClick={() => setViewingMenu(null)} />
-          <div className="relative bg-white rounded-[2.5rem] shadow-2xl shadow-slate-950/40 w-full max-w-2xl overflow-hidden border border-slate-100 animate-in zoom-in-95 duration-300">
+          <div className="relative bg-white rounded-2xl sm:rounded-[2.5rem] shadow-2xl shadow-slate-950/40 w-full max-w-sm sm:max-w-2xl max-h-[90vh] sm:max-h-[92vh] flex flex-col overflow-hidden border border-slate-100 animate-in zoom-in-95 duration-300">
             {/* Modal Header — Emerald Green Theme */}
-            <div className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-700 px-6 sm:px-8 py-6 text-white relative overflow-hidden border-b border-emerald-500/30 shadow-inner">
+            <div className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-700 px-3.5 py-3 sm:px-8 sm:py-6 text-white relative overflow-hidden border-b border-emerald-500/30 shadow-inner shrink-0">
               {/* Ambient Header Glows */}
-              <div className="absolute -top-12 -right-12 w-44 h-44 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-              <div className="absolute -bottom-12 -left-12 w-44 h-44 bg-teal-300/15 rounded-full blur-2xl pointer-events-none" />
+              <div className="absolute -top-12 -right-12 w-32 sm:w-44 h-32 sm:h-44 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+              <div className="absolute -bottom-12 -left-12 w-32 sm:w-44 h-32 sm:h-44 bg-teal-300/15 rounded-full blur-2xl pointer-events-none" />
 
-              <div className="flex items-start justify-between relative z-10">
-                <div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-extrabold uppercase tracking-widest text-emerald-100 border border-white/25 mb-2.5 shadow-2xs">
-                    <Utensils className="w-3 h-3 text-emerald-100" /> Dining Schedule
+              <div className="flex items-start justify-between relative z-10 gap-2">
+                <div className="min-w-0 flex-1">
+                  <div className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/20 backdrop-blur-md text-[8px] sm:text-[10px] font-extrabold uppercase tracking-widest text-emerald-100 border border-white/25 mb-1 sm:mb-2.5 shadow-2xs">
+                    <Utensils className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-100" /> Dining Schedule
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                  <h3 className="text-sm sm:text-2xl font-black text-white tracking-tight truncate">
                     {MEAL_SCHEDULES[viewingMenu].title}
                   </h3>
-                  <p className="text-emerald-100/90 text-xs sm:text-sm font-medium mt-1 leading-relaxed max-w-lg">
+                  <p className="text-emerald-100/90 text-[10px] sm:text-sm font-medium mt-0.5 sm:mt-1 leading-snug sm:leading-relaxed max-w-lg line-clamp-2 sm:line-clamp-none">
                     {MEAL_SCHEDULES[viewingMenu].note}
                   </p>
                 </div>
@@ -1800,74 +1865,100 @@ const UserDashboard = () => {
                 <button 
                   type="button"
                   onClick={() => setViewingMenu(null)}
-                  className="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-all cursor-pointer backdrop-blur-md border border-white/30 hover:scale-105 active:scale-95 shrink-0 ml-4 shadow-sm"
+                  className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-all cursor-pointer backdrop-blur-md border border-white/30 hover:scale-105 active:scale-95 shrink-0 shadow-sm mt-0.5"
                   aria-label="Close menu"
                 >
-                  <X className="w-4 h-4" strokeWidth={2.5} />
+                  <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={2.5} />
                 </button>
               </div>
             </div>
             
             {/* Modal Body */}
-            <div className="p-6 sm:p-7 bg-slate-50">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="p-2.5 sm:p-7 bg-slate-50 overflow-y-auto flex-1 hide-scrollbar">
+              
+              {/* Mobile Tab Filter (Hidden on desktop) */}
+              <div className="flex md:hidden bg-slate-200/70 p-0.5 rounded-xl mb-2 gap-1 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuTab('all')}
+                  className={`flex-1 py-1 rounded-lg text-[10px] font-black transition-all ${mobileMenuTab === 'all' ? 'bg-white text-emerald-800 shadow-xs' : 'text-slate-500 hover:text-slate-800'}`}
+                >
+                  All Meals
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuTab('weekday')}
+                  className={`flex-1 py-1 rounded-lg text-[10px] font-black transition-all ${mobileMenuTab === 'weekday' ? 'bg-white text-emerald-800 shadow-xs' : 'text-slate-500 hover:text-slate-800'}`}
+                >
+                  Mon – Sat
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuTab('sunday')}
+                  className={`flex-1 py-1 rounded-lg text-[10px] font-black transition-all ${mobileMenuTab === 'sunday' ? 'bg-white text-amber-800 shadow-xs' : 'text-slate-500 hover:text-slate-800'}`}
+                >
+                  ⭐ Sunday
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-5">
                 
                 {/* Mon - Sat Schedule Card */}
-                <div className="bg-white border border-slate-200/90 rounded-3xl p-5 shadow-xs">
-                  <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-100">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
-                        <CalendarDays className="w-4 h-4" />
+                <div className={`bg-white border border-slate-200/90 rounded-xl sm:rounded-3xl p-2.5 sm:p-5 shadow-xs transition-all ${mobileMenuTab === 'sunday' ? 'hidden md:block' : 'block'}`}>
+                  <div className="flex items-center justify-between pb-1.5 sm:pb-3.5 mb-1.5 sm:mb-4 border-b border-slate-100">
+                    <div className="flex items-center gap-1.5 sm:gap-2.5">
+                      <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                        <CalendarDays className="w-3 h-3 sm:w-4 sm:h-4" />
                       </div>
                       <div>
-                        <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider">Mon — Sat</h4>
-                        <p className="text-[10px] text-slate-400 font-medium">Daily Nutritious Diet</p>
+                        <h4 className="text-[11px] sm:text-xs font-black text-slate-900 uppercase tracking-wider leading-none">Mon — Sat</h4>
+                        <p className="text-[8px] sm:text-[10px] text-slate-400 font-medium mt-0.5">Daily Nutritious Diet</p>
                       </div>
                     </div>
-                    <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/60">
+                    <span className="text-[8px] sm:text-[10px] font-bold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-full border border-emerald-200/60">
                       3 Meals/Day
                     </span>
                   </div>
 
-                  <div className="space-y-3">
-                    <div className="p-3.5 bg-slate-50/80 rounded-2xl border border-slate-200/70 hover:border-emerald-200/80 transition-colors">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                  <div className="space-y-1 sm:space-y-3">
+                    <div className="p-2 sm:p-3.5 bg-slate-50/80 rounded-lg sm:rounded-2xl border border-slate-200/70 hover:border-emerald-200/80 transition-colors">
+                      <div className="flex items-center justify-between mb-0.5 sm:mb-1.5">
+                        <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500">
                           Morning Breakfast
                         </span>
-                        <span className="text-[10px] text-slate-600 font-semibold bg-white px-2 py-0.5 rounded-md border border-slate-200/60">
+                        <span className="text-[8px] sm:text-[10px] text-slate-600 font-semibold bg-white px-1 py-0.5 sm:px-2 sm:py-0.5 rounded border border-slate-200/60">
                           7:30 – 9:30 AM
                         </span>
                       </div>
-                      <p className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                      <p className="text-[11px] sm:text-sm font-bold text-slate-900 leading-snug">
                         {MEAL_SCHEDULES[viewingMenu].monSat.morning}
                       </p>
                     </div>
 
-                    <div className="p-3.5 bg-slate-50/80 rounded-2xl border border-slate-200/70 hover:border-emerald-200/80 transition-colors">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <div className="p-2 sm:p-3.5 bg-slate-50/80 rounded-lg sm:rounded-2xl border border-slate-200/70 hover:border-emerald-200/80 transition-colors">
+                      <div className="flex items-center justify-between mb-0.5 sm:mb-1.5">
+                        <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500">
                           Afternoon Lunch
                         </span>
-                        <span className="text-[10px] text-slate-600 font-semibold bg-white px-2 py-0.5 rounded-md border border-slate-200/60">
+                        <span className="text-[8px] sm:text-[10px] text-slate-600 font-semibold bg-white px-1 py-0.5 sm:px-2 sm:py-0.5 rounded border border-slate-200/60">
                           12:30 – 2:30 PM
                         </span>
                       </div>
-                      <p className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                      <p className="text-[11px] sm:text-sm font-bold text-slate-900 leading-snug">
                         {MEAL_SCHEDULES[viewingMenu].monSat.afternoon}
                       </p>
                     </div>
 
-                    <div className="p-3.5 bg-slate-50/80 rounded-2xl border border-slate-200/70 hover:border-emerald-200/80 transition-colors">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <div className="p-2 sm:p-3.5 bg-slate-50/80 rounded-lg sm:rounded-2xl border border-slate-200/70 hover:border-emerald-200/80 transition-colors">
+                      <div className="flex items-center justify-between mb-0.5 sm:mb-1.5">
+                        <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500">
                           Evening Dinner
                         </span>
-                        <span className="text-[10px] text-slate-600 font-semibold bg-white px-2 py-0.5 rounded-md border border-slate-200/60">
+                        <span className="text-[8px] sm:text-[10px] text-slate-600 font-semibold bg-white px-1 py-0.5 sm:px-2 sm:py-0.5 rounded border border-slate-200/60">
                           7:30 – 9:30 PM
                         </span>
                       </div>
-                      <p className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                      <p className="text-[11px] sm:text-sm font-bold text-slate-900 leading-snug">
                         {MEAL_SCHEDULES[viewingMenu].monSat.evening}
                       </p>
                     </div>
@@ -1875,61 +1966,61 @@ const UserDashboard = () => {
                 </div>
 
                 {/* Sunday Special Schedule Card */}
-                <div className="bg-white border border-slate-200/90 rounded-3xl p-5 shadow-xs">
-                  <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-100">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-                        <Crown className="w-4 h-4" />
+                <div className={`bg-white border border-slate-200/90 rounded-xl sm:rounded-3xl p-2.5 sm:p-5 shadow-xs transition-all ${mobileMenuTab === 'weekday' ? 'hidden md:block' : 'block'}`}>
+                  <div className="flex items-center justify-between pb-1.5 sm:pb-3.5 mb-1.5 sm:mb-4 border-b border-slate-100">
+                    <div className="flex items-center gap-1.5 sm:gap-2.5">
+                      <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                        <Crown className="w-3 h-3 sm:w-4 sm:h-4" />
                       </div>
                       <div>
-                        <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider">Sunday Special</h4>
-                        <p className="text-[10px] text-slate-400 font-medium">Chef's Weekly Feast</p>
+                        <h4 className="text-[11px] sm:text-xs font-black text-slate-900 uppercase tracking-wider leading-none">Sunday Special</h4>
+                        <p className="text-[8px] sm:text-[10px] text-slate-400 font-medium mt-0.5">Chef's Weekly Feast</p>
                       </div>
                     </div>
-                    <span className="text-[10px] font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200/60">
+                    <span className="text-[8px] sm:text-[10px] font-bold text-amber-800 bg-amber-50 px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-full border border-amber-200/60">
                       Special Feast
                     </span>
                   </div>
 
-                  <div className="space-y-3">
-                    <div className="p-3.5 bg-slate-50/80 rounded-2xl border border-slate-200/70 hover:border-amber-200/80 transition-colors">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                  <div className="space-y-1 sm:space-y-3">
+                    <div className="p-2 sm:p-3.5 bg-slate-50/80 rounded-lg sm:rounded-2xl border border-slate-200/70 hover:border-amber-200/80 transition-colors">
+                      <div className="flex items-center justify-between mb-0.5 sm:mb-1.5">
+                        <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500">
                           Grand Breakfast
                         </span>
-                        <span className="text-[10px] text-slate-600 font-semibold bg-white px-2 py-0.5 rounded-md border border-slate-200/60">
+                        <span className="text-[8px] sm:text-[10px] text-slate-600 font-semibold bg-white px-1 py-0.5 sm:px-2 sm:py-0.5 rounded border border-slate-200/60">
                           8:00 – 10:00 AM
                         </span>
                       </div>
-                      <p className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                      <p className="text-[11px] sm:text-sm font-bold text-slate-900 leading-snug">
                         {MEAL_SCHEDULES[viewingMenu].sunday.morning}
                       </p>
                     </div>
 
-                    <div className="p-3.5 bg-slate-50/80 rounded-2xl border border-slate-200/70 hover:border-amber-200/80 transition-colors">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <div className="p-2 sm:p-3.5 bg-slate-50/80 rounded-lg sm:rounded-2xl border border-slate-200/70 hover:border-amber-200/80 transition-colors">
+                      <div className="flex items-center justify-between mb-0.5 sm:mb-1.5">
+                        <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500">
                           Royal Feast Lunch
                         </span>
-                        <span className="text-[10px] text-slate-600 font-semibold bg-white px-2 py-0.5 rounded-md border border-slate-200/60">
+                        <span className="text-[8px] sm:text-[10px] text-slate-600 font-semibold bg-white px-1 py-0.5 sm:px-2 sm:py-0.5 rounded border border-slate-200/60">
                           1:00 – 3:00 PM
                         </span>
                       </div>
-                      <p className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                      <p className="text-[11px] sm:text-sm font-bold text-slate-900 leading-snug">
                         {MEAL_SCHEDULES[viewingMenu].sunday.afternoon}
                       </p>
                     </div>
 
-                    <div className="p-3.5 bg-slate-50/80 rounded-2xl border border-slate-200/70 hover:border-amber-200/80 transition-colors">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <div className="p-2 sm:p-3.5 bg-slate-50/80 rounded-lg sm:rounded-2xl border border-slate-200/70 hover:border-amber-200/80 transition-colors">
+                      <div className="flex items-center justify-between mb-0.5 sm:mb-1.5">
+                        <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500">
                           Sunday Dinner
                         </span>
-                        <span className="text-[10px] text-slate-600 font-semibold bg-white px-2 py-0.5 rounded-md border border-slate-200/60">
+                        <span className="text-[8px] sm:text-[10px] text-slate-600 font-semibold bg-white px-1 py-0.5 sm:px-2 sm:py-0.5 rounded border border-slate-200/60">
                           8:00 – 10:00 PM
                         </span>
                       </div>
-                      <p className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                      <p className="text-[11px] sm:text-sm font-bold text-slate-900 leading-snug">
                         {MEAL_SCHEDULES[viewingMenu].sunday.evening}
                       </p>
                     </div>
@@ -1939,16 +2030,16 @@ const UserDashboard = () => {
               </div>
               
               {/* Modal Footer */}
-              <div className="mt-6 pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <div className="flex items-center gap-2 text-slate-500 text-center sm:text-left">
-                  <Utensils className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span className="text-[11px] font-semibold text-slate-600">Pure RO drinking water • Hygienic home-style cooking daily</span>
+              <div className="mt-2.5 sm:mt-6 pt-2 sm:pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3 shrink-0">
+                <div className="flex items-center gap-1.5 sm:gap-2 text-slate-500 text-center sm:text-left">
+                  <Utensils className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-600 shrink-0" />
+                  <span className="text-[9px] sm:text-[11px] font-semibold text-slate-600">Pure RO drinking water • Hygienic home-style cooking daily</span>
                 </div>
 
                 <button 
                   type="button"
                   onClick={() => setViewingMenu(null)}
-                  className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-700 hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-600 active:scale-95 text-white rounded-xl font-black text-xs uppercase tracking-wider shadow-lg shadow-emerald-600/25 hover:shadow-xl hover:shadow-emerald-600/35 transition-all cursor-pointer"
+                  className="w-full sm:w-auto px-5 sm:px-8 py-2 sm:py-3.5 bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-700 hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-600 active:scale-95 text-white rounded-xl font-bold sm:font-black text-[11px] sm:text-xs uppercase tracking-wider shadow-md sm:shadow-lg shadow-emerald-600/25 transition-all cursor-pointer"
                 >
                   Close Menu
                 </button>
