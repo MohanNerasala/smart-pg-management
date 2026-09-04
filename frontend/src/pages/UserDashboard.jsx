@@ -7,9 +7,11 @@ import {
   ArrowRight, ArrowLeft, MapPin, Star,
   Calendar, CalendarDays, BadgePercent,
   Check, Phone, GraduationCap, Briefcase, Plane, Heart, HelpCircle, ReceiptText, DoorOpen,
-  Smartphone, Wallet, CreditCard, ShieldCheck, Clock, Info
+  Smartphone, Wallet, CreditCard, ShieldCheck, Clock, Info, Lock,
+  Coffee, Sun, Moon, X
 } from 'lucide-react';
 import api from '../services/api';
+import confetti from 'canvas-confetti';
 
 /* ─── Data ─────────────────────────────── */
 const YEARLY_DISCOUNT = 0.15;
@@ -150,6 +152,7 @@ const UserDashboard = () => {
   const [bookingLoading,  setBookingLoading]  = useState(false);
   const [agreedToTerms,   setAgreedToTerms]   = useState(false);
   const [paymentMethod,   setPaymentMethod]   = useState(null);
+  const [paymentCategory, setPaymentCategory] = useState('upi');
   const [agreedToRefund,  setAgreedToRefund]  = useState(false);
   const [rating,          setRating]          = useState(0);
   const [feedbackSentiment, setFeedbackSentiment] = useState(null);
@@ -321,6 +324,10 @@ const UserDashboard = () => {
   const roomSavings = (bookingMode === 'food' || roomPack !== 'yearly') ? 0 : (monthlySharePrice - yearlySharePrice) * 12;
   const mealSavings = mealPack === 'yearly' ? ((food?.price || 0) * 12) - (Math.round((food?.price || 0) * (1 - YEARLY_DISCOUNT)) * 12) : 0;
   const savings = roomSavings + mealSavings;
+  const finalPayable = (roomPack === 'yearly' || mealPack === 'yearly') 
+    ? ((roomPack === 'yearly' ? activeSharePrice * 12 : activeSharePrice) + 
+       (mealPack === 'yearly' ? activeFoodPrice * 12 : activeFoodPrice)) 
+    : totalMonthly;
 
   const handleConfirm = async () => {
     setBookingLoading(true);
@@ -383,55 +390,165 @@ const UserDashboard = () => {
     }
   };
 
+  // ── Celebration Blast on Successful Booking ──
+  useEffect(() => {
+    if (booked) {
+      // 1. Initial powerful center blast
+      confetti({
+        particleCount: 110,
+        spread: 85,
+        origin: { x: 0.5, y: 0.4 },
+        colors: ['#10b981', '#059669', '#34d399', '#f59e0b', '#3b82f6', '#ec4899', '#8b5cf6'],
+        startVelocity: 45
+      });
+
+      // 2. Left side celebratory blast cannon
+      const t1 = setTimeout(() => {
+        confetti({
+          particleCount: 65,
+          angle: 60,
+          spread: 80,
+          origin: { x: 0.08, y: 0.65 },
+          colors: ['#10b981', '#14b8a6', '#f59e0b', '#6366f1', '#ec4899']
+        });
+      }, 200);
+
+      // 3. Right side celebratory blast cannon
+      const t2 = setTimeout(() => {
+        confetti({
+          particleCount: 65,
+          angle: 120,
+          spread: 80,
+          origin: { x: 0.92, y: 0.65 },
+          colors: ['#10b981', '#14b8a6', '#f59e0b', '#6366f1', '#ec4899']
+        });
+      }, 350);
+
+      // 4. Golden stars and sparkling glitter burst
+      const t3 = setTimeout(() => {
+        confetti({
+          particleCount: 50,
+          spread: 130,
+          startVelocity: 30,
+          origin: { x: 0.5, y: 0.3 },
+          colors: ['#ffd700', '#10b981', '#a7f3d0', '#fbbf24', '#f43f5e']
+        });
+      }, 600);
+
+      return () => {
+        clearTimeout(t1);
+        clearTimeout(t2);
+        clearTimeout(t3);
+      };
+    }
+  }, [booked]);
+
   /* ── Confirmation screen (Popup) ── */
   if (booked) return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4 animate-in fade-in duration-300">
-      <div className="bg-white rounded-[2rem] p-8 md:p-12 max-w-sm w-full text-center shadow-2xl shadow-emerald-900/20 border border-emerald-100 animate-in zoom-in-95 slide-in-from-bottom-8 duration-500">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 backdrop-blur-md p-4 animate-in fade-in duration-300">
+      <div className="relative bg-white/95 backdrop-blur-2xl rounded-[2.5rem] p-7 sm:p-9 max-w-md w-full text-center shadow-2xl shadow-emerald-950/40 border border-emerald-100/90 overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-8 duration-500">
         
-        {/* Animated Icon Block */}
-        <div className="relative w-28 h-28 mx-auto mb-6">
-          <div className="absolute inset-0 bg-emerald-100 rounded-full animate-ping opacity-70"></div>
-          <div className="relative w-full h-full bg-gradient-to-tr from-emerald-500 to-emerald-400 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/30">
-            <CheckCircle2 className="w-14 h-14 text-white" />
+        {/* Ambient Decorative Gradient Orbs */}
+        <div className="absolute -top-16 -right-16 w-36 h-36 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute -bottom-16 -left-16 w-36 h-36 bg-gradient-to-tr from-amber-400/15 to-emerald-400/15 rounded-full blur-2xl pointer-events-none" />
+
+        {/* Shockwave Blast & 3D Centerpiece */}
+        <div className="relative w-28 h-28 mx-auto mb-5 flex items-center justify-center">
+          {/* Shockwave rings */}
+          <div className="absolute inset-0 bg-emerald-400/25 rounded-full animate-ping opacity-75" />
+          <div className="absolute -inset-2 rounded-full border-2 border-emerald-300/40 animate-pulse" />
+          <div className="absolute -inset-4 rounded-full bg-emerald-500/15 blur-md" />
+          
+          {/* Main 3D Glowing Circle */}
+          <div className="relative w-24 h-24 bg-gradient-to-tr from-emerald-600 via-emerald-500 to-teal-400 rounded-full flex items-center justify-center shadow-2xl shadow-emerald-500/50 border-4 border-white transition-transform hover:scale-105">
+            <Check className="w-12 h-12 text-white stroke-[3.5] drop-shadow-md animate-in zoom-in-50 duration-300" />
           </div>
-          {/* Confetti specs */}
-          <div className="absolute -top-4 -right-2 w-3 h-3 bg-amber-400 rounded-full animate-bounce"></div>
-          <div className="absolute top-8 -left-6 w-4 h-4 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '100ms' }}></div>
-          <div className="absolute -bottom-2 right-4 w-2.5 h-2.5 bg-rose-400 rounded-full animate-bounce" style={{ animationDelay: '200ms' }}></div>
+
+          {/* Blast confetti specs around disk */}
+          <div className="absolute -top-2 right-1 w-3.5 h-3.5 bg-amber-400 rounded-full animate-bounce shadow-sm" />
+          <div className="absolute top-7 -left-3 w-3 h-3 bg-sky-400 rounded-full animate-bounce shadow-sm" style={{ animationDelay: '150ms' }} />
+          <div className="absolute -bottom-1.5 right-3 w-3 h-3 bg-rose-400 rounded-full animate-bounce shadow-sm" style={{ animationDelay: '300ms' }} />
+          <div className="absolute top-1 left-2 w-2 h-2 bg-emerald-400 rounded-full animate-ping" style={{ animationDelay: '500ms' }} />
+          <div className="absolute -bottom-1 left-4 w-2.5 h-2.5 bg-purple-400 rounded-full animate-bounce shadow-sm" style={{ animationDelay: '450ms' }} />
         </div>
 
-        <h2 className="text-3xl font-black text-slate-900 tracking-tight mb-2">Booking Successful!</h2>
-        <p className="text-slate-500 font-medium mb-8 leading-relaxed">
-          Your slot at <span className="font-black text-slate-700">{pg?.pgName}</span> is reserved and active.
+        {/* Badge */}
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-[10px] font-bold text-emerald-800 uppercase tracking-widest mb-3 shadow-xs">
+          <Sparkles className="w-3 h-3 text-emerald-600 animate-pulse" /> Payment Confirmed
+        </div>
+
+        <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-1.5">
+          Booking Successful!
+        </h2>
+        <p className="text-xs sm:text-sm text-slate-500 font-medium mb-5 leading-relaxed">
+          Your slot at <span className="font-bold text-slate-800">{pg?.pgName || 'PG'}</span> is reserved and active.
         </p>
 
+        {/* Mini Receipt Preview Card */}
+        <div className="bg-slate-50/90 border border-slate-200/80 rounded-2xl p-3.5 mb-5 text-left shadow-xs">
+          <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-200/60">
+            <div>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Reserved Slot</p>
+              <p className="text-xs font-bold text-slate-800">
+                {bookingMode === 'food' ? 'Meal Plan Only' : `${sharing?.label || 'Selected'} Sharing`}
+                {selectedRoom?.roomNumber ? ` • Room ${selectedRoom.roomNumber}` : ''}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Amount Paid</p>
+              <p className="text-sm font-black text-emerald-600">₹{finalPayable.toLocaleString()}</p>
+            </div>
+          </div>
+          <div className="flex items-center justify-between text-[11px] text-slate-500">
+            <span className="flex items-center gap-1 font-medium text-[11px]">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> Verified Booking Slot
+            </span>
+            <span className="font-bold text-slate-700 uppercase text-[10px] bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-xs">
+              {paymentMethod || 'UPI'} Paid
+            </span>
+          </div>
+        </div>
+
+        {/* View Receipt Button */}
         <button 
           onClick={() => {
+            const calculatedTotal = bookingMode === 'full' 
+              ? (roomPack === 'yearly' ? totalMonthly * 12 : totalMonthly) 
+              : (mealPack === 'yearly' ? activeFoodPrice * 12 : activeFoodPrice);
+
             const bookingData = {
               pg: pg,
               pgId: pg?.id || pg?.pgId,
-              userEmail: user?.email, // Tagging for privacy filtering
+              userEmail: user?.email,
               bookingMode: bookingMode,
               sharing: bookingMode === 'full' && sharing ? { id: sharing.id, label: sharing.label } : null,
               roomPack: bookingMode === 'full' ? roomPack : null,
-              room: bookingMode === 'full' && selectedRoom ? { roomId: selectedRoom.roomId, roomType: selectedRoom.roomType } : null,
+              room: bookingMode === 'full' && selectedRoom ? { 
+                roomId: selectedRoom.roomId, 
+                roomName: selectedRoom.roomName || `Room ${selectedRoom.roomId}`,
+                roomNumber: selectedRoom.roomName || selectedRoom.roomId,
+                roomType: selectedRoom.roomType,
+                floorNumber: selectedRoom.floorNumber || (selectedRoom.roomName && String(selectedRoom.roomName).match(/\d/) ? String(selectedRoom.roomName).match(/\d/)[0] : 1) || 1,
+                floorId: selectedRoom.floorNumber || 1,
+                price: activeSharePrice
+              } : null,
               food: food ? { id: food.id, label: food.label, price: food.price, meals: food.meals } : null,
               mealPack: mealPack,
               activeSharePrice: bookingMode === 'full' ? activeSharePrice : 0,
               activeFoodPrice: activeFoodPrice,
               totalMonthly: bookingMode === 'full' ? totalMonthly : activeFoodPrice,
-              userDetails: { ...userDetails, email: user?.email } // Ensure email is in userDetails too
+              totalAmount: calculatedTotal,
+              status: 'CONFIRMED',
+              userDetails: { ...userDetails, email: user?.email }
             };
             const existingBookingsStr = localStorage.getItem('allBookings');
             let allBookings = existingBookingsStr ? JSON.parse(existingBookingsStr) : [];
             
-            // Migrate old latestBooking if this is the first time we're using allBookings
             if (allBookings.length === 0) {
               const oldLatestStr = localStorage.getItem('latestBooking');
               if (oldLatestStr) {
                 try {
                   const oldLatest = JSON.parse(oldLatestStr);
-                  // Ensure we don't duplicate if it somehow matches
                   if (oldLatest.pg?.pgName !== bookingData.pg?.pgName) {
                      allBookings.push(oldLatest);
                   }
@@ -444,31 +561,32 @@ const UserDashboard = () => {
             localStorage.setItem('allBookings', JSON.stringify(allBookings));
             localStorage.setItem('latestBooking', JSON.stringify(bookingWithDate));
             
-            // Sync with backend memory to claim the room globally!
             api.post('/sync/book', bookingWithDate)
               .finally(() => {
                 navigate('/bookings', { state: { booking: bookingWithDate } });
               });
           }} 
-          className="w-full h-16 bg-brand-600 text-white rounded-2xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-brand-700 shadow-xl shadow-brand-500/20 hover:-translate-y-1 transition-all active:scale-95"
+          className="w-full py-4 bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-700 hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2.5 shadow-xl shadow-emerald-600/30 hover:shadow-2xl hover:shadow-emerald-600/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all cursor-pointer group"
         >
-          <ReceiptText className="w-5 h-5" /> View My Receipt
+          <ReceiptText className="w-4 h-4 text-emerald-200 group-hover:scale-110 transition-transform" />
+          <span>View My Receipt</span>
+          <ArrowRight className="w-4 h-4 text-emerald-200 group-hover:translate-x-1 transition-transform" />
         </button>
 
         {/* Feedback Section */}
-        <div className="mt-10 pt-8 border-t border-slate-100 animate-in fade-in slide-in-from-top-4 duration-700 delay-300">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Rate Your Experience</p>
+        <div className="mt-6 pt-5 border-t border-slate-100 animate-in fade-in slide-in-from-top-4 duration-700 delay-300">
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Rate Your Experience</p>
           
           {/* Stars */}
-          <div className="flex justify-center gap-2 mb-6">
+          <div className="flex justify-center gap-2 mb-4">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
+                type="button"
                 onClick={() => setRating(star)}
-                className={`transition-all duration-300 transform hover:scale-125 active:scale-95
-                  ${rating >= star ? 'text-amber-400 scale-110' : 'text-slate-200 hover:text-amber-200'}`}
+                className="transition-all duration-200 transform hover:scale-125 active:scale-95 cursor-pointer"
               >
-                <Star className={`w-8 h-8 ${rating >= star ? 'fill-current' : ''}`} />
+                <Star className={`w-7 h-7 transition-colors ${rating >= star ? 'text-amber-400 fill-amber-400 drop-shadow-sm' : 'text-slate-200 hover:text-amber-300'}`} />
               </button>
             ))}
           </div>
@@ -483,11 +601,12 @@ const UserDashboard = () => {
             ].map((chip) => (
               <button
                 key={chip.id}
+                type="button"
                 onClick={() => setFeedbackSentiment(chip.id)}
-                className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all duration-300
+                className={`px-3.5 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider border transition-all duration-200 cursor-pointer
                   ${feedbackSentiment === chip.id 
-                    ? 'bg-brand-600 border-brand-600 text-white shadow-lg shadow-brand-500/30 -translate-y-1' 
-                    : 'bg-white border-slate-200 text-slate-500 hover:border-brand-300 hover:text-brand-600'}`}
+                    ? 'bg-emerald-600 border-emerald-600 text-white shadow-md shadow-emerald-600/30 -translate-y-0.5' 
+                    : 'bg-white border-slate-200 text-slate-500 hover:border-emerald-300 hover:text-emerald-700 hover:bg-emerald-50/40'}`}
               >
                 {chip.label}
               </button>
@@ -495,7 +614,7 @@ const UserDashboard = () => {
           </div>
 
           {rating > 0 && (
-            <p className="mt-6 text-emerald-600 text-xs font-black animate-in zoom-in duration-300 uppercase tracking-widest">
+            <p className="mt-4 text-emerald-600 text-xs font-black animate-in zoom-in duration-300 uppercase tracking-widest flex items-center justify-center gap-1">
               ❤️ Thank you for the feedback!
             </p>
           )}
@@ -505,7 +624,7 @@ const UserDashboard = () => {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-24">
+    <div className="min-h-screen bg-slate-50 pb-32 sm:pb-40">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
 
         {/* Premium Back Navigation */}
@@ -525,31 +644,70 @@ const UserDashboard = () => {
           </div>
         </button>
 
-        {/* PG Hero */}
+        {/* PG Hero Banner — Luxury Obsidian Design */}
         {pg ? (
-          <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-brand-900 to-brand-700 rounded-3xl p-7 mb-8 text-white shadow-2xl">
-            <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/5 rounded-full blur-3xl" />
-            <div className="flex items-start justify-between gap-4 relative">
-              <div>
-                <p className="text-brand-200 text-xs font-black uppercase tracking-widest mb-2">Booking Slot For</p>
-                <h1 className="text-2xl md:text-3xl font-black tracking-tight mb-2">{pg.pgName}</h1>
-                <div className="flex items-center gap-2 text-brand-200 text-sm font-medium">
-                  <MapPin className="w-4 h-4" /> {pg.area}, {pg.city}
+          <div className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 rounded-[2rem] p-6 sm:p-8 mb-8 text-white border border-slate-800/80 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.5)]">
+            {/* Ambient Lighting & Rim Highlights */}
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+            <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent pointer-events-none" />
+            <div className="absolute -top-20 -right-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none opacity-50" />
+
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative z-10">
+              {/* Left Column: Property Identity */}
+              <div className="max-w-xl">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.08] border border-white/10 backdrop-blur-md text-[10px] font-black uppercase tracking-[0.2em] text-slate-300 mb-3 shadow-2xs">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Booking Slot For</span>
+                </div>
+                
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-tight mb-3 font-display drop-shadow-sm">
+                  {pg.pgName}
+                </h1>
+                
+                <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 text-xs sm:text-sm text-slate-300">
+                  <div className="flex items-center gap-1.5 text-slate-300 font-medium">
+                    <div className="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center text-emerald-400 shrink-0">
+                      <MapPin className="w-3.5 h-3.5" />
+                    </div>
+                    <span>{pg.area}, {pg.city}</span>
+                  </div>
+                  <span className="w-1 h-1 rounded-full bg-slate-700 hidden sm:inline" />
+                  <div className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-500/25 px-2.5 py-0.5 rounded-full backdrop-blur-xs">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Verified Sanctuary</span>
+                  </div>
                 </div>
               </div>
-              <div className="text-right flex-shrink-0">
-                <div className="flex items-center gap-1 bg-white/10 px-3 py-1.5 rounded-xl mb-2">
-                  <Star className="w-4 h-4 text-amber-400 fill-current" />
-                  <span className="font-black">{pg.rating || '4.2'}</span>
+
+              {/* Right Column: Rating & Pricing */}
+              <div className="text-left sm:text-right flex-shrink-0 flex sm:flex-col justify-between sm:justify-center items-end border-t sm:border-t-0 border-white/10 pt-4 sm:pt-0">
+                <div className="inline-flex items-center gap-2 bg-white/[0.08] hover:bg-white/[0.12] backdrop-blur-md border border-white/15 px-3.5 py-1.5 rounded-xl shadow-xs text-white transition-all mb-2.5">
+                  <Star className="w-4 h-4 text-amber-400 fill-amber-400 drop-shadow-xs" />
+                  <span className="text-sm font-black tracking-tight">{pg.rating || '4.8'}</span>
+                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider pl-1.5 border-l border-white/15">Top Rated</span>
                 </div>
-                <p className="text-brand-200 text-xs font-bold">Starting from</p>
-                <p className="text-2xl font-black">₹{Math.round(basePrice * 0.55).toLocaleString()}<span className="text-sm text-brand-200 font-medium">/mo</span></p>
+
+                <div>
+                  <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-0.5">Starting from</p>
+                  <div className="flex items-baseline justify-start sm:justify-end gap-1">
+                    <span className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight font-display">
+                      ₹{Math.round(basePrice * 0.55).toLocaleString()}
+                    </span>
+                    <span className="text-xs sm:text-sm text-slate-400 font-bold">/mo</span>
+                  </div>
+                  <p className="text-[10px] font-semibold text-emerald-400/90 flex items-center justify-start sm:justify-end gap-1 mt-1">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                    <span>All-inclusive monthly rate</span>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         ) : (
-          <div className="bg-gradient-to-br from-slate-900 to-brand-700 rounded-3xl p-7 mb-8 text-white shadow-2xl">
-            <h1 className="text-2xl font-black">Slot Booking</h1>
+          <div className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 rounded-[2rem] p-7 mb-8 text-white border border-slate-800 shadow-2xl">
+            <h1 className="text-2xl font-black tracking-tight font-display">Slot Booking</h1>
           </div>
         )}
 
@@ -1154,21 +1312,21 @@ const UserDashboard = () => {
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 relative z-10">
                 <div className="group">
-                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-2 px-2 transition-colors group-focus-within:text-brand-500">Full Name</label>
+                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-2 px-2 transition-colors group-focus-within:text-emerald-600">Full Name</label>
                    <input 
                      type="text" 
                      placeholder="John Doe"
-                     className="w-full h-14 px-5 bg-slate-50/50 border-[1.5px] border-slate-200 rounded-2xl focus:border-brand-500 focus:bg-white focus:shadow-[0_0_0_4px_rgba(34,197,94,0.1)] transition-all duration-300 outline-none font-black text-slate-900 placeholder:text-slate-300 placeholder:font-bold hover:border-slate-300"
+                     className="w-full h-14 px-5 bg-white border border-slate-200 rounded-2xl focus:border-emerald-500 focus:outline-none focus:ring-0 focus:shadow-none transition-colors duration-200 outline-none font-bold text-slate-900 placeholder:text-slate-300 hover:border-slate-300"
                      value={userDetails.name}
                      onChange={(e) => setUserDetails({...userDetails, name: e.target.value})}
                    />
                 </div>
                 <div className="group">
-                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-2 px-2 transition-colors group-focus-within:text-brand-500">City / Hometown</label>
+                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-2 px-2 transition-colors group-focus-within:text-emerald-600">City / Hometown</label>
                    <input 
                      type="text" 
                      placeholder="e.g. Bangalore"
-                     className="w-full h-14 px-5 bg-slate-50/50 border-[1.5px] border-slate-200 rounded-2xl focus:border-brand-500 focus:bg-white focus:shadow-[0_0_0_4px_rgba(34,197,94,0.1)] transition-all duration-300 outline-none font-black text-slate-900 placeholder:text-slate-300 placeholder:font-bold hover:border-slate-300"
+                     className="w-full h-14 px-5 bg-white border border-slate-200 rounded-2xl focus:border-emerald-500 focus:outline-none focus:ring-0 focus:shadow-none transition-colors duration-200 outline-none font-bold text-slate-900 placeholder:text-slate-300 hover:border-slate-300"
                      value={userDetails.city}
                      onChange={(e) => setUserDetails({...userDetails, city: e.target.value})}
                    />
@@ -1176,13 +1334,13 @@ const UserDashboard = () => {
               </div>
 
               <div className="group relative z-10">
-                <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-2 px-2 transition-colors group-focus-within:text-brand-500">Phone Number</label>
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-2 px-2 transition-colors group-focus-within:text-emerald-600">Phone Number</label>
                 <div className="relative">
-                  <Phone className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors group-focus-within:text-brand-500" />
+                  <Phone className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors group-focus-within:text-emerald-600" />
                   <input 
                     type="tel" 
                     placeholder="+91 00000 00000"
-                    className="w-full h-14 pl-14 pr-5 bg-slate-50/50 border-[1.5px] border-slate-200 rounded-2xl focus:border-brand-500 focus:bg-white focus:shadow-[0_0_0_4px_rgba(34,197,94,0.1)] transition-all duration-300 outline-none font-black text-slate-900 placeholder:text-slate-300 placeholder:font-bold hover:border-slate-300"
+                    className="w-full h-14 pl-14 pr-5 bg-white border border-slate-200 rounded-2xl focus:border-emerald-500 focus:outline-none focus:ring-0 focus:shadow-none transition-colors duration-200 outline-none font-bold text-slate-900 placeholder:text-slate-300 hover:border-slate-300"
                     value={userDetails.phone}
                     onChange={(e) => setUserDetails({...userDetails, phone: e.target.value})}
                   />
@@ -1241,467 +1399,556 @@ const UserDashboard = () => {
 
         {/* ── STEP 5: CONFIRM ── */}
         {step === 5 && (
-          <div className="max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <h2 className="text-3xl font-black text-slate-900 mb-2">Final Confirmation</h2>
-            <p className="text-slate-500 font-medium mb-8 text-lg">Double check your details before processing.</p>
+          <div className="max-w-5xl mx-auto animate-in fade-in duration-300">
+            <div className="mb-5">
+              <h2 className="text-2xl font-bold text-slate-900 mb-1">Confirm & Pay</h2>
+              <p className="text-slate-500 text-sm">Review your booking details before completing payment.</p>
+            </div>
             
-            <div className="bg-white rounded-[2rem] shadow-2xl shadow-slate-200/60 border border-slate-100 overflow-hidden mb-8">
-              <div className="bg-slate-900 p-8 text-white relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-brand-600/20 rounded-full blur-[100px] -mr-32 -mt-32" />
-                <div className="relative flex justify-between items-start">
-                  <div>
-                    <p className="text-brand-300 text-xs font-black uppercase tracking-[0.2em] mb-2">Selected PG Property</p>
-                    <h3 className="text-3xl font-black mb-3">{pg?.pgName || 'PG Sanctuary'}</h3>
-                    <div className="flex items-center gap-4 text-brand-100/80 text-sm font-bold">
-                      <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-brand-400" /> {pg?.area}, {pg?.city}</span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-slate-700" />
-                      <span className="flex items-center gap-1.5"><Star className="w-4 h-4 text-amber-400 fill-current" /> {pg?.rating || '4.2'}</span>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+              {/* ── Left Column ── */}
+              <div className="lg:col-span-7 space-y-4">
+                
+                {/* PG Header — compact premium bar */}
+                <div className="relative overflow-hidden bg-gradient-to-br from-emerald-700 via-emerald-800 to-teal-900 rounded-2xl px-5 py-4 text-white">
+                  <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full blur-2xl -mr-16 -mt-16" />
+                  <div className="relative flex items-center justify-between">
+                    <div>
+                      <h3 className="text-lg font-bold tracking-tight">{pg?.pgName || 'PG Sanctuary'}</h3>
+                      <div className="flex items-center gap-3 text-emerald-200/70 text-xs mt-1">
+                        <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {pg?.area}, {pg?.city}</span>
+                        <span className="flex items-center gap-1"><Star className="w-3 h-3 text-amber-400 fill-amber-400" /> {pg?.rating || '4.2'}</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-1.5 items-end text-[9px] font-semibold uppercase tracking-wider">
+                      {bookingMode === 'full' && selectedRoom && (
+                        <span className="bg-white/15 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-white/10">Room {selectedRoom.roomType || selectedRoom.roomId}</span>
+                      )}
+                      {bookingMode === 'full' && (
+                        <span className="bg-white/15 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-white/10">{roomPack} · Room</span>
+                      )}
+                      <span className="bg-white/15 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-white/10">{mealPack} · Meals</span>
                     </div>
                   </div>
-                  <div className="flex flex-col gap-2 items-end">
+                </div>
+
+                {/* Personal Details */}
+                <div className="bg-white rounded-2xl border border-slate-200 p-5">
+                  <h4 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3">Resident Details</h4>
+                  <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+                    <div>
+                      <p className="text-[10px] text-slate-400 uppercase tracking-wider mb-0.5">Name</p>
+                      <p className="text-sm font-semibold text-slate-800">{userDetails.name}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-slate-400 uppercase tracking-wider mb-0.5">Purpose</p>
+                      <p className="text-sm font-semibold text-slate-800 capitalize">{userDetails.purpose}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-slate-400 uppercase tracking-wider mb-0.5">Phone</p>
+                      <p className="text-sm font-semibold text-slate-800">{userDetails.phone}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-slate-400 uppercase tracking-wider mb-0.5">Hometown</p>
+                      <p className="text-sm font-semibold text-slate-800">{userDetails.city || 'N/A'}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pricing — clean line items */}
+                <div className="bg-white rounded-2xl border border-slate-200 p-5">
+                  <h4 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3">Pricing Summary</h4>
+                  <div className="space-y-2">
                     {bookingMode === 'full' && (
-                      <div className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${roomPack === 'yearly' ? 'bg-emerald-500 text-white border-emerald-400' : 'bg-slate-800 text-slate-400 border-slate-700'}`}>
-                        Room Pack: {roomPack}
+                      <div className="flex items-center justify-between py-2 border-b border-slate-100">
+                        <div>
+                          <p className="text-sm font-medium text-slate-700">{sharing?.label} Sharing — Room</p>
+                          <p className="text-[10px] text-slate-400 capitalize">{roomPack} pack</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-semibold text-slate-800">₹{activeSharePrice.toLocaleString()}<span className="text-xs text-slate-400 font-normal">/mo</span></p>
+                          {roomPack === 'yearly' && <p className="text-[10px] text-slate-400">₹{(activeSharePrice * 12).toLocaleString()} /yr</p>}
+                        </div>
                       </div>
                     )}
-                    <div className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${mealPack === 'yearly' ? 'bg-emerald-500 text-white border-emerald-400' : 'bg-slate-800 text-slate-400 border-slate-700'}`}>
-                      Meals: {mealPack}
+                    <div className="flex items-center justify-between py-2 border-b border-slate-100">
+                      <div>
+                        <p className="text-sm font-medium text-slate-700">{food?.label} — Meals</p>
+                        <p className="text-[10px] text-slate-400 capitalize">{mealPack} pack</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-semibold text-slate-800">₹{activeFoodPrice.toLocaleString()}<span className="text-xs text-slate-400 font-normal">/mo</span></p>
+                        {mealPack === 'yearly' && <p className="text-[10px] text-slate-400">₹{(activeFoodPrice * 12).toLocaleString()} /yr</p>}
+                      </div>
                     </div>
-                    {bookingMode === 'full' && selectedRoom && (
-                      <div className="px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border bg-brand-500 text-white border-brand-400">
-                        Room: {selectedRoom.roomType || selectedRoom.roomId}
+
+                    {(roomPack === 'yearly' || mealPack === 'yearly') && (
+                      <div className="flex items-center justify-between py-2 border-b border-dashed border-slate-200">
+                        <div className="flex items-center gap-2">
+                          <BadgePercent className="w-3.5 h-3.5 text-emerald-600" />
+                          <p className="text-xs font-medium text-emerald-700">Yearly Discount (15%)</p>
+                        </div>
+                        <p className="text-sm font-semibold text-emerald-600">−₹{savings.toLocaleString()}</p>
+                      </div>
+                    )}
+
+                    <div className="flex items-center justify-between pt-2">
+                      <p className="text-sm font-bold text-slate-900">Monthly Total</p>
+                      <p className="text-lg font-bold text-slate-900">₹{totalMonthly.toLocaleString()}<span className="text-xs text-slate-400 font-normal ml-0.5">/mo</span></p>
+                    </div>
+                    
+                    {(roomPack === 'yearly' || mealPack === 'yearly') && (
+                      <div className="flex items-center justify-between bg-gradient-to-r from-emerald-700 to-teal-700 text-white rounded-xl px-4 py-3 mt-1">
+                        <p className="text-xs font-semibold">Total Payable Now</p>
+                        <p className="text-lg font-bold">
+                          ₹{((roomPack === 'yearly' ? activeSharePrice * 12 : activeSharePrice) + 
+                            (mealPack === 'yearly' ? activeFoodPrice * 12 : activeFoodPrice)).toLocaleString()}
+                        </p>
                       </div>
                     )}
                   </div>
                 </div>
               </div>
 
-              <div className="p-8 space-y-8">
-                {/* Personal Section */}
-                <div>
-                   <div className="flex items-center gap-2 mb-4">
-                      <div className="w-2 h-6 bg-brand-600 rounded-full" />
-                      <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest">Primary Resident</h4>
-                   </div>
-                   <div className="grid grid-cols-2 gap-8">
-                      <div>
-                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1">Full Name</p>
-                         <p className="font-black text-slate-900">{userDetails.name}</p>
-                      </div>
-                      <div>
-                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1">Purpose of Stay</p>
-                         <p className="font-black text-slate-900 capitalize">{userDetails.purpose}</p>
-                      </div>
-                      <div>
-                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1">Contact No.</p>
-                         <p className="font-black text-slate-900">{userDetails.phone}</p>
-                      </div>
-                      <div>
-                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1">Hometown</p>
-                         <p className="font-black text-slate-900">{userDetails.city || 'N/A'}</p>
-                      </div>
-                   </div>
-                </div>
-
-                {/* Configuration Section */}
-                <div className="pt-8 border-t border-slate-100">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-2 h-6 bg-amber-500 rounded-full" />
-                      <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest">Pricing Breakdown</h4>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                       {bookingMode === 'full' && (
-                         <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100">
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Room Configuration</p>
-                            <div className="space-y-1">
-                               <div className="flex justify-between items-center mb-1">
-                                  <span className="font-black text-slate-900">{sharing?.label} Sharing</span>
-                                  <span className="text-lg font-black text-slate-900">₹{activeSharePrice.toLocaleString()}<span className="text-xs text-slate-400 font-medium ml-1">/mo</span></span>
-                               </div>
-                               {roomPack === 'yearly' && (
-                                  <div className="bg-white/50 rounded-xl px-3 py-2 border border-slate-100 flex justify-between items-center">
-                                     <span className="text-[10px] font-black text-brand-600 uppercase tracking-widest">Annual Total</span>
-                                     <span className="font-black text-brand-700">₹{(activeSharePrice * 12).toLocaleString()}</span>
-                                  </div>
-                               )}
-                            </div>
-                            <div className={`mt-3 text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full border w-fit mx-auto ${roomPack === 'yearly' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-blue-50 text-blue-700 border-blue-100'}`}>
-                               {roomPack} Pack Selected
-                            </div>
-                         </div>
-                       )}
-
-                       <div className={`bg-slate-50 rounded-2xl p-5 border border-slate-100 ${bookingMode === 'food' ? 'md:col-span-2' : ''}`}>
-                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Meal Subscription</p>
-                          <div className="space-y-1">
-                             <div className="flex justify-between items-center mb-1">
-                                <span className="font-black text-slate-900">{food?.label} Plan</span>
-                                <span className="text-lg font-black text-slate-900">₹{activeFoodPrice.toLocaleString()}<span className="text-xs text-slate-400 font-medium ml-1">/mo</span></span>
-                             </div>
-                             {mealPack === 'yearly' && (
-                                <div className="bg-white/50 rounded-xl px-3 py-2 border border-slate-100 flex justify-between items-center">
-                                   <span className="text-[10px] font-black text-brand-600 uppercase tracking-widest">Annual Total</span>
-                                   <span className="font-black text-brand-700">₹{(activeFoodPrice * 12).toLocaleString()}</span>
-                                </div>
-                             )}
-                          </div>
-                          <div className={`mt-3 text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full border w-fit mx-auto ${mealPack === 'yearly' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-blue-50 text-blue-700 border-blue-100'}`}>
-                             {mealPack} Pack Selected
-                          </div>
-                       </div>
-                    </div>
-                </div>
-
-                {(roomPack === 'yearly' || mealPack === 'yearly') && (
-                  <div className="bg-emerald-50 rounded-2xl p-4 border border-emerald-200 flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                        <BadgePercent className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <p className="text-emerald-700 font-black text-sm">Long-term Loyalty Applied</p>
-                        <p className="text-emerald-600/70 text-[10px] font-bold uppercase tracking-widest">
-                          {roomPack === 'yearly' && '15% Off Room '} 
-                          {roomPack === 'yearly' && mealPack === 'yearly' && '& '}
-                          {mealPack === 'yearly' && '15% Off Meals '}
-                          Active
-                        </p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                       <p className="text-[10px] font-black text-emerald-600 uppercase">Year Savings</p>
-                       <p className="text-xl font-black text-emerald-700">₹{savings.toLocaleString()}</p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Unified Booking Terms & Refund Policy Container - Shown only for Full Pack */}
+              {/* ── Right Column ── */}
+              <div className="lg:col-span-5 space-y-4">
+                
+                {/* Policy & Agreement */}
                 {bookingMode === 'full' && (
-                  <div className="bg-white border-2 border-slate-100 rounded-[2.5rem] overflow-hidden mb-8 shadow-sm">
-                  {/* Header */}
-                  <div className="bg-slate-900 p-6 flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/20">
-                      <ShieldCheck className="w-6 h-6 text-brand-400" />
-                    </div>
-                    <div>
-                      <h3 className="font-black text-white text-base uppercase tracking-tight leading-none mb-1">StayNest Terms & Refund</h3>
-                      <p className="text-brand-400/60 text-[10px] font-bold uppercase tracking-[0.2em]">Official Structural Policy</p>
-                    </div>
-                  </div>
-
-                  {/* Booking Guidelines Section */}
-                  <div className="p-6 border-b border-slate-100">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1.5 h-6 bg-brand-500 rounded-full" />
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Booking Guidelines</p>
-                    </div>
-                    <div className="space-y-4">
-                      <div className="flex items-start gap-3">
-                        <Clock className="w-4 h-4 text-brand-500 shrink-0 mt-0.5" />
-                        <p className="text-xs font-bold text-slate-700 leading-relaxed">
-                          Renew your slot <span className="text-brand-600">at least 2 days</span> before expiry to ensure availability.
-                        </p>
+                  <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                    {/* Header */}
+                    <div className="px-5 py-3.5 bg-gradient-to-r from-emerald-50 to-teal-50 border-b border-emerald-100 flex items-center gap-2.5">
+                      <div className="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center">
+                        <ShieldCheck className="w-4 h-4 text-emerald-600" />
                       </div>
-                      <div className="flex items-start gap-3">
-                        <HelpCircle className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
-                        <p className="text-xs font-bold text-slate-700 leading-relaxed">
-                          Empty slots are quickly opened for new residents if not confirmed.
-                        </p>
+                      <div>
+                        <h4 className="text-[11px] font-bold text-slate-800 uppercase tracking-wider leading-none">Policy & Refund</h4>
+                        <p className="text-[9px] text-emerald-600 font-medium mt-0.5">StayNest Guarantee</p>
                       </div>
                     </div>
-                  </div>
-
-                  {/* Tiered Refund Policy Section */}
-                  <div className="p-6 bg-slate-50/50">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1.5 h-6 bg-amber-500 rounded-full" />
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Refund Policy ({roomPack === 'yearly' ? 'Yearly' : 'Monthly'} Pack)</p>
-                    </div>
-
-                    <div className="space-y-3">
-                      {roomPack === 'yearly' ? (
-                        <>
-                          <div className="flex items-center justify-between p-3.5 bg-emerald-50 rounded-2xl border border-emerald-100">
-                            <div className="flex items-center gap-3">
-                              <CalendarDays className="w-4 h-4 text-emerald-600" />
-                              <span className="text-xs font-black text-emerald-900 uppercase">First Month</span>
-                            </div>
-                            <span className="text-sm font-black text-emerald-600">80% Refund</span>
-                          </div>
-                          <div className="flex items-center justify-between p-3.5 bg-amber-50 rounded-2xl border border-amber-100">
-                            <div className="flex items-center gap-3">
-                              <CalendarDays className="w-4 h-4 text-amber-600" />
-                              <span className="text-xs font-black text-amber-900 uppercase">2nd to 5th Month</span>
-                            </div>
-                            <span className="text-sm font-black text-amber-600">40% Refund</span>
-                          </div>
-                          <div className="flex items-center justify-between p-3.5 bg-blue-50 rounded-2xl border border-blue-100">
-                            <div className="flex items-center gap-3">
-                              <CalendarDays className="w-4 h-4 text-blue-600" />
-                              <span className="text-xs font-black text-blue-900 uppercase">6th to 8th Month</span>
-                            </div>
-                            <span className="text-sm font-black text-blue-600">20% Refund</span>
-                          </div>
-                          <div className="flex items-center justify-between p-3.5 bg-slate-100 rounded-2xl border border-slate-200">
-                            <div className="flex items-center gap-3">
-                              <CalendarDays className="w-4 h-4 text-slate-400" />
-                              <span className="text-xs font-black text-slate-400 uppercase whitespace-nowrap overflow-hidden text-ellipsis max-w-[120px]">After 8th Month</span>
-                            </div>
-                            <span className="text-xs font-black text-slate-400">No Return</span>
-                          </div>
-                        </>
-                      ) : (
-                        <div className="flex items-center justify-between p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
-                          <div className="flex items-center gap-3">
-                            <BadgePercent className="w-5 h-5 text-emerald-600" />
-                            <span className="text-xs font-black text-emerald-900 uppercase">Anytime Refund</span>
-                          </div>
-                          <span className="text-lg font-black text-emerald-600">60%</span>
+                    
+                    {/* Guidelines */}
+                    <div className="px-5 py-3.5 border-b border-slate-100 space-y-2.5">
+                      <div className="flex items-start gap-2.5">
+                        <div className="w-5 h-5 rounded-md bg-amber-50 flex items-center justify-center shrink-0 mt-0.5">
+                          <Clock className="w-3 h-3 text-amber-500" />
                         </div>
-                      )}
+                        <p className="text-[11px] text-slate-500 leading-relaxed">Renew <span className="font-semibold text-slate-700">2 days</span> before expiry to keep your slot.</p>
+                      </div>
+                      <div className="flex items-start gap-2.5">
+                        <div className="w-5 h-5 rounded-md bg-blue-50 flex items-center justify-center shrink-0 mt-0.5">
+                          <Info className="w-3 h-3 text-blue-500" />
+                        </div>
+                        <p className="text-[11px] text-slate-500 leading-relaxed">Unconfirmed slots are released to other residents.</p>
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Acceptance Checkbox */}
-                  <div className="p-6 bg-slate-50 border-t border-slate-100">
+                    {/* Refund Schedule */}
+                    <div className="px-5 py-3.5 border-b border-slate-100">
+                      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2.5">Refund Schedule</p>
+                      <div className="space-y-1">
+                        {roomPack === 'yearly' ? (
+                          <>
+                            <div className="flex justify-between text-[11px] py-2 px-3.5 bg-emerald-50/60 rounded-lg border border-emerald-100/50">
+                              <span className="text-slate-600">1st month</span>
+                              <span className="font-bold text-emerald-600">80%</span>
+                            </div>
+                            <div className="flex justify-between text-[11px] py-2 px-3.5 bg-slate-50/60 rounded-lg">
+                              <span className="text-slate-600">2–5 months</span>
+                              <span className="font-bold text-amber-600">40%</span>
+                            </div>
+                            <div className="flex justify-between text-[11px] py-2 px-3.5 bg-slate-50/60 rounded-lg">
+                              <span className="text-slate-600">6–8 months</span>
+                              <span className="font-bold text-orange-500">20%</span>
+                            </div>
+                            <div className="flex justify-between text-[11px] py-2 px-3.5 rounded-lg">
+                              <span className="text-slate-400">After 8 months</span>
+                              <span className="font-semibold text-slate-400">No refund</span>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="flex justify-between text-[11px] py-2 px-3.5 bg-emerald-50/60 rounded-lg border border-emerald-100/50">
+                            <span className="text-slate-600">Anytime</span>
+                            <span className="font-bold text-emerald-600">60%</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Agreement Checkbox */}
                     <div 
-                      className="flex items-center gap-4 cursor-pointer group p-1" 
+                      className={`px-5 py-3.5 flex items-center gap-3 cursor-pointer select-none transition-all duration-200 group ${
+                        agreedToRefund 
+                          ? 'bg-emerald-50/50 hover:bg-emerald-50/80 border-t border-emerald-100/70' 
+                          : 'hover:bg-slate-50 border-t border-slate-100'
+                      }`}
                       onClick={() => {
                         const next = !agreedToRefund;
                         setAgreedToRefund(next);
                         setAgreedToTerms(next);
                       }}
                     >
-                      <div className={`w-8 h-8 rounded-xl border-2 flex items-center justify-center flex-shrink-0 transition-all duration-300
-                        ${agreedToRefund ? 'bg-brand-600 border-brand-600 shadow-lg shadow-brand-500/20' : 'border-slate-300 bg-white group-hover:border-brand-400'}`}>
-                        {agreedToRefund && <Check className="w-5 h-5 text-white" strokeWidth={4} />}
+                      <div className={`w-5 h-5 rounded-md border-[1.5px] flex items-center justify-center shrink-0 transition-all duration-200
+                        ${agreedToRefund 
+                          ? 'bg-emerald-600 border-emerald-600 shadow-sm shadow-emerald-600/30 scale-105' 
+                          : 'border-slate-300 bg-white group-hover:border-emerald-500 group-hover:scale-105'}`}>
+                        {agreedToRefund && <Check className="w-3.5 h-3.5 text-white animate-in zoom-in-50 duration-150" strokeWidth={3} />}
                       </div>
-                      <div className="flex-1 select-none">
-                        <p className="text-xs font-black text-slate-900 uppercase tracking-tight">I Agree to Policy & Guidelines</p>
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Strict settlement adherence</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                )}
-
-                {/* Agreement Checkbox (Full Pack Only) - REMOVED OLD VERSION BELOW */}
-
-                {/* Agreement Checkbox (Full Pack Only) */}
-                {bookingMode === 'full' && (
-                  <div className="mb-8 p-4 bg-slate-50 rounded-2xl border border-slate-200 group cursor-pointer hover:bg-white transition-all hidden"
-                    onClick={() => setAgreedToTerms(!agreedToTerms)}>
-                    <div className="flex items-center gap-4">
-                      <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all
-                        ${agreedToTerms ? 'bg-brand-600 border-brand-600' : 'border-slate-300 bg-white group-hover:border-brand-400'}`}>
-                        {agreedToTerms && <Check className="w-4 h-4 text-white" />}
-                      </div>
-                      <p className="text-sm font-bold text-slate-700">
-                        I agree to the terms and conditions and I have read the booking guidelines.
+                      <p className="text-[11px] text-slate-600 group-hover:text-slate-900 transition-colors">
+                        I agree to the <span className="font-semibold text-slate-800 underline decoration-emerald-400/50 underline-offset-2">booking policy & refund terms</span>
                       </p>
                     </div>
                   </div>
                 )}
 
-                {/* Focused Official Brand Payment Options */}
-                <div className="mb-10">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 px-1 text-center">
-                    Select Your Payment Method
-                  </p>
+                {/* Payment Method */}
+                <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Payment Method</h4>
+                    <span className="inline-flex items-center gap-1 text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
+                      <Lock className="w-2.5 h-2.5" /> 100% Encrypted
+                    </span>
+                  </div>
                   
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mx-auto">
-                    {[
-                      { id: 'phonepe', label: 'PhonePe', color: '#6739B7', icon: PhonePeIcon },
-                      { id: 'gpay',    label: 'GPay',    color: '#4285F4', icon: GPayIcon },
-                      { id: 'paytm',   label: 'Paytm',   color: '#00B9F5', icon: PaytmIcon },
-                      { id: 'card',    label: 'Card',    color: '#1A1F71', icon: CardIcon },
-                    ].map((method) => {
-                      const Icon = method.icon;
-                      const isSelected = paymentMethod === method.id;
-                      return (
-                        <button
-                          key={method.id}
-                          onClick={() => setPaymentMethod(method.id)}
-                          className={`flex-shrink-0 h-20 rounded-2xl border transition-all duration-200 flex flex-col items-center justify-center gap-2 group relative
-                            ${isSelected 
-                              ? 'border-brand-600 bg-white shadow-md ring-2 ring-brand-500/10' 
-                              : 'border-slate-200 bg-slate-50 hover:border-slate-300 hover:bg-white'}`}
-                        >
-                          {isSelected && (
-                            <div className="absolute top-2 right-2">
-                              <div className="w-4 h-4 rounded-full bg-brand-600 flex items-center justify-center shadow-sm">
-                                <Check className="w-2.5 h-2.5 text-white" strokeWidth={5} />
-                              </div>
+                  <div className="flex bg-slate-100/80 p-1 rounded-xl mb-3.5 border border-slate-200/50">
+                    <button
+                      type="button"
+                      onClick={() => { 
+                        setPaymentCategory('upi'); 
+                        if (paymentMethod === 'card' || !paymentMethod) setPaymentMethod('phonepe'); 
+                      }}
+                      className={`flex-1 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer
+                        ${paymentCategory === 'upi' 
+                          ? 'bg-white text-emerald-800 shadow-sm shadow-slate-300/40 border border-slate-200/60 scale-[1.01]' 
+                          : 'text-slate-400 hover:text-slate-600 hover:bg-white/40 active:scale-95'}`}
+                    >
+                      <Smartphone className={`w-3.5 h-3.5 transition-colors ${paymentCategory === 'upi' ? 'text-emerald-600' : 'text-slate-400'}`} /> UPI
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { 
+                        setPaymentCategory('card'); 
+                        setPaymentMethod('card'); 
+                      }}
+                      className={`flex-1 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer
+                        ${paymentCategory === 'card' 
+                          ? 'bg-white text-emerald-800 shadow-sm shadow-slate-300/40 border border-slate-200/60 scale-[1.01]' 
+                          : 'text-slate-400 hover:text-slate-600 hover:bg-white/40 active:scale-95'}`}
+                    >
+                      <CreditCard className={`w-3.5 h-3.5 transition-colors ${paymentCategory === 'card' ? 'text-emerald-600' : 'text-slate-400'}`} /> Card
+                    </button>
+                  </div>
+
+                  {paymentCategory === 'upi' && (
+                    <div className="space-y-2 animate-in fade-in duration-200">
+                      {[
+                        { id: 'phonepe', label: 'PhonePe', icon: PhonePeIcon },
+                        { id: 'gpay',    label: 'Google Pay', icon: GPayIcon },
+                        { id: 'paytm',   label: 'Paytm',   icon: PaytmIcon },
+                      ].map((method) => {
+                        const Icon = method.icon;
+                        const isSelected = paymentMethod === method.id;
+                        return (
+                          <button
+                            key={method.id}
+                            type="button"
+                            onClick={() => setPaymentMethod(method.id)}
+                            className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer group active:scale-[0.99]
+                              ${isSelected 
+                                ? 'border-emerald-500 bg-emerald-50/60 shadow-sm shadow-emerald-600/10 translate-x-1' 
+                                : 'border-slate-200 bg-white hover:border-emerald-300 hover:bg-emerald-50/20 hover:shadow-sm hover:translate-x-0.5'}`}
+                          >
+                            <div className="w-8 h-3.5 flex items-center justify-center shrink-0">
+                              <Icon className="w-full h-full" />
                             </div>
-                          )}
-                          
-                          <div className={`w-14 h-6 flex items-center justify-center opacity-90 transition-opacity ${isSelected ? 'opacity-100' : 'group-hover:opacity-100'}`}>
-                             <Icon className="w-full h-full" />
-                          </div>
-                          
-                          <div className="text-center">
-                            <span className={`text-[8px] font-black uppercase tracking-wider block
-                              ${isSelected ? 'text-brand-900' : 'text-slate-400'}`}>
+                            <span className={`text-xs flex-1 text-left transition-colors ${isSelected ? 'font-bold text-emerald-950' : 'font-medium text-slate-700 group-hover:text-slate-900'}`}>
                               {method.label}
                             </span>
-                            <div 
-                              className={`h-0.5 rounded-full mx-auto mt-1 transition-all
-                                ${isSelected ? 'w-4' : 'w-0'}`}
-                              style={{ backgroundColor: method.color }}
-                            />
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
+                            <div className={`w-4 h-4 rounded-full border-[1.5px] flex items-center justify-center transition-all duration-200
+                              ${isSelected 
+                                ? 'border-emerald-600 bg-emerald-600 shadow-sm shadow-emerald-600/30 scale-105' 
+                                : 'border-slate-300 group-hover:border-emerald-400 group-hover:scale-105'}`}>
+                              {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-full animate-in zoom-in-50 duration-150" />}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {paymentCategory === 'card' && (
+                    <div className="space-y-2.5 animate-in fade-in slide-in-from-top-1 duration-200">
+                      <input 
+                        type="text" 
+                        placeholder="Card number (16 digits)" 
+                        maxLength={19}
+                        className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-800 outline-none focus:outline-none hover:border-slate-300 focus:border-emerald-500 focus:ring-0 focus:shadow-none transition-colors placeholder:text-slate-400 bg-white" 
+                      />
+                      <div className="grid grid-cols-2 gap-2.5">
+                        <input 
+                          type="text" 
+                          placeholder="MM / YY" 
+                          maxLength={5}
+                          className="border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-800 outline-none focus:outline-none hover:border-slate-300 focus:border-emerald-500 focus:ring-0 focus:shadow-none transition-colors placeholder:text-slate-400 text-center bg-white" 
+                        />
+                        <input 
+                          type="password" 
+                          placeholder="CVV" 
+                          maxLength={4}
+                          className="border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-800 outline-none focus:outline-none hover:border-slate-300 focus:border-emerald-500 focus:ring-0 focus:shadow-none transition-colors placeholder:text-slate-400 text-center bg-white" 
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {/* Refund Policy Disclosure - REMOVED OLD VERSION */}
-
-                {/* Final Total */}
-                <div className="pt-8 border-t-2 border-dashed border-slate-200">
-                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6">
-                    <div className="space-y-4">
-                      <div>
-                        <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Monthly Subscription</p>
-                        <div className="flex items-baseline gap-1">
-                          <span className="text-xs font-black text-slate-400">INR</span>
-                          <span className="text-4xl font-black text-slate-900">₹{totalMonthly.toLocaleString()}</span>
-                          <span className="text-slate-400 font-bold">/mo</span>
-                        </div>
+                {/* ── Total Payable Strip & Action Buttons ── */}
+                <div className="space-y-3 pt-1">
+                  {/* Mini Total Summary Card */}
+                  <div className="bg-gradient-to-r from-emerald-50/90 via-teal-50/50 to-slate-50 rounded-2xl border border-emerald-100/80 p-3.5 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-md shadow-emerald-600/20">
+                        <ReceiptText className="w-4 h-4" />
                       </div>
-                      
-                      {(roomPack === 'yearly' || mealPack === 'yearly') && (
-                        <div className="bg-brand-50 border border-brand-100 rounded-2xl p-4 animate-in fade-in slide-in-from-left-4">
-                          <p className="text-[10px] font-black text-brand-500 uppercase tracking-widest mb-1">Total Booking Commitment</p>
-                          <div className="flex items-baseline gap-1">
-                            <span className="text-xs font-bold text-brand-600">INR</span>
-                            <span className="text-2xl font-black text-brand-700">
-                              ₹{((roomPack === 'yearly' ? activeSharePrice * 12 : activeSharePrice) + 
-                                (mealPack === 'yearly' ? activeFoodPrice * 12 : activeFoodPrice)).toLocaleString()}
-                            </span>
-                            <span className="text-brand-500/70 font-bold text-xs uppercase ml-1">Total</span>
-                          </div>
-                          <p className="text-[9px] text-brand-600/60 font-medium mt-1 uppercase tracking-tighter italic">
-                            * Sum of {bookingMode === 'full' ? (roomPack === 'yearly' ? 'Yearly Room' : '1 Month Room') : 'N/A Room'} 
-                            {bookingMode === 'full' && mealPack === 'yearly' ? ' & Yearly Meals' : 
-                             mealPack === 'yearly' ? ' & Yearly Meals' : ' & Monthly Meal'}
-                          </p>
-                        </div>
-                      )}
+                      <div>
+                        <p className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider">Total Payable</p>
+                        <p className="text-[11px] text-slate-500">
+                          {roomPack === 'yearly' || mealPack === 'yearly' ? 'Full Yearly Plan' : '1st Month Advance'}
+                        </p>
+                      </div>
                     </div>
+                    <div className="text-right">
+                      <p className="text-lg font-black text-slate-900 tracking-tight">
+                        ₹{finalPayable.toLocaleString()}
+                      </p>
+                      <span className="inline-block text-[9px] font-medium text-emerald-700 bg-emerald-100/70 px-1.5 py-0.5 rounded-md">
+                        All inclusive
+                      </span>
+                    </div>
+                  </div>
 
-                    <div className="sm:text-right">
-                       <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1 italic">Inclusive of all taxes & amenities</p>
-                       <p className="text-slate-400 text-[9px] font-medium leading-tight">By clicking below, you authorize the reservation<br/>of this slot for the selected duration.</p>
-                    </div>
+                  {/* Buttons */}
+                  <div className="flex gap-2.5 items-stretch">
+                    <button 
+                      type="button"
+                      onClick={() => setStep(4)} 
+                      className="px-4 py-3 border border-slate-200 bg-white rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 hover:-translate-x-0.5 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer flex items-center gap-1.5 shrink-0"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" /> Back
+                    </button>
+
+                    <button 
+                      type="button"
+                      onClick={handleConfirm} 
+                      disabled={bookingLoading || (bookingMode === 'full' ? (!agreedToTerms || !paymentMethod || !agreedToRefund) : !paymentMethod)}
+                      className={`flex-1 py-3.5 px-5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all duration-200 select-none group relative overflow-hidden
+                        ${(bookingMode === 'full' ? (agreedToTerms && paymentMethod && agreedToRefund) : paymentMethod) 
+                          ? 'bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-700 text-white hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-600 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg shadow-emerald-600/30 hover:shadow-xl hover:shadow-emerald-600/40 cursor-pointer' 
+                          : 'bg-slate-100 text-slate-400 border border-slate-200/80 cursor-not-allowed'}`}
+                    >
+                      {bookingLoading ? (
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <>
+                          <Lock className="w-4 h-4 text-emerald-200 group-hover:scale-110 transition-transform duration-200" />
+                          <span>Pay ₹{finalPayable.toLocaleString()} & Confirm</span>
+                          <ArrowRight className="w-4 h-4 text-emerald-200 group-hover:translate-x-1 transition-transform duration-200" />
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Trust badge */}
+                  <div className="flex items-center justify-center gap-3 text-[10px] text-slate-400 pt-0.5">
+                    <span className="flex items-center gap-1">
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> 100% Safe Checkout
+                    </span>
+                    <span>•</span>
+                    <span>Instant Confirmation</span>
                   </div>
                 </div>
               </div>
             </div>
-
-            <div className="flex items-center gap-3 sm:gap-4 mt-2">
-              <button onClick={() => setStep(4)} className="h-11 px-5 sm:px-6 border border-slate-200 rounded-full font-black text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-slate-500 hover:text-slate-800 hover:bg-slate-100/80 backdrop-blur-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-out">
-                ← Back
-              </button>
-              <button 
-                onClick={handleConfirm} 
-                disabled={bookingLoading || (bookingMode === 'full' ? (!agreedToTerms || !paymentMethod || !agreedToRefund) : !paymentMethod)}
-                className={`flex-1 h-11 rounded-full font-black text-[10px] sm:text-[11px] uppercase tracking-[0.15em] flex items-center justify-center gap-3 transition-all duration-300
-                  ${(bookingMode === 'full' ? (agreedToTerms && paymentMethod && agreedToRefund) : paymentMethod) 
-                    ? 'bg-brand-500 border border-brand-400/50 text-white shadow-[0_8px_20px_-4px_rgba(34,197,94,0.5)] hover:bg-brand-700 hover:border-brand-600 hover:shadow-[0_12px_24px_-4px_rgba(21,128,61,0.6)] hover:-translate-y-1 active:translate-y-0.5 active:scale-[0.97] transition-all duration-300 ease-out cursor-pointer relative overflow-hidden group' 
-                    : 'bg-slate-100 text-slate-400 cursor-not-allowed opacity-60'}`}>
-                {bookingLoading ? (
-                  <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <>
-                    <Sparkles className="w-5 h-5 text-amber-300" />
-                    Complete Booking & Reserve Slot
-                  </>
-                )}
-              </button>
-            </div>
-            <p className="text-center text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-6">
-              By reserving now, you secure your spot at the current promotional rates.
-            </p>
           </div>
         )}
       </div>
       
       {/* ── MEAL MENU MODAL ── */}
       {viewingMenu && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
-          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setViewingMenu(null)} />
-          <div className="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-2xl overflow-hidden animate-in zoom-in-95 duration-300">
-            {/* Modal Header */}
-            <div className="bg-slate-900 px-6 py-5 flex items-center justify-between">
-              <div>
-                <h3 className="text-xl font-black text-white">{MEAL_SCHEDULES[viewingMenu].title}</h3>
-                <p className="text-slate-400 text-xs font-medium mt-1">{MEAL_SCHEDULES[viewingMenu].note}</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-300">
+          <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-md" onClick={() => setViewingMenu(null)} />
+          <div className="relative bg-white rounded-[2.5rem] shadow-2xl shadow-slate-950/40 w-full max-w-2xl overflow-hidden border border-slate-100 animate-in zoom-in-95 duration-300">
+            {/* Modal Header — Emerald Green Theme */}
+            <div className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-700 px-6 sm:px-8 py-6 text-white relative overflow-hidden border-b border-emerald-500/30 shadow-inner">
+              {/* Ambient Header Glows */}
+              <div className="absolute -top-12 -right-12 w-44 h-44 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+              <div className="absolute -bottom-12 -left-12 w-44 h-44 bg-teal-300/15 rounded-full blur-2xl pointer-events-none" />
+
+              <div className="flex items-start justify-between relative z-10">
+                <div>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-extrabold uppercase tracking-widest text-emerald-100 border border-white/25 mb-2.5 shadow-2xs">
+                    <Utensils className="w-3 h-3 text-emerald-100" /> Dining Schedule
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                    {MEAL_SCHEDULES[viewingMenu].title}
+                  </h3>
+                  <p className="text-emerald-100/90 text-xs sm:text-sm font-medium mt-1 leading-relaxed max-w-lg">
+                    {MEAL_SCHEDULES[viewingMenu].note}
+                  </p>
+                </div>
+
+                <button 
+                  type="button"
+                  onClick={() => setViewingMenu(null)}
+                  className="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-all cursor-pointer backdrop-blur-md border border-white/30 hover:scale-105 active:scale-95 shrink-0 ml-4 shadow-sm"
+                  aria-label="Close menu"
+                >
+                  <X className="w-4 h-4" strokeWidth={2.5} />
+                </button>
               </div>
-              <button 
-                onClick={() => setViewingMenu(null)}
-                className="w-8 h-8 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-full flex items-center justify-center transition-colors"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-              </button>
             </div>
             
             {/* Modal Body */}
-            <div className="p-6">
+            <div className="p-6 sm:p-7 bg-slate-50">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 
-                {/* Mon - Sat Schedule */}
-                <div className="bg-slate-50 border border-slate-100 rounded-3xl p-5">
-                  <h4 className="text-[10px] font-black text-slate-800 uppercase tracking-widest mb-4 flex items-center gap-2 border-b border-slate-200 pb-2">
-                    <CalendarDays className="w-4 h-4 text-brand-500" /> Mon — Sat
-                  </h4>
-                  <div className="space-y-4">
-                    <div>
-                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Morning</span>
-                      <p className="text-xs sm:text-sm font-bold text-slate-700">{MEAL_SCHEDULES[viewingMenu].monSat.morning}</p>
+                {/* Mon - Sat Schedule Card */}
+                <div className="bg-white border border-slate-200/90 rounded-3xl p-5 shadow-xs">
+                  <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-100">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                        <CalendarDays className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider">Mon — Sat</h4>
+                        <p className="text-[10px] text-slate-400 font-medium">Daily Nutritious Diet</p>
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Afternoon</span>
-                      <p className="text-xs sm:text-sm font-bold text-slate-700">{MEAL_SCHEDULES[viewingMenu].monSat.afternoon}</p>
+                    <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/60">
+                      3 Meals/Day
+                    </span>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="p-3.5 bg-slate-50/80 rounded-2xl border border-slate-200/70 hover:border-emerald-200/80 transition-colors">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                          Morning Breakfast
+                        </span>
+                        <span className="text-[10px] text-slate-600 font-semibold bg-white px-2 py-0.5 rounded-md border border-slate-200/60">
+                          7:30 – 9:30 AM
+                        </span>
+                      </div>
+                      <p className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                        {MEAL_SCHEDULES[viewingMenu].monSat.morning}
+                      </p>
                     </div>
-                    <div>
-                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Evening</span>
-                      <p className="text-xs sm:text-sm font-bold text-slate-700">{MEAL_SCHEDULES[viewingMenu].monSat.evening}</p>
+
+                    <div className="p-3.5 bg-slate-50/80 rounded-2xl border border-slate-200/70 hover:border-emerald-200/80 transition-colors">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                          Afternoon Lunch
+                        </span>
+                        <span className="text-[10px] text-slate-600 font-semibold bg-white px-2 py-0.5 rounded-md border border-slate-200/60">
+                          12:30 – 2:30 PM
+                        </span>
+                      </div>
+                      <p className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                        {MEAL_SCHEDULES[viewingMenu].monSat.afternoon}
+                      </p>
+                    </div>
+
+                    <div className="p-3.5 bg-slate-50/80 rounded-2xl border border-slate-200/70 hover:border-emerald-200/80 transition-colors">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                          Evening Dinner
+                        </span>
+                        <span className="text-[10px] text-slate-600 font-semibold bg-white px-2 py-0.5 rounded-md border border-slate-200/60">
+                          7:30 – 9:30 PM
+                        </span>
+                      </div>
+                      <p className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                        {MEAL_SCHEDULES[viewingMenu].monSat.evening}
+                      </p>
                     </div>
                   </div>
                 </div>
 
-                {/* Sunday Schedule */}
-                <div className="bg-gradient-to-br from-brand-50 to-emerald-50 border border-brand-100 rounded-3xl p-5 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 p-4 opacity-5">
-                    <Star className="w-32 h-32 text-brand-600" />
+                {/* Sunday Special Schedule Card */}
+                <div className="bg-white border border-slate-200/90 rounded-3xl p-5 shadow-xs">
+                  <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-100">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                        <Crown className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider">Sunday Special</h4>
+                        <p className="text-[10px] text-slate-400 font-medium">Chef's Weekly Feast</p>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200/60">
+                      Special Feast
+                    </span>
                   </div>
-                  <h4 className="text-[10px] font-black text-brand-800 uppercase tracking-widest mb-4 flex items-center gap-2 border-b border-brand-200 pb-2 relative z-10">
-                    <Crown className="w-4 h-4 text-amber-500" /> Sunday Special
-                  </h4>
-                  <div className="space-y-4 relative z-10">
-                    <div>
-                      <span className="text-[9px] font-bold text-brand-600/70 uppercase tracking-widest block mb-1">Morning</span>
-                      <p className="text-xs sm:text-sm font-black text-brand-900">{MEAL_SCHEDULES[viewingMenu].sunday.morning}</p>
+
+                  <div className="space-y-3">
+                    <div className="p-3.5 bg-slate-50/80 rounded-2xl border border-slate-200/70 hover:border-amber-200/80 transition-colors">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                          Grand Breakfast
+                        </span>
+                        <span className="text-[10px] text-slate-600 font-semibold bg-white px-2 py-0.5 rounded-md border border-slate-200/60">
+                          8:00 – 10:00 AM
+                        </span>
+                      </div>
+                      <p className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                        {MEAL_SCHEDULES[viewingMenu].sunday.morning}
+                      </p>
                     </div>
-                    <div>
-                      <span className="text-[9px] font-bold text-brand-600/70 uppercase tracking-widest block mb-1">Afternoon</span>
-                      <p className="text-xs sm:text-sm font-black text-brand-900">{MEAL_SCHEDULES[viewingMenu].sunday.afternoon}</p>
+
+                    <div className="p-3.5 bg-slate-50/80 rounded-2xl border border-slate-200/70 hover:border-amber-200/80 transition-colors">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                          Royal Feast Lunch
+                        </span>
+                        <span className="text-[10px] text-slate-600 font-semibold bg-white px-2 py-0.5 rounded-md border border-slate-200/60">
+                          1:00 – 3:00 PM
+                        </span>
+                      </div>
+                      <p className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                        {MEAL_SCHEDULES[viewingMenu].sunday.afternoon}
+                      </p>
                     </div>
-                    <div>
-                      <span className="text-[9px] font-bold text-brand-600/70 uppercase tracking-widest block mb-1">Evening</span>
-                      <p className="text-xs sm:text-sm font-black text-brand-900">{MEAL_SCHEDULES[viewingMenu].sunday.evening}</p>
+
+                    <div className="p-3.5 bg-slate-50/80 rounded-2xl border border-slate-200/70 hover:border-amber-200/80 transition-colors">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                          Sunday Dinner
+                        </span>
+                        <span className="text-[10px] text-slate-600 font-semibold bg-white px-2 py-0.5 rounded-md border border-slate-200/60">
+                          8:00 – 10:00 PM
+                        </span>
+                      </div>
+                      <p className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                        {MEAL_SCHEDULES[viewingMenu].sunday.evening}
+                      </p>
                     </div>
                   </div>
                 </div>
 
               </div>
               
-              <div className="mt-6 pt-5 border-t border-slate-100 flex justify-end">
+              {/* Modal Footer */}
+              <div className="mt-6 pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="flex items-center gap-2 text-slate-500 text-center sm:text-left">
+                  <Utensils className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span className="text-[11px] font-semibold text-slate-600">Pure RO drinking water • Hygienic home-style cooking daily</span>
+                </div>
+
                 <button 
+                  type="button"
                   onClick={() => setViewingMenu(null)}
-                  className="px-8 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all"
+                  className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-700 hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-600 active:scale-95 text-white rounded-xl font-black text-xs uppercase tracking-wider shadow-lg shadow-emerald-600/25 hover:shadow-xl hover:shadow-emerald-600/35 transition-all cursor-pointer"
                 >
                   Close Menu
                 </button>

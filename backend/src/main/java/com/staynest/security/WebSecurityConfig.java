@@ -32,9 +32,6 @@ public class WebSecurityConfig {
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
 
-    @Autowired
-    private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
-
     @Value("${app.cors.allowed-origins}")
     private String allowedOrigins;
 
@@ -75,8 +72,6 @@ public class WebSecurityConfig {
                 auth.requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                     .requestMatchers("/health").permitAll()
                     .requestMatchers("/auth/**", "/api/auth/**").permitAll()
-
-                    .requestMatchers("/oauth2/**", "/login/**").permitAll()
                     .requestMatchers("/api/test/**").permitAll()
                     .requestMatchers("/pg/list", "/pg/{id}").permitAll()
                     .requestMatchers("/rooms/byPG/**").permitAll()
@@ -84,11 +79,6 @@ public class WebSecurityConfig {
                     .requestMatchers("/").permitAll()
                     .requestMatchers("/error").permitAll()
                     .anyRequest().authenticated()
-            )
-            .oauth2Login(oauth2 -> oauth2
-                .authorizationEndpoint(endpoint -> endpoint.baseUri("/oauth2/authorize"))
-                .redirectionEndpoint(endpoint -> endpoint.baseUri("/login/oauth2/code/*"))
-                .successHandler(oAuth2LoginSuccessHandler)
             );
 
         http.authenticationProvider(authenticationProvider());

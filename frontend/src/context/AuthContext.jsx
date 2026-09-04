@@ -104,13 +104,6 @@ export const AuthProvider = ({ children }) => {
   };
 
 
-  const handleOAuthLogin = (token, refreshToken, userData) => {
-    localStorage.setItem('token', token);
-    localStorage.setItem('refreshToken', refreshToken);
-    localStorage.setItem('user', JSON.stringify(userData));
-    setUser(userData);
-  };
-
   const logout = () => {
     // Clear auth data
     localStorage.removeItem('token');
@@ -127,7 +120,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, handleOAuthLogin, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

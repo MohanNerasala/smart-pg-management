@@ -5,7 +5,6 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import OAuth2RedirectHandler from './pages/OAuth2RedirectHandler';
 import PGDetails from './pages/PGDetails';
 import UserDashboard from './pages/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard';
@@ -43,7 +42,6 @@ const App = () => {
               <Route path="/listings" element={<Listings />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
               <Route path="/pg/:id" element={<PGDetails />} />
               
               {/* User Routes */}

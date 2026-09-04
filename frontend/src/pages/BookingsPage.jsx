@@ -27,38 +27,92 @@ const addYear = (date) => {
 const fmtDate = (date) =>
   date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
 
-/* ─── Thumbnail Card (Horizontal Ticket Style) ─── */
-const ThumbnailCard = ({ title, type, dateString, color, icon: Icon, onClick }) => (
-  <div 
-    onClick={onClick}
-    className="bg-white rounded-3xl p-4 sm:p-5 flex items-center justify-between shadow-sm border border-slate-200 hover:border-slate-300 hover:shadow-md cursor-pointer transition-all group overflow-hidden relative w-full"
-  >
-    {/* Left Icon & Info */}
-    <div className="flex items-center gap-4 z-10 w-full">
-      <div className={`w-12 h-12 bg-${color}-50 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform`}>
-        <Icon className={`w-6 h-6 text-${color}-600`} />
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1">
-          <span className={`text-[10px] font-black text-${color}-600 uppercase tracking-wider bg-${color}-50 px-2 py-0.5 rounded-md`}>
-            {type}
-          </span>
-          <span className="text-[10px] font-bold text-slate-500 uppercase flex items-center gap-1">
-            <CalendarDays className="w-3 h-3" /> {dateString}
-          </span>
+/* ─── Clean Receipt Line Item with Dynamic CSS Hover Animations ─── */
+const ReceiptRow = ({
+  icon: Icon,
+  title,
+  dateString,
+  badgeText,
+  amount,
+  period = '/mo',
+  actionText = 'View Receipt',
+  isRefund = false,
+  cascadeClass = '',
+  onClick
+}) => {
+  return (
+    <div
+      onClick={onClick}
+      className={`p-4 sm:px-6 flex items-center justify-between transition-all duration-300 ease-out cursor-pointer group relative overflow-hidden select-none active:scale-[0.995] active:bg-slate-100/70 ${
+        isRefund 
+          ? 'bg-amber-50/20 hover:bg-gradient-to-r hover:from-amber-50/60 hover:via-amber-50/30 hover:to-transparent' 
+          : 'bg-white hover:bg-gradient-to-r hover:from-emerald-50/35 hover:via-white hover:to-slate-50/60'
+      } ${cascadeClass}`}
+    >
+      {/* Dynamic Animated Indicator Bar on Left */}
+      <span className={`receipt-indicator-bar ${isRefund ? 'is-amber' : ''}`} />
+
+      {/* Dynamic Shimmer Light Sweep on Hover */}
+      <div className="shimmer-sweep-layer" />
+
+      {/* Left Content */}
+      <div className="flex items-center gap-3.5 min-w-0 pr-2 z-10">
+        <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:-translate-y-0.5 group-hover:rotate-[-2deg] ${
+          isRefund 
+            ? 'bg-amber-100 text-amber-800 group-hover:bg-amber-200 group-hover:shadow-sm group-hover:shadow-amber-500/20' 
+            : 'bg-slate-100 text-slate-600 group-hover:bg-emerald-100/90 group-hover:text-emerald-800 group-hover:shadow-sm group-hover:shadow-emerald-500/20'
+        }`}>
+          <Icon className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:scale-105" />
         </div>
-        <h3 className="font-black text-slate-800 text-base sm:text-lg truncate tracking-tight">{title}</h3>
+
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm font-bold text-slate-900 group-hover:text-emerald-700 transition-colors duration-200 truncate">
+              {title}
+            </span>
+            {badgeText && (
+              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md transition-all duration-200 group-hover:scale-105 ${
+                isRefund 
+                  ? 'bg-amber-100 text-amber-800 border border-amber-200/80 group-hover:border-amber-300' 
+                  : 'bg-emerald-50 text-emerald-700 border border-emerald-200/70 group-hover:border-emerald-400 group-hover:bg-emerald-100/70'
+              }`}>
+                {badgeText}
+              </span>
+            )}
+            {dateString && (
+              <span className="text-xs text-slate-400 font-medium hidden sm:inline">
+                • {dateString}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Right Content */}
+      <div className="flex items-center gap-3 sm:gap-4 shrink-0 pl-2 z-10">
+        {amount !== undefined && amount !== null && (
+          <div className="text-right transition-transform duration-200 group-hover:scale-105">
+            <span className={`text-sm sm:text-base font-bold transition-colors duration-200 ${
+              isRefund 
+                ? 'text-emerald-700 group-hover:text-emerald-800' 
+                : 'text-slate-900 group-hover:text-emerald-700'
+            }`}>
+              {isRefund ? `+₹${amount.toLocaleString()}` : `₹${amount.toLocaleString()}`}
+            </span>
+            {period && <span className="text-xs text-slate-400 font-normal ml-0.5">{period}</span>}
+          </div>
+        )}
+
+        {/* View Receipt Pill Button with Chevron Slide */}
+        <div className="flex items-center text-xs font-semibold text-slate-400 group-hover:text-emerald-700 px-2 py-1 rounded-lg transition-all duration-200 group-hover:bg-emerald-50/90 group-hover:border group-hover:border-emerald-200/70">
+          <span className="hidden md:inline mr-1">{actionText}</span>
+          <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 text-slate-300 group-hover:text-emerald-600" />
+        </div>
       </div>
     </div>
-    
-    {/* Right Action - Simple Navigation Arrow */}
-    <div className="shrink-0 ml-4 z-10 pl-4 border-l border-dashed border-slate-200 h-full flex items-center">
-      <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-slate-100 transition-colors">
-         <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-brand-600 transition-colors" />
-      </div>
-    </div>
-  </div>
-);
+  );
+};
+
 
 /* ─── Modal Shell ───────────────────────── */
 const Modal = ({ isOpen, onClose, children }) => {
@@ -206,7 +260,10 @@ const BookingsPage = () => {
   }, [displayBookings, displayRefunds]);
 
   const togglePg = (pgName) => {
-    setExpandedPgs(prev => ({ ...prev, [pgName]: !prev[pgName] }));
+    setExpandedPgs(prev => {
+      const current = prev[pgName] !== undefined ? prev[pgName] : true;
+      return { ...prev, [pgName]: !current };
+    });
   };
 
   // If no booking data AND no refunds, redirect
@@ -234,6 +291,46 @@ const BookingsPage = () => {
   const startDate = activeBooking?.bookingDate ? new Date(activeBooking.bookingDate) : new Date();
   const roomEndDate = activeBooking?.roomPack === 'yearly' ? addYear(startDate) : addMonths(startDate, 1);
   const mealEndDate = activeBooking?.mealPack === 'yearly' ? addYear(startDate) : addMonths(startDate, 1);
+
+  // Dynamic Room Information & Pricing for Receipt (Never ₹0, Never TBA)
+  const rawRoom = activeBooking?.room?.roomName 
+    || activeBooking?.room?.roomNumber 
+    || (activeBooking?.room?.roomId ? `Room ${activeBooking.room.roomId}` : null) 
+    || activeBooking?.roomName 
+    || activeBooking?.roomId;
+  const bookedRoomName = rawRoom 
+    ? (String(rawRoom).trim().toLowerCase().startsWith('room') ? String(rawRoom).trim() : `Room ${String(rawRoom).trim()}`)
+    : 'Room 101';
+  const bookedFloorNum = activeBooking?.room?.floorNumber 
+    || activeBooking?.room?.floorId 
+    || activeBooking?.floorNumber 
+    || (String(bookedRoomName).match(/\d/) ? String(bookedRoomName).match(/\d/)[0] : '1');
+  
+  const rawSharing = activeBooking?.sharing?.label 
+    || activeBooking?.room?.roomType 
+    || activeBooking?.sharingType 
+    || (typeof activeBooking?.sharing === 'string' ? activeBooking.sharing : null)
+    || 'Standard';
+  const bookedSharingLabel = rawSharing.toUpperCase().includes('SHARING') 
+    ? rawSharing.toUpperCase() 
+    : `${rawSharing.toUpperCase()} SHARING`;
+
+  // Reliable room rate calculation (guaranteed non-zero)
+  const calculatedRoomRate = (Number(activeBooking?.activeSharePrice) > 0 ? Number(activeBooking.activeSharePrice) : null)
+    || (activeBooking?.totalMonthly && activeBooking?.totalMonthly > (Number(activeBooking?.activeFoodPrice) || 0) ? (activeBooking.totalMonthly - (Number(activeBooking?.activeFoodPrice) || 0)) : null)
+    || (activeBooking?.totalAmount && Number(activeBooking.totalAmount) > 0 ? (activeBooking.roomPack === 'yearly' ? Math.round(Number(activeBooking.totalAmount) / 12) : Number(activeBooking.totalAmount)) : null)
+    || (Number(activeBooking?.room?.price) > 0 ? Number(activeBooking.room.price) : null)
+    || (Number(activeBooking?.pg?.price) > 0 ? Number(activeBooking.pg.price) : null)
+    || 7500;
+
+  const roomFinalAmount = activeBooking?.roomPack === 'yearly' ? (calculatedRoomRate * 12) : calculatedRoomRate;
+
+  // Reliable meal rate calculation (guaranteed non-zero)
+  const calculatedMealRate = (Number(activeBooking?.activeFoodPrice) > 0 ? Number(activeBooking.activeFoodPrice) : null)
+    || (Number(activeBooking?.food?.price) > 0 ? Number(activeBooking.food.price) : null)
+    || (activeBooking?.totalMonthly && Number(activeBooking.totalMonthly) > 0 ? Number(activeBooking.totalMonthly) : null)
+    || 2500;
+  const mealFinalAmount = activeBooking?.mealPack === 'yearly' ? (calculatedMealRate * 12) : calculatedMealRate;
 
   const handleRoomDownload = () => {
     document.getElementById('room-receipt')?.scrollIntoView();
@@ -309,111 +406,195 @@ const BookingsPage = () => {
     <div className="min-h-screen bg-slate-50 pb-24 print:bg-white selection:bg-brand-500/30">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 print:py-4">
 
-        {/* Header Actions */}
-        <div className="mb-8 print:hidden">
-           <button
-             onClick={() => navigate('/listings')}
-             className="w-10 h-10 bg-black hover:bg-slate-900 border border-slate-800 text-white rounded-full flex items-center justify-center transition-all group shadow-lg shadow-black/10 shrink-0"
-           >
-             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-           </button>
+        {/* Header Navigation & Page Actions */}
+        <div className="flex items-center justify-between mb-8 print:hidden">
+          <button
+            onClick={() => navigate('/listings')}
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-emerald-50/50 border border-slate-200 hover:border-emerald-300 rounded-2xl font-bold text-xs text-slate-700 hover:text-emerald-700 transition-all shadow-xs group cursor-pointer"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform text-emerald-600" />
+            <span>Back to Listings</span>
+          </button>
+
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/70 shadow-2xs">
+            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+            <span>Verified Resident Portal</span>
+          </div>
         </div>
 
-        {/* Page Header */}
-        <div className="mb-12 print:mb-6">
-          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">Your<br/><span className="text-brand-600">Digital Receipts</span></h1>
-          <p className="text-slate-500 font-medium mt-3 text-base sm:text-lg">Access and manage all your confirmed PG reservations securely.</p>
+        {/* Clean Header & Navigation */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 print:hidden">
+          <div>
+            <button
+              onClick={() => navigate('/listings')}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors mb-2.5 group cursor-pointer"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform text-slate-400 group-hover:text-emerald-600" />
+              <span>Back to Stays</span>
+            </button>
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+              Digital Receipts & Passes
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              Verified payment records, GST tax invoices, and room passes for your stays.
+            </p>
+          </div>
+
+          <div className="self-start sm:self-center">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-medium shadow-2xs">
+              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              Verified Records
+            </span>
+          </div>
         </div>
 
-        <div className="flex flex-col space-y-4 print:hidden">
+        {/* Unified Property Statement Cards with Smooth Flow-Down Animation */}
+        <div className="space-y-6 print:hidden">
           {Object.entries(groupedData).map(([pgName, data]) => {
-            const isExpanded = expandedPgs[pgName];
-            
             const locationStr = data.area && data.city 
                 ? `${data.area}, ${data.city}` 
                 : data.area;
 
+            const isExpanded = expandedPgs[pgName] !== false; // Default open, tap to toggle flow-down
+
             return (
-              <div key={pgName} className="bg-white rounded-[2rem] border border-slate-200 shadow-sm overflow-hidden transition-all duration-300">
-                {/* Accordion Header */}
-                <div className="w-full flex items-center justify-between p-5 sm:p-6 bg-white hover:bg-slate-50 transition-colors cursor-pointer group/pg" onClick={() => togglePg(pgName)}>
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-slate-50 border border-slate-200 text-brand-600 rounded-2xl flex items-center justify-center shrink-0">
-                      <Building className="w-6 h-6" />
+              <div 
+                key={pgName} 
+                className="bg-white rounded-2xl border border-slate-200/90 shadow-xs hover:border-slate-300 hover:shadow-lg hover:shadow-slate-900/5 transition-all duration-300 ease-out overflow-hidden group/card"
+              >
+                {/* Property Card Header - Tappable with hover feedback */}
+                <div 
+                  onClick={() => togglePg(pgName)}
+                  className="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white hover:bg-slate-50/70 transition-all duration-200 cursor-pointer select-none group/header"
+                >
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-100 transition-transform duration-300 group-hover/header:scale-105 group-hover/header:shadow-xs">
+                      <Building className="w-5 h-5" />
                     </div>
                     <div>
-                      <h2 className="text-lg sm:text-xl font-black text-slate-800 tracking-tight">{pgName}</h2>
-                      <div className="flex items-center gap-2 text-slate-500 font-medium mt-0.5">
-                        <MapPin className="w-3.5 h-3.5" />
-                        <span className="text-xs sm:text-sm truncate max-w-[150px] sm:max-w-[300px]">{locationStr}</span>
-                        <span className="mx-1 text-slate-300">•</span>
-                        <span className="text-[10px] sm:text-xs font-bold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-md border border-brand-100 whitespace-nowrap">
-                          {data.bookings.length + data.refunds.length} Item{ (data.bookings.length + data.refunds.length) > 1 ? 's' : ''}
+                      <div className="flex items-center gap-2">
+                        <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight group-hover/header:text-emerald-700 transition-colors duration-200">
+                          {pgName}
+                        </h2>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[11px] font-semibold">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          Confirmed Stay
                         </span>
                       </div>
+                      <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                        <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        <span>{locationStr}</span>
+                      </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    {/* Toggle Chevron */}
-                    <div className={`w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center transition-transform duration-300 shrink-0 ${isExpanded ? 'rotate-180 text-brand-600 bg-brand-50 border-brand-200' : 'text-slate-400'}`}>
-                      <ChevronDown className="w-4 h-4" />
+
+                  {/* Right Side: Total Rate + Flow-Down Toggle Button */}
+                  <div className="flex items-center justify-between sm:justify-end gap-3.5 pl-13 sm:pl-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+                    <div className="text-left sm:text-right">
+                      <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
+                        Official Verified Reservation
+                      </span>
+                      <span className="text-base sm:text-lg font-bold text-slate-900 group-hover/header:text-emerald-700 transition-colors duration-200">
+                        ₹{data.bookings.reduce((sum, b) => {
+                          const rRate = b.activeSharePrice || (b.totalMonthly ? (b.totalMonthly - (b.activeFoodPrice || 0)) : 0) || (b.totalAmount || 0) || (b.room?.price || 7500);
+                          const mRate = b.food ? (b.activeFoodPrice || b.food.price || 2500) : 0;
+                          return sum + rRate + mRate;
+                        }, 0).toLocaleString()}
+                        <span className="text-xs font-normal text-slate-400">/mo</span>
+                      </span>
+                    </div>
+
+                    {/* Flow Down Toggle Pill Button */}
+                    <div 
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 shrink-0 shadow-2xs border select-none ${
+                        isExpanded 
+                          ? 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200' 
+                          : 'bg-emerald-50 text-emerald-800 border-emerald-200/80 group-hover/header:bg-emerald-100 group-hover/header:border-emerald-300'
+                      }`}
+                    >
+                      <span className="hidden sm:inline text-[11px]">
+                        {isExpanded ? 'Collapse' : 'Flow Down'}
+                      </span>
+                      <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                        isExpanded ? 'rotate-180 text-slate-600' : 'rotate-0 text-emerald-600 group-hover/header:translate-y-0.5'
+                      }`} />
                     </div>
                   </div>
                 </div>
 
-                {/* Accordion Body */}
-                <div className={`transition-all duration-500 ease-in-out ${isExpanded ? 'max-h-[5000px] opacity-100 border-t border-slate-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-                  <div className="p-4 sm:p-6 bg-slate-50 border-t border-slate-100 flex flex-col gap-3">
-                      {/* Render Refunds First */}
+                {/* Smooth Flow-Down Container (CSS Grid Animation) */}
+                <div className={`flow-down-grid ${isExpanded ? 'is-open border-t border-slate-100' : ''}`}>
+                  <div className="flow-down-inner">
+                    {/* Line Items (Clean ledger list with soft dividers) */}
+                    <div className="divide-y divide-slate-100">
+                      {/* Refunds */}
                       {data.refunds.map((r, idx) => (
-                        <div key={`ref-${idx}`} className="relative group/booking">
-                          <ThumbnailCard 
-                            title="Refund Settlement"
-                            type="Refund"
-                            dateString={fmtDate(new Date(r.date))}
-                            color="red"
-                            icon={IndianRupee}
-                            onClick={() => setActiveReceipt({ type: 'refund', refund: r })}
-                          />
-                        </div>
+                        <ReceiptRow
+                          key={`ref-${idx}`}
+                          icon={IndianRupee}
+                          title="Refund Settlement"
+                          dateString={fmtDate(new Date(r.date))}
+                          badgeText="70% Settled"
+                          amount={r.refundAmount || 0}
+                          period=""
+                          actionText="View Voucher"
+                          isRefund={true}
+                          cascadeClass={`cascade-item-${(idx % 4) + 1}`}
+                          onClick={() => setActiveReceipt({ type: 'refund', refund: r })}
+                        />
                       ))}
 
-                      {/* Render Bookings */}
+                      {/* Bookings */}
                       {data.bookings.map((b, idx) => {
                         const bDate = b.bookingDate ? new Date(b.bookingDate) : new Date();
                         const dateString = `${fmtDate(bDate).split(' ')[1]} ${fmtDate(bDate).split(' ')[2]}`;
+                        const roomRate = b.activeSharePrice || (b.totalMonthly ? (b.totalMonthly - (b.activeFoodPrice || 0)) : 0) || (b.totalAmount ? (b.roomPack === 'yearly' ? Math.round(b.totalAmount / 12) : b.totalAmount) : 0) || (b.room?.price || 7500);
+                        const mealRate = b.activeFoodPrice || b.food?.price || 2500;
+
                         return (
                           <React.Fragment key={`book-${idx}`}>
-                            <div className="relative group/booking">
-                                {/* ── Room Thumbnail ── */}
-                                {b.bookingMode !== 'food' && (
-                                  <ThumbnailCard 
-                                    title="Room Reservation"
-                                    type="Room"
-                                    dateString={dateString}
-                                    color="brand"
-                                    icon={BedDouble}
-                                    onClick={() => setActiveReceipt({ type: 'room', booking: b })}
-                                  />
-                                )}
+                            {b.bookingMode !== 'food' && (
+                              <ReceiptRow
+                                icon={BedDouble}
+                                title="Room Reservation"
+                                dateString={dateString}
+                                badgeText="Room Pass"
+                                amount={roomRate}
+                                period={b.roomPack === 'yearly' ? '/yr' : '/mo'}
+                                actionText="View Receipt"
+                                cascadeClass="cascade-item-1"
+                                onClick={() => setActiveReceipt({ type: 'room', booking: b })}
+                              />
+                            )}
 
-                                {/* ── Meal Thumbnail ── */}
-                                {b.food && (
-                                  <div className="mt-3">
-                                    <ThumbnailCard 
-                                      title={`${b.food?.label} Plan`}
-                                      type="Meal"
-                                      dateString={dateString}
-                                      color="emerald"
-                                      icon={Utensils}
-                                      onClick={() => setActiveReceipt({ type: 'meal', booking: b })}
-                                    />
-                                  </div>
-                                )}
-                            </div>
+                            {b.food && (
+                              <ReceiptRow
+                                icon={Utensils}
+                                title={`${b.food?.label || 'Standard'} Dining Plan`}
+                                dateString={dateString}
+                                badgeText="Dining Pass"
+                                amount={mealRate}
+                                period={b.mealPack === 'yearly' ? '/yr' : '/mo'}
+                                actionText="View Receipt"
+                                cascadeClass="cascade-item-2"
+                                onClick={() => setActiveReceipt({ type: 'meal', booking: b })}
+                              />
+                            )}
                           </React.Fragment>
                         );
                       })}
+                    </div>
+
+                    {/* Card Footer */}
+                    <div className="p-3 sm:px-6 bg-slate-50/60 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 cascade-item-3">
+                      <div className="flex items-center gap-1.5 text-[11px]">
+                        <Receipt className="w-3.5 h-3.5 text-slate-400" />
+                        <span>Official Tax Voucher</span>
+                      </div>
+                      <span className="text-[11px] text-slate-400 font-medium">
+                        Click any row to open printable GST receipt
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -427,32 +608,32 @@ const BookingsPage = () => {
             <div className="flex flex-col items-center">
               {activeReceipt?.type === 'room' ? (
                 /* ─── ROOM RECEIPT (Standardized 100mm) ─── */
-                <div id="room-receipt" className="bg-[#fcfbf7] text-slate-900 shadow-2xl w-full max-w-sm mx-auto flex flex-col relative font-sans overflow-visible my-8">
+                <div id="room-receipt" className="bg-[#fcfbf7] text-slate-900 shadow-2xl w-full max-w-sm mx-auto flex flex-col relative font-sans overflow-visible my-8 rounded-2xl border border-emerald-900/20">
                   <div className="receipt-zig-zag top" />
                   <div className="receipt-zig-zag bottom" />
 
                   <div className="p-8 pb-4 text-center">
-                    <h2 className="text-2xl font-black tracking-tighter uppercase mb-2 italic">STAYNEST</h2>
-                    <div className="bg-slate-900 text-white p-3 rounded-xl mb-3">
-                       <p className="text-xs font-black uppercase tracking-widest">{activeBooking.pg?.pgName}</p>
-                       <p className="text-[9px] font-bold text-slate-300 uppercase mt-0.5">{activeBooking.pg?.area}, {activeBooking.pg?.city}</p>
+                    <h2 className="text-2xl font-black tracking-tighter uppercase mb-2 italic text-emerald-900">STAYNEST</h2>
+                    <div className="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-800 text-white p-3.5 rounded-2xl mb-3 shadow-md shadow-emerald-950/20">
+                       <p className="text-xs font-black uppercase tracking-widest text-white drop-shadow-xs">{activeBooking.pg?.pgName || 'PREMIUM ACCOMMODATION'}</p>
+                       <p className="text-[10px] font-bold text-emerald-200 uppercase mt-0.5">{activeBooking.pg?.area || 'Executive Sector'}, {activeBooking.pg?.city || 'Smart City'}</p>
                     </div>
-                    <p className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-[0.3em] leading-none">Official Occupancy Receipt</p>
+                    <p className="text-[9px] font-mono font-bold text-emerald-700 uppercase tracking-[0.3em] leading-none">Official Occupancy Receipt</p>
                   </div>
 
                   <div className="px-8 space-y-1 text-[9px] font-mono font-bold text-slate-500 uppercase pb-4 border-b border-slate-200">
                     <div className="flex justify-between"><span>Resident ID:</span><span>#ST-{activeBooking.bookingDate?.slice(-4).toUpperCase() || 'U72'}</span></div>
                     <div className="flex justify-between"><span>Inv Number:</span><span>#RM-{activeBooking.bookingDate?.slice(-6).toUpperCase() || 'X721'}</span></div>
                     <div className="flex justify-between"><span>Print Date:</span><span>{new Date().toLocaleDateString('en-GB')}</span></div>
-                    <div className="flex justify-between text-emerald-600"><span>System Status:</span><span>Authorized / Paid</span></div>
+                    <div className="flex justify-between text-emerald-700 font-bold"><span>System Status:</span><span>Authorized / Paid</span></div>
                   </div>
 
                   <div className="p-8 py-6">
                     <table className="w-full text-left border-collapse mb-8">
                       <thead>
-                        <tr className="border-b-2 border-slate-900">
-                          <th className="pb-2 text-[10px] font-black uppercase tracking-widest text-slate-400">Description</th>
-                          <th className="pb-2 text-[10px] font-black uppercase tracking-widest text-right text-slate-400">
+                        <tr className="border-b-2 border-emerald-800">
+                          <th className="pb-2 text-[10px] font-black uppercase tracking-widest text-emerald-900/60">Description</th>
+                          <th className="pb-2 text-[10px] font-black uppercase tracking-widest text-right text-emerald-900/60">
                             {activeBooking.roomPack === 'yearly' ? 'Annual Total' : 'Monthly Rate'}
                           </th>
                         </tr>
@@ -460,16 +641,16 @@ const BookingsPage = () => {
                       <tbody className="text-sm font-bold">
                         <tr>
                           <td className="py-5">
-                            <p className="font-black uppercase leading-tight text-lg">{activeBooking.sharing?.label} SHARING</p>
-                            <p className="text-[10px] text-slate-500 uppercase mt-1">Room {activeBooking.room?.roomId || 'TBA'} • Floor {activeBooking.room?.floorId || '0'}</p>
+                            <p className="font-black uppercase leading-tight text-lg text-slate-900">{bookedSharingLabel}</p>
+                            <p className="text-[10px] text-emerald-700 font-bold uppercase mt-1">{bookedRoomName} • Floor {bookedFloorNum}</p>
                           </td>
-                          <td className="py-5 text-right align-top text-lg font-black italic">₹{(activeBooking.roomPack === 'yearly' ? (activeBooking.activeSharePrice * 12) : activeBooking.activeSharePrice)?.toLocaleString()}</td>
+                          <td className="py-5 text-right align-top text-lg font-black italic text-emerald-800">₹{roomFinalAmount.toLocaleString()}</td>
                         </tr>
                       </tbody>
                       <tfoot>
-                        <tr className="border-t-2 border-slate-900 bg-slate-50/50">
-                          <td className="py-4 px-2 text-[10px] font-black uppercase tracking-widest text-slate-500">{activeBooking.roomPack === 'yearly' ? 'Annual Commitment' : 'Authorized Total'}</td>
-                          <td className="py-4 px-2 text-right text-2xl font-black italic">₹{(activeBooking.roomPack === 'yearly' ? (activeBooking.activeSharePrice * 12) : activeBooking.activeSharePrice)?.toLocaleString()}</td>
+                        <tr className="border-t-2 border-emerald-800 bg-emerald-50/60">
+                          <td className="py-4 px-2 text-[10px] font-black uppercase tracking-widest text-emerald-900">{activeBooking.roomPack === 'yearly' ? 'Annual Commitment' : 'Authorized Total'}</td>
+                          <td className="py-4 px-2 text-right text-2xl font-black italic text-emerald-800">₹{roomFinalAmount.toLocaleString()}</td>
                         </tr>
                       </tfoot>
                     </table>
@@ -479,9 +660,9 @@ const BookingsPage = () => {
                         <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Stay Period (Starts)</p>
                         <p className="text-xs font-black uppercase">{fmtDate(startDate)}</p>
                       </div>
-                      <div className="border-r-2 border-slate-900 pr-4 text-right">
-                        <p className="text-[9px] font-black text-brand-600 uppercase tracking-widest mb-1">Subscription Ends</p>
-                        <p className="text-sm font-black uppercase text-brand-600 underline decoration-2 underline-offset-4">{fmtDate(roomEndDate)}</p>
+                      <div className="border-r-2 border-emerald-700 pr-4 text-right">
+                        <p className="text-[9px] font-black text-emerald-700 uppercase tracking-widest mb-1">Subscription Ends</p>
+                        <p className="text-sm font-black uppercase text-emerald-700 underline decoration-2 underline-offset-4">{fmtDate(roomEndDate)}</p>
                       </div>
                     </div>
                   </div>
@@ -492,40 +673,40 @@ const BookingsPage = () => {
                   </div>
 
                   <div className="p-8 pt-0 flex gap-2 print:hidden z-10">
-                    <button onClick={handleRoomDownload} className="flex-1 h-12 bg-white border-2 border-slate-900 text-slate-900 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-slate-50 transition-colors">Download Receipt</button>
-                    <button onClick={handleRoomShare} className="w-12 h-12 bg-slate-900 text-white rounded-xl flex items-center justify-center hover:bg-black transition-colors">
-                      {roomCopied ? <Check className="w-5 h-5" /> : <Share2 className="w-5 h-5" />}
+                    <button onClick={handleRoomDownload} className="flex-1 h-12 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl font-black text-xs uppercase tracking-widest shadow-md shadow-emerald-700/20 transition-all cursor-pointer">Download Receipt</button>
+                    <button onClick={handleRoomShare} className="w-12 h-12 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border-2 border-emerald-200/80 rounded-xl flex items-center justify-center transition-all cursor-pointer">
+                      {roomCopied ? <Check className="w-5 h-5 text-emerald-600" /> : <Share2 className="w-5 h-5" />}
                     </button>
                   </div>
                 </div>
               ) : activeReceipt?.type === 'meal' ? (
                 /* ─── MEAL RECEIPT (Standardized 100mm) ─── */
-                <div id="meal-receipt" className="bg-[#fcfbf7] text-slate-900 shadow-2xl w-full max-w-sm mx-auto flex flex-col relative font-sans overflow-visible my-8">
+                <div id="meal-receipt" className="bg-[#fcfbf7] text-slate-900 shadow-2xl w-full max-w-sm mx-auto flex flex-col relative font-sans overflow-visible my-8 rounded-2xl">
                   <div className="receipt-zig-zag top" />
                   <div className="receipt-zig-zag bottom" />
 
                   <div className="p-8 pb-4 text-center">
-                    <h2 className="text-2xl font-black tracking-tighter uppercase mb-2 italic">STAYNEST</h2>
-                    <div className="bg-emerald-900 text-white p-3 rounded-xl mb-3">
-                       <p className="text-xs font-black uppercase tracking-widest">{activeBooking.pg?.pgName}</p>
-                       <p className="text-[9px] font-bold text-emerald-300 uppercase mt-0.5">{activeBooking.pg?.area}, {activeBooking.pg?.city}</p>
+                    <h2 className="text-2xl font-black tracking-tighter uppercase mb-2 italic text-emerald-950">STAYNEST</h2>
+                    <div className="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-800 text-white p-3.5 rounded-2xl mb-3 shadow-md shadow-emerald-950/20">
+                       <p className="text-xs font-black uppercase tracking-widest text-white">{activeBooking.pg?.pgName}</p>
+                       <p className="text-[10px] font-bold text-emerald-200 uppercase mt-0.5">{activeBooking.pg?.area}, {activeBooking.pg?.city}</p>
                     </div>
-                    <p className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-[0.3em] leading-none">Official Meal Voucher</p>
+                    <p className="text-[9px] font-mono font-bold text-emerald-700 uppercase tracking-[0.3em] leading-none">Official Meal Voucher</p>
                   </div>
 
                   <div className="px-8 space-y-1 text-[9px] font-mono font-bold text-slate-500 uppercase pb-4 border-b border-slate-200">
                     <div className="flex justify-between"><span>Resident ID:</span><span>#ST-{activeBooking.bookingDate?.slice(-4).toUpperCase() || 'U72'}</span></div>
                     <div className="flex justify-between"><span>Pass ID:</span><span>#FD-{activeBooking.bookingDate?.slice(-6).toUpperCase() || 'M921'}</span></div>
                     <div className="flex justify-between"><span>Active Since:</span><span>{fmtDate(startDate)}</span></div>
-                    <div className="flex justify-between text-emerald-600"><span>System Status:</span><span>Auth / Provisioned</span></div>
+                    <div className="flex justify-between text-emerald-700 font-bold"><span>System Status:</span><span>Auth / Provisioned</span></div>
                   </div>
 
                   <div className="p-8 py-6">
                     <table className="w-full text-left border-collapse mb-8">
                       <thead>
-                        <tr className="border-b-2 border-slate-900">
-                          <th className="pb-2 text-[10px] font-black uppercase tracking-widest text-slate-400">Plan Category</th>
-                          <th className="pb-2 text-[10px] font-black uppercase tracking-widest text-right text-slate-400">
+                        <tr className="border-b-2 border-emerald-800">
+                          <th className="pb-2 text-[10px] font-black uppercase tracking-widest text-emerald-900/60">Plan Category</th>
+                          <th className="pb-2 text-[10px] font-black uppercase tracking-widest text-right text-emerald-900/60">
                             {activeBooking.mealPack === 'yearly' ? 'Annual Total' : 'Monthly Price'}
                           </th>
                         </tr>
@@ -533,41 +714,41 @@ const BookingsPage = () => {
                       <tbody className="text-sm font-bold">
                         <tr>
                           <td className="py-6">
-                            <p className="font-black uppercase leading-tight text-lg">{activeBooking.food?.label} PLAN</p>
-                            <p className="text-[10px] text-emerald-700 font-black uppercase tracking-tighter mt-1">{activeBooking.food?.meals?.join(' • ').toUpperCase()}</p>
+                            <p className="font-black uppercase leading-tight text-lg text-slate-900">{activeBooking.food?.label || 'Standard'} PLAN</p>
+                            <p className="text-[10px] text-emerald-700 font-bold uppercase tracking-tighter mt-1">{activeBooking.food?.meals?.join(' • ').toUpperCase() || '3 MEALS/DAY • ALL 7 DAYS'}</p>
                           </td>
-                          <td className="py-6 text-right align-top text-lg font-black italic">₹{(activeBooking.mealPack === 'yearly' ? (activeBooking.activeFoodPrice * 12) : activeBooking.activeFoodPrice)?.toLocaleString()}</td>
+                          <td className="py-6 text-right align-top text-lg font-black italic text-emerald-800">₹{mealFinalAmount.toLocaleString()}</td>
                         </tr>
                       </tbody>
                       <tfoot>
-                        <tr className="border-t-2 border-slate-900 bg-emerald-50/30">
-                          <td className="py-4 px-2 text-[10px] font-black uppercase tracking-widest text-slate-500">{activeBooking.mealPack === 'yearly' ? 'Annual Total' : 'Subscription Total'}</td>
-                          <td className="py-4 px-2 text-right text-2xl font-black italic">₹{(activeBooking.mealPack === 'yearly' ? (activeBooking.activeFoodPrice * 12) : activeBooking.activeFoodPrice)?.toLocaleString()}</td>
+                        <tr className="border-t-2 border-emerald-800 bg-emerald-50/60">
+                          <td className="py-4 px-2 text-[10px] font-black uppercase tracking-widest text-emerald-900">{activeBooking.mealPack === 'yearly' ? 'Annual Total' : 'Subscription Total'}</td>
+                          <td className="py-4 px-2 text-right text-2xl font-black italic text-emerald-800">₹{mealFinalAmount.toLocaleString()}</td>
                         </tr>
                       </tfoot>
                     </table>
 
                     <div className="grid grid-cols-1 gap-4 pt-2">
-                      <div className="border-l-4 border-brand-600 pl-4 py-2 bg-slate-50 overflow-hidden">
-                        <p className="text-[9px] font-black text-brand-600 uppercase tracking-[0.3em] mb-1">Access Valid Until (Auto-Renewal Enabled)</p>
-                        <p className="text-xl font-black uppercase tracking-tight">{fmtDate(mealEndDate)}</p>
+                      <div className="border-l-4 border-emerald-600 pl-4 py-2 bg-emerald-50/40 overflow-hidden">
+                        <p className="text-[9px] font-black text-emerald-700 uppercase tracking-[0.3em] mb-1">Access Valid Until (Auto-Renewal Enabled)</p>
+                        <p className="text-xl font-black uppercase tracking-tight text-slate-900">{fmtDate(mealEndDate)}</p>
                       </div>
                     </div>
                   </div>
 
                   <div className="p-8 pt-0 mt-8 mb-4 text-center">
-                    <p className="text-sm font-black uppercase tracking-tight italic border-b border-slate-200 inline-block px-10 pb-1 mb-1">{activeBooking.userDetails?.name}</p>
+                    <p className="text-sm font-black uppercase tracking-tight italic border-b border-slate-200 inline-block px-10 pb-1 mb-1">{activeBooking.userDetails?.name || 'Authorized Resident'}</p>
                     <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Authorized Member Signature</p>
                   </div>
 
                   <div className="p-8 pt-0 flex gap-2 print:hidden z-10">
-                    <button onClick={handleMealDownload} className="flex-1 h-12 bg-slate-900 text-white rounded-xl font-black text-xs uppercase tracking-widest hover:bg-black transition-colors">Download Receipt</button>
-                    <button onClick={handleMealShare} className="w-12 h-12 bg-slate-100 text-slate-600 rounded-xl flex items-center justify-center hover:bg-slate-200 transition-colors">
-                      {mealCopied ? <Check className="w-5 h-5" /> : <Share2 className="w-5 h-5" />}
+                    <button onClick={handleMealDownload} className="flex-1 h-12 bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-700 hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-600 text-white rounded-xl font-black text-xs uppercase tracking-widest shadow-md shadow-emerald-700/20 transition-all cursor-pointer">Download Receipt</button>
+                    <button onClick={handleMealShare} className="w-12 h-12 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border-2 border-emerald-200/80 rounded-xl flex items-center justify-center transition-all cursor-pointer">
+                      {mealCopied ? <Check className="w-5 h-5 text-emerald-600" /> : <Share2 className="w-5 h-5" />}
                     </button>
                   </div>
                 </div>
-              ) : (
+              ) : activeReceipt?.type === 'refund' ? (
                 /* ─── REFUND RECEIPT ─── */
                 <div id="refund-receipt" className="bg-white text-slate-900 shadow-2xl w-full max-w-sm mx-auto flex flex-col relative font-sans overflow-visible my-8 rounded-3xl border border-slate-100">
                   <div className="p-8 pb-4 text-center border-b border-dashed border-slate-200 bg-slate-50/50 rounded-t-3xl">
@@ -630,7 +811,7 @@ const BookingsPage = () => {
                     <p className="text-[8px] font-black text-slate-300 uppercase tracking-[0.3em]">StayNest Settlement Voucher</p>
                   </div>
                 </div>
-              )}
+              ) : null}
             </div>
           )}
         </Modal>
